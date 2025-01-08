@@ -1,20 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import ProductCard from './ProductCard';
-import { useProducts } from '@/services/productsApi';
+import { useQuery } from '@tanstack/react-query';
+import { fetchAllProducts } from '@/services/productsApi';
 
 const Products = () => {
-  const [products, setProducts] = useState([]);
-  const { fetchProducts } = useProducts();
-
-  useEffect(() => {
-    const loadProducts = async () => {
-      const fetchedProducts = await fetchProducts();
-      setProducts(fetchedProducts);
-    };
-
-    loadProducts();
-  }, [fetchProducts]);
+  const { data: products = [] } = useQuery({
+    queryKey: ['products'],
+    queryFn: fetchAllProducts
+  });
 
   return (
     <div className="w-full py-12">
