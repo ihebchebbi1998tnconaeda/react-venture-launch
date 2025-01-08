@@ -1,34 +1,52 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Product } from '@/types/product';
+import { GripVertical } from 'lucide-react';
 
 interface ProductGridProps {
   products: Product[];
   onDragStart: (event: React.DragEvent<HTMLDivElement>, product: Product) => void;
 }
 
-const ProductGrid: React.FC<ProductGridProps> = ({ products, onDragStart }) => {
+const ProductGrid = ({ products, onDragStart }: ProductGridProps) => {
+  if (products.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <p className="text-gray-500 text-center italic">
+          Aucun article disponible pour le moment
+        </p>
+      </div>
+    );
+  }
+
+  const handleDragStart = (event: React.DragEvent<HTMLDivElement>, product: Product) => {
+    onDragStart(event, product);
+  };
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+    <div className="grid grid-cols-2 gap-4 overflow-y-auto flex-1 min-h-0">
       {products.map((product) => (
         <motion.div
           key={product.id}
-          className="cursor-pointer"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
           draggable
-          onDragStart={(e) => onDragStart(e, product)}
+          onDragStart={(e) => handleDragStart(e, product)}
+          data-product-type={product.itemgroup_product}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          className="bg-white rounded-lg shadow-sm p-4 cursor-grab active:cursor-grabbing border border-gray-100/50 hover:shadow-md transition-all"
         >
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
+          <div className="relative">
+            <GripVertical className="absolute top-0 right-0 text-gray-400" size={16} />
             <img
               src={product.image}
               alt={product.name}
-              className="w-full h-48 object-cover"
+              className="w-full h-24 object-contain mb-2"
             />
-            <div className="p-4">
-              <h3 className="text-lg font-medium text-gray-900">{product.name}</h3>
-              <p className="text-gray-500">{product.price} TND</p>
-            </div>
+            <h3 className="text-sm font-medium text-gray-900 truncate">
+              {product.name}
+            </h3>
+            <p className="text-sm text-[#700100] font-medium mt-1">{product.price} TND</p>
           </div>
         </motion.div>
       ))}
