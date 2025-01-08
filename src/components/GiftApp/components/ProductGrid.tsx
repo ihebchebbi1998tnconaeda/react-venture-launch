@@ -1,40 +1,33 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Product } from '@/types/product';
+import { motion } from 'framer-motion';
 
 interface ProductGridProps {
   products: Product[];
-  onProductSelect: (product: Product) => void;
+  onDragStart: (event: React.DragEvent<HTMLDivElement>, product: Product) => void;
 }
 
-const ProductGrid: React.FC<ProductGridProps> = ({ products, onProductSelect }) => {
-  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, product: Product) => {
-    e.dataTransfer.setData('product', JSON.stringify(product));
-  };
-
+const ProductGrid = ({ products, onDragStart }: ProductGridProps) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+    <div className="grid grid-cols-2 gap-4 overflow-y-auto flex-1">
       {products.map((product) => (
         <motion.div
           key={product.id}
-          className="cursor-pointer"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+          className="bg-white/50 p-4 rounded-lg cursor-move relative group"
           draggable
-          onDragStart={(e) => handleDragStart(e, product)}
-          onClick={() => onProductSelect(product)}
+          onDragStart={(e) => onDragStart(e, product)}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
         >
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <img
-              src={product.image}
-              alt={product.name}
-              className="w-full h-48 object-cover"
-            />
-            <div className="p-4">
-              <h3 className="text-lg font-medium text-gray-900">{product.name}</h3>
-              <p className="text-gray-500">{product.price} TND</p>
-            </div>
-          </div>
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-full h-32 object-contain mb-2"
+          />
+          <h3 className="text-sm font-semibold text-gray-800 truncate">
+            {product.name}
+          </h3>
+          <p className="text-xs text-gray-600">{product.price} TND</p>
         </motion.div>
       ))}
     </div>
