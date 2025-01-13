@@ -34,11 +34,13 @@ const GiftApp = () => {
     if (path.includes('packtrio')) return 'Pack Trio';
     if (path.includes('packduo')) return 'Pack Duo';
     if (path.includes('packminiduo')) return 'Pack Mini Duo';
+    if (path.includes('packchemise')) return 'Pack Chemise';
     return 'Pack Trio'; // Default
   }, [location]);
 
   // Get number of containers based on pack type
   const containerCount = React.useMemo(() => {
+    if (packType === 'Pack Chemise') return 1;
     return ['Pack Duo', 'Pack Mini Duo'].includes(packType) ? 2 : 3;
   }, [packType]);
 
@@ -59,6 +61,19 @@ const GiftApp = () => {
 
     // Validate specific pack requirements
     switch (packType) {
+      case 'Pack Chemise': {
+        const chemises = selectedItems.filter(item => item.itemgroup_product === 'chemises');
+        if (chemises.length !== 1) {
+          toast({
+            title: "Sélection invalide",
+            description: "Le Pack Chemise doit contenir exactement 1 chemise",
+            variant: "destructive",
+          });
+          return false;
+        }
+        break;
+      }
+
       case 'Pack Prestige': {
         const chemises = selectedItems.filter(item => item.itemgroup_product === 'chemises');
         const accessoiresCount = selectedItems.filter(item => item.type_product === 'Accessoires').length;
@@ -154,6 +169,72 @@ const GiftApp = () => {
     return true;
   };
 
+  const getPackPrice = (packType: string): number => {
+    switch (packType) {
+      case 'Pack Prestige':
+        return 50;
+      case 'Pack Premium':
+        return 30;
+      case 'Pack Trio':
+        return 20;
+      case 'Pack Duo':
+        return 20;
+      case 'Pack Mini Duo':
+        return 0;
+      case 'Pack Chemise':
+        return 10; // Example price for Pack Chemise
+      default:
+        return 0;
+    }
+  };
+
+  const handleConfirmPack = async () => {
+    if (!validateSelection()) {
+      return;
+    }
+
+    setIsLoading(true);
+    const packPrice = getPackPrice(packType);
+    
+    // First add the pack price as a separate item
+    if (packPrice > 0) {
+      addToCart({
+        id: Date.now(), // Unique ID for the pack charge
+        name: `${packType} - Frais de packaging`,
+        price: packPrice,
+        quantity: 1,
+        image: "/Menu/Sur musure .png",
+        type_product: "Pack",
+        itemgroup_product: "Pack",
+      });
+    }
+    
+    // Then add all selected items
+    for (const item of selectedItems) {
+      await new Promise(resolve => setTimeout(resolve, 500));
+      addToCart({
+        ...item,
+        quantity: 1,
+        personalization: item.personalization || packNote,
+      });
+    }
+
+    toast({
+      title: "Pack Ajouté au Panier! 🎉",
+      description: packPrice > 0 
+        ? `Pack et frais de packaging (${packPrice} TND) ajoutés au panier`
+        : "Pack ajouté au panier",
+      style: {
+        backgroundColor: '#700100',
+        color: 'white',
+        border: '1px solid #590000',
+      },
+    });
+
+    setIsLoading(false);
+    navigate('/cart');
+  };
+
   const handleItemDrop = (item: Product) => {
     if (selectedItems.length >= containerCount) {
       toast({
@@ -181,51 +262,6 @@ const GiftApp = () => {
     setSelectedItems((prev) => prev.filter((_, i) => i !== index));
     playTickSound();
   };
-
-  const handleConfirmPack = async () => {
-    if (!validateSelection()) {
-      return;
-    }
-
-    setIsLoading(true);
-    
-    for (const item of selectedItems) {
-      await new Promise(resolve => setTimeout(resolve, 500));
-      addToCart({
-        ...item,
-        quantity: 1,
-        personalization: item.personalization || packNote,
-      });
-    }
-
-    toast({
-      title: "Pack Ajouté au Panier! 🎉",
-      description: "Vous allez être redirigé vers votre panier",
-      style: {
-        backgroundColor: '#700100',
-        color: 'white',
-        border: '1px solid #590000',
-      },
-    });
-
-    setIsLoading(false);
-    navigate('/cart');
-  };
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-[#f6f7f9]">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="flex flex-col items-center"
-        >
-          <div className="w-16 h-16 border-4 border-[#700100] border-t-transparent rounded-full animate-spin" />
-          <p className="mt-4 text-[#700100] font-medium">Création de votre pack cadeau...</p>
-        </motion.div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b bg-[#f6f7f9] py-16 px-4 md:px-8">

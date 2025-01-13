@@ -28,16 +28,16 @@ const ProductSelectionPanel = ({
   // Get available categories based on pack type and container index
   const getAvailableCategories = () => {
     switch (packType) {
+      case 'Pack Chemise':
+        return [{ label: 'Chemises', type: 'itemgroup', value: 'chemises' }];
       case 'Pack Prestige':
         return selectedContainerIndex === 0 
           ? [{ label: 'Chemises', type: 'itemgroup', value: 'chemises' }]
           : [{ label: 'Accessoires', type: 'type', value: 'Accessoires' }];
-      
       case 'Pack Premium':
         return selectedContainerIndex === 0
           ? [{ label: 'Cravates', type: 'itemgroup', value: 'Cravates' }]
           : [{ label: 'Accessoires', type: 'type', value: 'Accessoires' }];
-      
       case 'Pack Trio':
         if (selectedContainerIndex === 0) {
           return [{ label: 'Portefeuilles', type: 'itemgroup', value: 'Portefeuilles' }];
@@ -46,17 +46,14 @@ const ProductSelectionPanel = ({
         } else {
           return [{ label: 'Accessoires', type: 'type', value: 'Accessoires' }];
         }
-      
       case 'Pack Duo':
         return selectedContainerIndex === 0
           ? [{ label: 'Portefeuilles', type: 'itemgroup', value: 'Portefeuilles' }]
           : [{ label: 'Ceintures', type: 'itemgroup', value: 'Ceintures' }];
-      
       case 'Pack Mini Duo':
         return selectedContainerIndex === 0
           ? [{ label: 'Porte-cartes', type: 'itemgroup', value: 'Porte-cartes' }]
           : [{ label: 'Porte-clés', type: 'itemgroup', value: 'Porte-clés' }];
-      
       default:
         return [];
     }
@@ -71,6 +68,11 @@ const ProductSelectionPanel = ({
       
       if (categories.length > 0) {
         filteredProducts = data.filter(product => {
+          // Special handling for Pack Chemise - only show chemises
+          if (packType === 'Pack Chemise') {
+            return product.itemgroup_product === 'chemises';
+          }
+
           // Check if we should filter out chemises for Pack Prestige
           if (packType === 'Pack Prestige' && selectedContainerIndex === 0) {
             const hasChemise = selectedItems.some(item => item.itemgroup_product === 'chemises');

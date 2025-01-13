@@ -13,7 +13,7 @@ import { getPersonalizations } from '@/utils/personalizationStorage';
 import ProductDetailHeader from './product-detail/ProductDetailHeader';
 import ProductDetailContent from './product-detail/ProductDetailContent';
 import ProductDetailActions from './product-detail/ProductDetailActions';
-import BoxSelectionDialog from './product-detail/BoxSelectionDialog';
+import GiftBoxSelection from './product-detail/GiftBoxSelection';
 
 interface ProductDetailModalProps {
   isOpen: boolean;
@@ -35,20 +35,29 @@ const ProductDetailModal = ({ isOpen, onClose, product }: ProductDetailModalProp
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState('');
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const [selectedBoxOption, setSelectedBoxOption] = useState<boolean | null>(null);
   const [personalization, setPersonalization] = useState(() => {
     const savedPersonalizations = getPersonalizations();
     return savedPersonalizations[product.id] || '';
   });
-  const [isBoxDialogOpen, setIsBoxDialogOpen] = useState(false);
   
   const { addToCart } = useCart();
   const { toast } = useToast();
 
-  const handleAddToCart = (withBox?: boolean) => {
+  const handleAddToCart = () => {
     if (!selectedSize) {
       toast({
         title: "Veuillez sélectionner une taille",
         description: "Une taille doit être sélectionnée avant d'ajouter au panier",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (product.itemgroup_product === 'chemises' && selectedBoxOption === null) {
+      toast({
+        title: "Sélection requise",
+        description: "Veuillez choisir si vous souhaitez une boîte cadeau",
         variant: "destructive",
       });
       return;
@@ -63,7 +72,7 @@ const ProductDetailModal = ({ isOpen, onClose, product }: ProductDetailModalProp
       size: selectedSize,
       color: product.color,
       personalization: personalization,
-      withBox: withBox
+      withBox: selectedBoxOption || false
     });
 
     playTickSound();
@@ -78,14 +87,6 @@ const ProductDetailModal = ({ isOpen, onClose, product }: ProductDetailModalProp
       },
     });
     onClose();
-  };
-
-  const handleInitialAddToCart = () => {
-    if (product.itemgroup_product === 'chemises') {
-      setIsBoxDialogOpen(true);
-    } else {
-      handleAddToCart(false);
-    }
   };
 
   return (
@@ -148,6 +149,13 @@ const ProductDetailModal = ({ isOpen, onClose, product }: ProductDetailModalProp
                   />
                 </div>
 
+                {product.itemgroup_product === 'chemises' && (
+                  <GiftBoxSelection
+                    selectedBoxOption={selectedBoxOption}
+                    setSelectedBoxOption={setSelectedBoxOption}
+                  />
+                )}
+
                 <PersonalizationButton
                   productId={product.id}
                   onSave={setPersonalization}
@@ -157,22 +165,13 @@ const ProductDetailModal = ({ isOpen, onClose, product }: ProductDetailModalProp
             </div>
 
             <ProductDetailActions
-              onAddToCart={handleInitialAddToCart}
+              onAddToCart={handleAddToCart}
               status={product.status}
-              showBoxOption={product.itemgroup_product === 'chemises'}
+              showBoxOption={false}
             />
           </div>
         </div>
       </DialogContent>
-
-      <BoxSelectionDialog
-        isOpen={isBoxDialogOpen}
-        onClose={() => setIsBoxDialogOpen(false)}
-        onConfirm={(withBox) => {
-          handleAddToCart(withBox);
-          setIsBoxDialogOpen(false);
-        }}
-      />
     </Dialog>
   );
 };

@@ -6,6 +6,7 @@ import MondeFioriSection from './menu-sections/MondeFioriSection';
 import PretAPorterSection from './menu-sections/PretAPorterSection';
 import AccessoiresSection from './menu-sections/AccessoiresSection';
 import SubMenuSection from '../navigation/SubMenuSection';
+import { Link } from 'react-router-dom';
 
 const MainNavbarMenus = () => {
   return (
@@ -14,7 +15,11 @@ const MainNavbarMenus = () => {
         <MondeFioriSection />
       </NavMenuItem>
 
-      <NavMenuItem title="L'univers Cadeaux" image="/Menu/Universcadeau.png">
+      <NavMenuItem 
+        title="L'univers Cadeaux" 
+        image="/Menu/Universcadeau.png"
+        href="/univers-cadeaux"
+      >
         <GiftUniverseMenu />
       </NavMenuItem>
 
@@ -26,35 +31,9 @@ const MainNavbarMenus = () => {
         <AccessoiresSection />
       </NavMenuItem>
 
-      <NavMenuItem title="Le sur mesure" image="/Menu/lesurmesure.png">
-        <div className="grid grid-cols-2 gap-3">
-          <SubMenuSection
-            title="Homme"
-            items={[
-              {
-                href: "/category/sur-mesure/homme/portefeuilles",
-                title: "Portefeuilles",
-                description: "Portefeuilles élégants"
-              },
-              {
-                href: "/category/sur-mesure/homme/ceintures",
-                title: "Ceintures",
-                description: "Ceintures raffinées"
-              }
-            ]}
-          />
-          <SubMenuSection
-            title="Femme"
-            items={[
-              {
-                href: "/category/sur-mesure/femme/sacs-a-main",
-                title: "Sacs à main",
-                description: "Sacs à main élégants"
-              }
-            ]}
-          />
-        </div>
-      </NavMenuItem>
+      <Link to="/sur-mesure" className="text-white text-[16px] lg:text-[21px] hover:text-white/80 transition-colors">
+        Le sur mesure
+      </Link>
 
       <NavMenuItem title="Outlet" image="/Menu/Ooutlet.png">
         <div className="grid grid-cols-2 gap-3">
@@ -63,12 +42,12 @@ const MainNavbarMenus = () => {
             items={[
               {
                 href: "/category/outlet/homme/costumes",
-                title: "Costumes",
+                title: "Costume",
                 description: "Costumes en promotion"
               },
               {
                 href: "/category/outlet/homme/blazers",
-                title: "Blazers",
+                title: "Blazer",
                 description: "Blazers en solde"
               }
             ]}

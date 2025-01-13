@@ -22,7 +22,7 @@ export const menuItems = [
       { href: "/category/univers-cadeaux/pack-trio", title: "Pack Trio" },
       { href: "/category/univers-cadeaux/pack-duo", title: "Pack Duo" },
       { href: "/category/univers-cadeaux/pack-mini-duo", title: "Pack Mini Duo" },
-      { href: "/category/univers-cadeaux/pack-mono", title: "Pack Mono" },
+      { href: "/category/univers-cadeaux/packchemise", title: "Pack Chemise" },
     ],
   },
   {
@@ -42,10 +42,10 @@ export const menuItems = [
     icon: Watch,
     link: "#",
     subItems: [
-      { href: "/category/accessoires/homme/portefeuilles", title: "Portefeuilles" },
-      { href: "/category/accessoires/homme/ceintures", title: "Ceintures" },
-      { href: "/category/accessoires/homme/cravates", title: "Cravates" },
-      { href: "/category/accessoires/homme/mallettes", title: "Mallettes" },
+      { href: "/category/accessoires/homme/portefeuilles", title: "Portefeuille" },
+      { href: "/category/accessoires/homme/ceintures", title: "Ceinture" },
+      { href: "/category/accessoires/homme/cravates", title: "Cravate" },
+      { href: "/category/accessoires/homme/mallettes", title: "Mallette" },
       { href: "/category/accessoires/femmes/sacs-a-main", title: "Sacs à main" },
     ],
   },

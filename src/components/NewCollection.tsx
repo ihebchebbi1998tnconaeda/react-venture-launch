@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from './ui/button';
+import { Link } from 'react-router-dom'; // Import Link component for routing
 
 const NewCollection = () => {
   return (
@@ -49,12 +50,14 @@ const NewCollection = () => {
             </div>
 
             <div className="flex justify-center mt-4 md:mt-6">
-              <Button
-                variant="outline"
-                className="px-6 md:px-8 py-2 bg-transparent border-white text-white hover:bg-white hover:text-[#4A0404] transition-colors font-['WomanFontBold'] text-sm md:text-base"
-              >
-                DÉCOUVRIR PLUS
-              </Button>
+              <Link to="/category/pret-a-porter/homme/costumes"> {/* Using Link for routing */}
+                <Button
+                  variant="outline"
+                  className="px-6 md:px-8 py-2 bg-transparent border-white text-white hover:bg-white hover:text-[#4A0404] transition-colors font-['WomanFontBold'] text-sm md:text-base"
+                >
+                  DÉCOUVRIR PLUS
+                </Button>
+              </Link>
             </div>
           </div>
 

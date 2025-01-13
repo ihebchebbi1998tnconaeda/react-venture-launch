@@ -11,6 +11,7 @@ import GiftApp from '@/components/GiftApp/GiftApp';
 import WelcomePackPremium from '@/components/GiftApp/WelcomePackPremium';
 import WelcomePackPrestige from '@/components/GiftApp/WelcomePackPrestige';
 import WelcomePackMiniDuo from '@/components/GiftApp/WelcomePackMiniDuo';
+import WelcomePackChemise from '@/components/GiftApp/WelcomePackChemise';
 
 const GiftUniversePage = () => {
   const [showGiftBox, setShowGiftBox] = useState(false);
@@ -25,12 +26,18 @@ const GiftUniversePage = () => {
     const componentMap = {
       packprestige: <WelcomePackPrestige onCompose={() => setShowGiftBox(true)} />,
       packpremium: <WelcomePackPremium onCompose={() => setShowGiftBox(true)} />,
+      packpremuim: <WelcomePackPremium onCompose={() => setShowGiftBox(true)} />, // Added to handle the typo
       packtrio: <WelcomePackTrio onCompose={() => setShowGiftBox(true)} />,
       packduo: <WelcomePackDuo onCompose={() => setShowGiftBox(true)} />,
       packminiduo: <WelcomePackMiniDuo onCompose={() => setShowGiftBox(true)} />,
+      packchemise: <WelcomePackChemise onCompose={() => setShowGiftBox(true)} />,
     };
 
-    setCurrentComponent(componentMap[lastSegment] || <WelcomePackTrio onCompose={() => setShowGiftBox(true)} />);
+    setCurrentComponent(componentMap[lastSegment] || null);
+    
+    if (!componentMap[lastSegment]) {
+      console.warn(`No matching component found for route: ${lastSegment}`);
+    }
   }, [location]);
 
   return (
@@ -41,13 +48,18 @@ const GiftUniversePage = () => {
         <MainNavbar />
       </div>
       <br />
-      <div className="flex flex-col items-center justify-center">
+      <div className="lg:mt-[0.5%] mt-[-15%]">
         {showNewPage ? (
           <GiftApp />
         ) : showGiftBox ? (
           <GiftBox onAnimationComplete={() => setShowNewPage(true)} />
         ) : (
-          currentComponent
+          currentComponent || (
+            <div className="text-center p-8">
+              <h2 className="text-2xl font-semibold text-gray-800">Pack non trouvé</h2>
+              <p className="text-gray-600 mt-2">Le pack que vous recherchez n'existe pas.</p>
+            </div>
+          )
         )}
       </div>
       <Footer />

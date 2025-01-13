@@ -9,27 +9,27 @@ const PretAPorterSection = () => {
         items={[
           {
             href: "/category/pret-a-porter/homme/costumes",
-            title: "Costumes",
+            title: "Costume",
             description: "Costumes élégants"
           },
           {
             href: "/category/pret-a-porter/homme/blazers",
-            title: "Blazers",
+            title: "Blazer",
             description: "Blazers raffinés"
           },
           {
             href: "/category/pret-a-porter/homme/chemises",
-            title: "Chemises",
+            title: "Chemise",
             description: "Chemises classiques"
           },
           {
             href: "/category/pret-a-porter/homme/pantalons",
-            title: "Pantalons",
+            title: "Pantalon",
             description: "Pantalons élégants"
           },
           {
             href: "/category/pret-a-porter/homme/pollo",
-            title: "Pollo",
+            title: "Polo",
             description: "Polos élégants"
           }
         ]}

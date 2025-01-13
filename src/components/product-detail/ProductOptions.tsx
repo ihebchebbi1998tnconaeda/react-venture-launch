@@ -33,7 +33,7 @@ const ProductOptions = ({
   const [selectedBoxOption, setSelectedBoxOption] = useState<boolean | null>(null);
 
   const displaySize = (size: string) => {
-    if (size === 'XXL2') return '2XXL';
+    if (size === '3XL') return '3XL';
     return size;
   };
 

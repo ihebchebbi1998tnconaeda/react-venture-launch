@@ -17,13 +17,18 @@ export function GiftBox({ onAnimationComplete }: GiftBoxProps) {
     setTimeout(() => setIsTopView(true), 2500);
     setTimeout(() => {
       setIsOpen(true);
-      const newParticles = Array.from({ length: 50 }, (_, i) => ({
+      const newParticles = Array.from({ length: 100 }, (_, i) => ({
         id: i,
-        type: i % 2 === 0 ? 'gift' : 'heart',
+        type: i % 3 === 0 ? 'gift' : i % 3 === 1 ? 'heart' : 'star',
         style: {
           left: `${Math.random() * 100}%`,
+          top: `${Math.random() * 100}%`,
+          '--x': `${(Math.random() - 0.5) * 500}px`,
+          '--y': `${(Math.random() - 0.5) * 500}px`,
+          '--rotation': `${Math.random() * 720 - 360}deg`,
+          '--scale': `${0.5 + Math.random() * 1.5}`,
           animationDelay: `${Math.random() * 0.5}s`,
-          animationDuration: `${0.5 + Math.random() * 2}s`,
+          animationDuration: `${1 + Math.random() * 2}s`,
         },
       }));
       setParticles(newParticles);
@@ -68,25 +73,20 @@ export function GiftBox({ onAnimationComplete }: GiftBoxProps) {
           <div className="content flex items-center justify-center">
             <div className="gift-icon-wrapper">
               <Gift className="gift-icon text-white w-12 h-12" />
-              <div className="gift-glow"></div>
             </div>
           </div>
         </div>
 
         <div className="ribbon-vertical"></div>
         <div className="ribbon-horizontal"></div>
-        
-        <div className="ribbon-bow">
-          <div className="bow-left"></div>
-          <div className="bow-right"></div>
-          <div className="bow-center"></div>
-        </div>
+        <div className="ribbon-knot"></div>
       </div>
 
       <style>
         {`
         .perspective {
-          perspective: 3000px;
+          perspective: 4000px;
+          overflow: hidden;
         }
 
         .gift-box {
@@ -95,26 +95,27 @@ export function GiftBox({ onAnimationComplete }: GiftBoxProps) {
           height: 200px;
           transform-style: preserve-3d;
           transition: all 2s cubic-bezier(0.4, 0, 0.2, 1);
-          filter: drop-shadow(0 35px 35px rgba(0, 0, 0, 0.25));
+          filter: drop-shadow(0 35px 50px rgba(0, 0, 0, 0.4));
           background: transparent;
         }
 
         .gift-box.rotating {
-          transform: rotate3d(1, 1, 0, 360deg) rotate3d(0, 1, 0, 360deg);
+          transform: rotate3d(1, 1, 0, 1080deg) rotate3d(0, 1, 0, 1080deg) scale(1.2);
         }
 
         .gift-box.top-view {
-          transform: rotate3d(1, 0, 0, 60deg) translateY(-50px);
+          transform: rotate3d(1, 0, 0, 60deg) translateY(-80px) scale(1.3);
         }
 
         .gift-box.open .lid {
-          transform: rotateX(-110deg) translateY(-30px);
-          filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.2));
+          transform: rotateX(-120deg) translateY(-40px) scale(1.05);
+          filter: drop-shadow(0 30px 30px rgba(0, 0, 0, 0.4));
         }
 
         .gift-box.transitioning {
-          transform: scale(15);
+          transform: scale(25);
           opacity: 0;
+          transition: all 4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .lid, .base {
@@ -126,7 +127,7 @@ export function GiftBox({ onAnimationComplete }: GiftBoxProps) {
 
         .lid {
           transform-origin: top;
-          transition: all 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+          transition: all 1.8s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .lid > div, .base > div {
@@ -138,8 +139,8 @@ export function GiftBox({ onAnimationComplete }: GiftBoxProps) {
 
         .lid-top, .lid-front, .lid-back, .lid-left, .lid-right,
         .base-front, .base-back, .base-left, .base-right, .base-bottom {
-          background: linear-gradient(135deg, #780404, #9a0505);
-          box-shadow: inset 0 0 30px rgba(0,0,0,0.2);
+          background: linear-gradient(135deg, #1a1a1a, #000);
+          box-shadow: inset 0 0 40px rgba(0,0,0,0.6);
         }
 
         .lid-shine, .base-shine {
@@ -150,10 +151,10 @@ export function GiftBox({ onAnimationComplete }: GiftBoxProps) {
           height: 100%;
           background: linear-gradient(
             135deg,
-            rgba(255, 255, 255, 0.5) 0%,
-            transparent 40%,
-            transparent 60%,
-            rgba(255, 255, 255, 0.2) 100%
+            rgba(255, 255, 255, 0.2) 0%,
+            transparent 30%,
+            transparent 70%,
+            rgba(255, 255, 255, 0.1) 100%
           );
           pointer-events: none;
         }
@@ -175,7 +176,7 @@ export function GiftBox({ onAnimationComplete }: GiftBoxProps) {
           height: 100%;
           transform: translateY(-50px);
           opacity: 0;
-          transition: all 0.5s ease-in-out;
+          transition: all 1s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .gift-box.open .content {
@@ -186,27 +187,13 @@ export function GiftBox({ onAnimationComplete }: GiftBoxProps) {
         .gift-icon-wrapper {
           position: relative;
           animation: float 2s ease-in-out infinite;
-        }
-
-        .gift-icon {
-          filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
-        }
-
-        .gift-glow {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          width: 60px;
-          height: 60px;
-          transform: translate(-50%, -50%);
-          background: radial-gradient(circle, rgba(255, 0, 0, 0.8) 0%, transparent 70%);
-          animation: pulse 2s ease-in-out infinite;
+          filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.3));
         }
 
         .ribbon-vertical, .ribbon-horizontal {
-          background: linear-gradient(45deg, #ff0000, #ff4d4d);
+          background: #700100;
           position: absolute;
-          box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+          box-shadow: 0 0 20px rgba(0,0,0,0.4);
         }
 
         .ribbon-vertical {
@@ -223,104 +210,66 @@ export function GiftBox({ onAnimationComplete }: GiftBoxProps) {
           transform: translateZ(101px);
         }
 
-        .ribbon-bow {
+        .ribbon-knot {
           position: absolute;
-          top: 70px;
-          left: 70px;
-          transform: translateZ(102px);
-          transform-style: preserve-3d;
-        }
-
-        .bow-left, .bow-right {
-          position: absolute;
-          width: 30px;
-          height: 30px;
-          background: linear-gradient(45deg, #ff0000, #ff4d4d);
-          border-radius: 50% 50% 0 50%;
-          transform-origin: bottom right;
-          box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
-        }
-
-        .bow-left {
-          transform: rotate(-45deg);
-          left: -15px;
-        }
-
-        .bow-right {
-          transform: rotate(45deg) scaleX(-1);
-          right: -15px;
-        }
-
-        .bow-center {
-          position: absolute;
-          width: 20px;
-          height: 20px;
-          background: linear-gradient(45deg, #ff0000, #ff4d4d);
-          border-radius: 50%;
-          top: 30px;
-          left: 30px;
+          width: 50px;
+          height: 50px;
+          left: 75px;
+          top: 75px;
+          background: #700100;
+          transform: translateZ(102px) rotate(45deg);
+          box-shadow: 0 0 25px rgba(0,0,0,0.4);
+          border-radius: 8px;
         }
 
         .particle {
           position: absolute;
-          width: 10px;
-          height: 10px;
-          background: red;
-          border-radius: 50%;
           opacity: 0;
           transform-origin: center;
           animation: explode 2s forwards;
         }
 
         .heart {
-          width: 20px;
-          height: 20px;
-          background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Heart_icon.svg/128px-Heart_icon.svg.png') center center no-repeat;
+          width: 25px;
+          height: 25px;
+          background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Heart_coraz%C3%B3n.svg/128px-Heart_coraz%C3%B3n.svg.png') center center no-repeat;
           background-size: cover;
+          filter: drop-shadow(0 0 8px rgba(255, 0, 0, 0.6));
         }
 
         .gift {
-          width: 20px;
-          height: 20px;
+          width: 25px;
+          height: 25px;
           background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gift_box.svg/128px-Gift_box.svg.png') center center no-repeat;
           background-size: cover;
+          filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+        }
+
+        .star {
+          width: 25px;
+          height: 25px;
+          background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Star_icon_stylized.svg/128px-Star_icon_stylized.svg.png') center center no-repeat;
+          background-size: cover;
+          filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
         }
 
         @keyframes explode {
           0% {
-            transform: translate(0, 0);
+            transform: translate(0, 0) rotate(0) scale(0);
             opacity: 1;
           }
           100% {
-            transform: translate(var(--x), var(--y));
+            transform: translate(var(--x), var(--y)) rotate(var(--rotation)) scale(var(--scale));
             opacity: 0;
           }
         }
 
-        @keyframes pulse {
-          0% {
-            transform: scale(1);
-            opacity: 1;
-          }
-          50% {
-            transform: scale(1.3);
-            opacity: 0.6;
-          }
-          100% {
-            transform: scale(1);
-            opacity: 1;
-          }
-        }
-
         @keyframes float {
-          0% {
-            transform: translateY(0);
+          0%, 100% {
+            transform: translateY(0) scale(1) rotate(0deg);
           }
           50% {
-            transform: translateY(-10px);
-          }
-          100% {
-            transform: translateY(0);
+            transform: translateY(-20px) scale(1.1) rotate(5deg);
           }
         }
         `}

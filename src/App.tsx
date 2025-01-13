@@ -23,6 +23,8 @@ const FooterCategoryPage = React.lazy(() => import('./pages/FooterCategoryPage')
 const MondeFioriHistoire = React.lazy(() => import('./pages/MondeFioriHistoire'));
 const MondeFioriCollection = React.lazy(() => import('./pages/MondeFioriCollection'));
 const MondeFioriDNA = React.lazy(() => import('./pages/MondeFioriDNA'));
+const SurMesurePage = React.lazy(() => import('./pages/SurMesurePage'));
+const UniversCadeauxPage = React.lazy(() => import('./pages/UniversCadeauxPage'));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -74,6 +76,14 @@ const App = () => (
                   element={
                     <Suspense fallback={<PageLoader />}>
                       <CategoryPage />
+                    </Suspense>
+                  } 
+                />
+                <Route 
+                  path="/univers-cadeaux" 
+                  element={
+                    <Suspense fallback={<PageLoader />}>
+                      <UniversCadeauxPage />
                     </Suspense>
                   } 
                 />
@@ -141,7 +151,6 @@ const App = () => (
                     </Suspense>
                   } 
                 />
-                {/* New Monde Fiori routes */}
                 <Route 
                   path="/monde-fiori/histoire" 
                   element={
@@ -163,6 +172,14 @@ const App = () => (
                   element={
                     <Suspense fallback={<PageLoader />}>
                       <MondeFioriDNA />
+                    </Suspense>
+                  } 
+                />
+                <Route 
+                  path="/sur-mesure" 
+                  element={
+                    <Suspense fallback={<PageLoader />}>
+                      <SurMesurePage />
                     </Suspense>
                   } 
                 />

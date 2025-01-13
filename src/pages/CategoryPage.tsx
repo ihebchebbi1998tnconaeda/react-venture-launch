@@ -46,7 +46,12 @@ const CategoryPage = () => {
       <div className="hidden lg:block">
         <MainNavbar/>
       </div>
-      <BeltsSection />
+      <div className="hidden lg:block">
+    <BeltsSection />
+    </div>
+      <div className="lg:hidden mt-[-12%]">
+    <BeltsSection />
+  </div>
       <div className="flex-grow bg-[#F9FAFB]">
         <div className="container mx-auto px-4 py-4">
           <button

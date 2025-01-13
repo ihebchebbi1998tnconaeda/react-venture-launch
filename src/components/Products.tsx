@@ -17,7 +17,7 @@ const Products = () => {
     },
     [
       Autoplay({
-        delay: 4000,
+        delay: 2500,
         stopOnInteraction: false,
         stopOnMouseEnter: true,
       }),
@@ -58,7 +58,7 @@ const Products = () => {
   return (
     <div className="products-wrapper">
       <div className="products-container">
-        <h1 className="products-title">New Products</h1>
+        <h1 className="products-title">Nouveauté</h1>
         <Categories />
         <div className="embla" ref={emblaRef}>
           <div className="embla__container">
@@ -98,7 +98,8 @@ const Products = () => {
            </div>
         </button>
       </div>
-      <style jsx>{`
+      <style>
+        {`
         .products-wrapper {
           width: 100%;
           overflow: hidden;
@@ -143,61 +144,49 @@ const Products = () => {
           animation: pulse 1.5s infinite;
         }
         @keyframes pulse {
-          0% {
-            background-color: #e5e7eb;
-          }
-          50% {
-            background-color: #d1d5db;
-          }
-          100% {
-            background-color: #e5e7eb;
-          }
+          0% { background-color: #e5e7eb; }
+          50% { background-color: #d1d5db; }
+          100% { background-color: #e5e7eb; }
         }
- .embla__button {
-    position: absolute;
-    top: 50%;
-    transform: translate(-50%, -40%); /* Fix centering */
-    background-color: #700100;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 35px; /* Increased width and height for clarity */
-    height: 35px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 3.5rem; /* Adjust font size for the arrows */
-    font-weight: bold; /* Ensure arrows are prominent */
-    cursor: pointer;
-    z-index: 10;
-    transition: background-color 0.3s ease;
-  }
-  .embla__button--prev {
-    left: 2rem;
-  }
-   .embla__button div {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  font-size: 3.25rem;
-  margin: 10px; 
-  top: 4px; 
-  right: 3px;
-  bottom: 100px;
-}
-
-  .embla__button--next {
-    right: 2rem;
-  }
-        .embla__button:hover {
-          background-color: #000;
+        .embla__button {
+          position: absolute;
+          top: 50%;
+          transform: translate(-50%, -40%);
+          background-color: #700100;
+          color: white;
+          border: none;
+          border-radius: 50%;
+          width: 35px;
+          height: 35px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 3.5rem;
+          font-weight: bold;
+          cursor: pointer;
+          z-index: 10;
+          transition: background-color 0.3s ease;
         }
+        .embla__button--prev { left: 2rem; }
+        .embla__button div {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          position: absolute;
+          font-size: 3.25rem;
+          margin: 10px;
+          top: 4px;
+          right: 3px;
+          bottom: 100px;
+        }
+        .embla__button--next { right: 2rem; }
+        .embla__button:hover { background-color: #000; }
         .embla__button--disabled {
           background-color: #d1d5db;
           cursor: not-allowed;
         }
-      `}</style>
+        `}
+      </style>
     </div>
   );
 };

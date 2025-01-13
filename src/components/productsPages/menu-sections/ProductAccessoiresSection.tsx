@@ -9,27 +9,27 @@ const ProductAccessoiresSection = () => {
         items={[
           {
             href: "/category/accessoires/homme/portefeuilles",
-            title: "Portefeuilles",
+            title: "Portefeuille",
             description: "Portefeuilles élégants"
           },
           {
             href: "/category/accessoires/homme/ceintures",
-            title: "Ceintures",
+            title: "Ceinture",
             description: "Ceintures raffinées"
           },
           {
             href: "/category/accessoires/homme/cravates",
-            title: "Cravates",
+            title: "Cravate",
             description: "Cravates élégantes"
           },
           {
             href: "/category/accessoires/homme/mallettes",
-            title: "Mallettes",
+            title: "Mallette",
             description: "Mallettes professionnelles"
           },
           {
             href: "/category/accessoires/homme/porte-cartes",
-            title: "Porte-cartes",
+            title: "Porte-carte",
             description: "Porte-cartes élégants"
           }
         ]}

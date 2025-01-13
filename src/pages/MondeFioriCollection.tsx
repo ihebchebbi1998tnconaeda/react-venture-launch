@@ -16,7 +16,9 @@ const MondeFioriCollection = () => {
     <div className="hidden lg:block">
       <MainNavbar/>
     </div>
+    <div className="lg:mt-[0.5%] mt-[-15%]">
     <BeltsSection />
+    </div>
       <Footer />
     </div>
   );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   NavigationMenuItem,
   NavigationMenuTrigger,
@@ -10,14 +10,26 @@ interface NavMenuItemProps {
   title: string;
   image: string;
   children: React.ReactNode;
+  href?: string;
 }
 
-const NavMenuItem = ({ title, image, children }: NavMenuItemProps) => {
+const NavMenuItem = ({ title, image, children, href }: NavMenuItemProps) => {
+  const navigate = useNavigate();
   const isGiftUniverse = title === "L'univers Cadeaux";
+  
+  const handleClick = (e: React.MouseEvent) => {
+    if (href) {
+      e.preventDefault();
+      navigate(href);
+    }
+  };
   
   return (
     <NavigationMenuItem>
-      <NavigationMenuTrigger className="text-red text-[16px] lg:text-[21px] bg-transparent hover:bg-transparent focus:bg-transparent data-[state=open]:bg-transparent">
+      <NavigationMenuTrigger 
+        onClick={handleClick}
+        className="text-red text-[16px] lg:text-[21px] bg-transparent hover:bg-transparent focus:bg-transparent data-[state=open]:bg-transparent"
+      >
         {title}
       </NavigationMenuTrigger>
       <NavigationMenuContent>

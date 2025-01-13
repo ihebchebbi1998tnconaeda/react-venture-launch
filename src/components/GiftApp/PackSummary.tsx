@@ -67,12 +67,12 @@ const PackSummary = ({
         <Separator className="my-4" />
         
         <div className="flex justify-between items-center bg-[#6D0201]/5 p-4 rounded-lg">
-          <span className="text-sm font-medium text-gray-700">Total du Pack</span>
+          <span className="text-sm font-small text-gray-700">Total du Pack</span>
           <motion.span 
             key={totalPrice}
             initial={{ scale: 1.2, color: '#6D0201' }}
             animate={{ scale: 1, color: '#1a1a1a' }}
-            className="text-lg font-semibold"
+            className="text-small font-semibold"
           >
             {totalPrice.toFixed(2)} TND
           </motion.span>

@@ -91,14 +91,12 @@ const GiftPackContainer = ({
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
-        className={`relative transition-all duration-300 ${className} ${
-          item ? 'bg-white/95' : ''
-        }`}
+        className={`relative transition-all duration-300 ${className}`}
       >
         <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
-          <h3 className="text-lg font-medium text-[#700100] mb-2">{title}</h3>
+          <h3 className={`text-lg font-medium ${item ? 'text-[#700100]' : 'text-white'} mb-2`}>{title}</h3>
           {!item && (
-            <p className="text-sm text-gray-500 text-center">
+            <p className="text-sm text-gray-400 text-center">
               Glissez et déposez un article ici
             </p>
           )}
@@ -109,15 +107,15 @@ const GiftPackContainer = ({
               className="relative w-full h-full group"
             >
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="relative w-4/5 h-4/5 p-4 rounded-lg bg-white/50 backdrop-blur-sm shadow-sm border border-gray-100/30 transition-all duration-300 group-hover:shadow-md">
+                <div className="relative w-4/5 h-4/5 p-4 rounded-lg bg-black/50 backdrop-blur-sm shadow-lg border border-gray-800/30 transition-all duration-300 group-hover:shadow-xl">
                   <img
                     src={item.image}
                     alt={item.name}
                     className="w-full h-full object-contain cursor-pointer transition-all duration-300 group-hover:scale-105 filter drop-shadow-lg"
                     onClick={handleItemClick}
                   />
-                  <div className="absolute bottom-0 left-0 right-0 p-2 bg-white/90 backdrop-blur-sm rounded-b-lg">
-                    <p className="text-sm font-medium text-[#700100] truncate text-center">
+                  <div className="absolute bottom-0 left-0 right-0 p-2 bg-black/80 backdrop-blur-sm rounded-b-lg">
+                    <p className="text-sm font-medium text-white truncate text-center">
                       {item.name}
                     </p>
                   </div>

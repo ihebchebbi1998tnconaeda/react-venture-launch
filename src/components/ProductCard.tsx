@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Product } from '../types/product';
+import { calculateDiscountedPrice, formatPrice } from '@/utils/priceCalculations';
 
 interface ProductCardProps {
   product: Product;
@@ -8,13 +9,20 @@ interface ProductCardProps {
 
 const ProductCard = ({ product }: ProductCardProps) => {
   const navigate = useNavigate();
+  const discountedPrice = calculateDiscountedPrice(product.price, product.discount);
+  const hasDiscount = !!product.discount && parseFloat(product.discount) > 0;
 
   return (
     <div 
       className="h-full hover:shadow-lg hover:transform hover:scale-[1.02] transition-all duration-300 cursor-pointer"
       onClick={() => navigate(`/product/${product.id}`)}
     >
-      <div className="h-[300px] bg-transparent overflow-hidden mb-3">
+      <div className="h-[300px] bg-transparent overflow-hidden mb-3 relative">
+        {hasDiscount && (
+          <div className="absolute top-2 right-2 bg-[#700100] text-white px-2 py-1 rounded-full text-sm font-medium">
+            -{product.discount}%
+          </div>
+        )}
         <img
           src={product.image}
           alt={product.name}
@@ -30,8 +38,21 @@ const ProductCard = ({ product }: ProductCardProps) => {
           {product.material}<br />
           {product.color}
         </div>
-        <div className="mt-2 font-['WomanFontRegular'] text-black">
-          {product.price} TND
+        <div className="mt-2 font-['WomanFontRegular']">
+          {hasDiscount ? (
+            <div className="space-y-1">
+              <span className="text-[#700100] font-bold">
+                {formatPrice(discountedPrice)} TND
+              </span>
+              <span className="text-gray-500 line-through block">
+                {formatPrice(product.price)} TND
+              </span>
+            </div>
+          ) : (
+            <span className="text-black">
+              {formatPrice(product.price)} TND
+            </span>
+          )}
         </div>
       </div>
     </div>

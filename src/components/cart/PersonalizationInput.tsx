@@ -107,14 +107,14 @@ const PersonalizationInput = ({ itemId, onUpdate }: PersonalizationInputProps) =
             >
               <Edit2 className="h-4 w-4" />
             </Button>
-            <Button
+          {/*   <Button
               size="icon"
               variant="ghost"
               className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity text-red-600 hover:text-red-700 hover:bg-red-50"
               onClick={handleRemove}
             >
               <X className="h-4 w-4" />
-            </Button>
+            </Button> */}
           </div>
         </div>
       )}

@@ -55,22 +55,22 @@ const BrandLocation = () => {
   }, [feedbacks.length]);
 
   return (
-    <section className="py-6 lg:py-12 px-4 bg-gray-50">
+    <section className="py-6 lg:py-12 bg-gray-50">
       <div className="max-w-[1536px] mx-auto w-full flex flex-col items-center">
-        <div className="w-[90%] mb-8"> {/* Increased from 80% to 90% */}
+        <div className="w-[95%] mb-8">
           <h1 className="text-center text-[#591C1C] text-3xl md:text-4xl lg:text-5xl font-['WomanFontBold']">
             Trouver un magasin
           </h1>
         </div>
 
-        <div className="w-[90%] flex flex-wrap gap-6 mb-8 justify-center"> {/* Increased from 80% to 90% */}
+        <div className="w-[95%] flex flex-wrap gap-6 mb-8 justify-center">
           <div className="w-[47%] min-w-[300px]"> {/* Adjusted from 45% to 47% for better fit */}
             <a href={location1URL} target="_blank" rel="noopener noreferrer">
               <div className="relative overflow-hidden rounded-lg h-[340px] group hover:shadow-lg transition-all">
                 <img src="Thestore.png" alt="Fiori Les Berges du Lac" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                 <div className="absolute bottom-0 left-0 right-0 p-3 text-white bg-[#591C1C]/90">
                   <p className="text-lg font-['WomanFontBold']">
-                    Rue du Lac Tibériade,<br />Les Berges du lac, La Marsa, Tunisia
+                    Rue du Lac Tibériade , Les Berges du lac
                   </p>
                 </div>
               </div>
@@ -82,7 +82,7 @@ const BrandLocation = () => {
                 <img src="Thestand.png" alt="Fiori Tunisia Mall" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                 <div className="absolute bottom-0 left-0 right-0 p-3 text-white bg-[#591C1C]/90">
                   <p className="text-lg font-['WomanFontBold']">
-                    Tunisia mall,Les Berges Du Lac II<br />En face Zara et Zayn
+                    Tunisia mall,Les Berges Du Lac II
                   </p>
                 </div>
               </div>
@@ -90,7 +90,7 @@ const BrandLocation = () => {
           </div>
         </div>
 
-        <div className="w-[90%] flex flex-wrap gap-6 items-stretch justify-center"> {/* Increased from 80% to 90% */}
+        <div className="w-[93%] flex flex-wrap gap-6 items-stretch justify-center">
           <div className="w-[47%] min-w-[300px] bg-[#591C1C] rounded-lg p-6 text-white"> {/* Adjusted from 45% to 47% */}
           <br></br>
           <br></br>

@@ -39,12 +39,12 @@ const MainNavbarProduct = () => {
                 items={[
                   {
                     href: "/category/sur-mesure/homme/portefeuilles",
-                    title: "Portefeuilles",
+                    title: "Portefeuille",
                     description: "Portefeuilles élégants"
                   },
                   {
                     href: "/category/sur-mesure/homme/ceintures",
-                    title: "Ceintures",
+                    title: "Ceinture",
                     description: "Ceintures raffinées"
                   }
                 ]}
@@ -69,12 +69,12 @@ const MainNavbarProduct = () => {
                 items={[
                   {
                     href: "/category/outlet/homme/costumes",
-                    title: "Costumes",
+                    title: "Costume",
                     description: "Costumes en promotion"
                   },
                   {
                     href: "/category/outlet/homme/blazers",
-                    title: "Blazers",
+                    title: "Blazer",
                     description: "Blazers en solde"
                   }
                 ]}
@@ -84,7 +84,7 @@ const MainNavbarProduct = () => {
                 items={[
                   {
                     href: "/category/outlet/femme/chemises",
-                    title: "Chemises",
+                    title: "Chemise",
                     description: "Chemises en promotion"
                   }
                 ]}

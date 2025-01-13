@@ -31,12 +31,7 @@ export default defineConfig(({ mode }) => ({
       }
     },
     chunkSizeWarningLimit: 1000,
-    base: 'https://fioriforyou.com/',
     reportCompressedSize: false,
     cssCodeSplit: true,
-  },
-  optimizeDeps: {
-    include: ['react', 'react-dom', 'framer-motion'],
-    exclude: ['@radix-ui/react-navigation-menu', '@radix-ui/react-dialog']
   }
 }));

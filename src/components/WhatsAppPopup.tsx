@@ -35,7 +35,7 @@ const WhatsAppPopup = () => {
   };
 
   const handleWhatsAppClick = () => {
-    window.open('https://wa.me/+21650813355', '_blank');
+    window.open('https://wa.me/+21629509840', '_blank');
   };
 
   const handleMinimizedClick = () => {

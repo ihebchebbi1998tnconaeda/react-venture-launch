@@ -5,6 +5,7 @@ import { CheckCircle } from 'lucide-react';
 import { useCart } from '@/components/cart/CartProvider';
 import { updateProductStock } from '@/utils/stockManagement';
 import { submitOrder } from '@/services/orderSubmissionApi';
+import { toast } from "@/hooks/use-toast";
 
 const PaymentSuccessPage = () => {
   const navigate = useNavigate();
@@ -37,7 +38,8 @@ const PaymentSuccessPage = () => {
             size: item.size || '-',
             color: item.color || '-',
             personalization: item.personalization || '-',
-            pack: packType
+            pack: packType,
+            box: item.withBox ? 'Avec box' : 'Sans box'
           }));
 
           const orderData = {
@@ -74,6 +76,16 @@ const PaymentSuccessPage = () => {
 
           await submitOrder(orderData);
           
+          toast({
+            title: "Commande confirmée !",
+            description: "Un email de confirmation vous a été envoyé.",
+            style: {
+              backgroundColor: '#700100',
+              color: 'white',
+              border: '1px solid #590000',
+            },
+          });
+          
           sessionStorage.removeItem('pendingOrder');
           sessionStorage.removeItem('selectedPackType');
         }
@@ -81,6 +93,11 @@ const PaymentSuccessPage = () => {
         clearCart();
       } catch (error) {
         console.error('Error processing payment success:', error);
+        toast({
+          title: "Erreur",
+          description: "Une erreur est survenue lors du traitement de votre commande. Notre équipe a été notifiée.",
+          variant: "destructive",
+        });
       }
     };
 
@@ -112,6 +129,7 @@ const PaymentSuccessPage = () => {
         </h1>
         <p className="text-gray-600 mb-6">
           Votre commande a été confirmée et sera traitée dans les plus brefs délais.
+          Un email de confirmation vous a été envoyé.
         </p>
         <motion.button
           whileHover={{ scale: 1.05 }}

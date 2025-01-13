@@ -75,25 +75,35 @@ const Footer = () => {
             <h3 className="font-semibold text-sm mb-4">CONTACTEZ-NOUS</h3>
             <ul className="space-y-2 text-sm">
               <li className="flex items-center gap-2">
-                <span className="inline-block">+212-529-15-93-92</span>
+                <a href="https://wa.me/21629509840" target="_blank" rel="noopener noreferrer" className="inline-block">
+                  +216 29 509 840
+                </a>
               </li>
               <li>
-                <a href="#" className="hover:underline flex items-center gap-2">
+                <a href="mailto:contact@fioriforyou.com" className="hover:underline flex items-center gap-2">
                   <span>Envoyez-nous un email</span>
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:underline flex items-center gap-2">
+                <a href="https://wa.me/21629509840" target="_blank" rel="noopener noreferrer" className="hover:underline flex items-center gap-2">
                   <span>Chat en direct</span>
                 </a>
               </li>
             </ul>
             <p className="mt-6 mb-3 text-sm">Suivez-nous</p>
             <div className="flex gap-3">
-              <a href="#" className="hover:text-[#700100]-600"><i className="fab fa-instagram text-lg"></i></a>
-              <a href="#" className="hover:text-[#700100]-600"><i className="fab fa-facebook text-lg"></i></a>
-              <a href="#" className="hover:text-[#700100]-600"><i className="fab fa-youtube text-lg"></i></a>
-              <a href="#" className="hover:text-[#700100]-600"><i className="fab fa-tiktok text-lg"></i></a>
+              <a href="https://www.instagram.com/fioriforyou/" target="_blank" rel="noopener noreferrer" className="text-[#700100]">
+                <i className="fab fa-instagram" style={{ fontSize: '1.44rem' }}></i>
+              </a>
+              <a href="https://www.facebook.com/FioriForYouMen" target="_blank" rel="noopener noreferrer" className="text-[#700100]">
+                <i className="fab fa-facebook" style={{ fontSize: '1.44rem' }}></i>
+              </a>
+              <a href="https://www.youtube.com/@fioriforyou" target="_blank" rel="noopener noreferrer" className="text-[#700100]">
+                <i className="fab fa-youtube" style={{ fontSize: '1.44rem' }}></i>
+              </a>
+              <a href="https://www.tiktok.com/@fioriforyou" target="_blank" rel="noopener noreferrer" className="text-[#700100]">
+                <i className="fab fa-tiktok" style={{ fontSize: '1.44rem' }}></i>
+              </a>
             </div>
           </div>
 
@@ -121,12 +131,12 @@ const Footer = () => {
           <div>
             <h3 className="font-semibold text-sm mb-4">NOS PAGES</h3>
             <ul className="space-y-2 text-sm">
-              <li><a href="/footer-category/le-monde-fiori" className="hover:underline">Le monde Fiori</a></li>
-              <li><a href="/footer-category/univers-cadeaux" className="hover:underline">L'univers Cadeaux</a></li>
-              <li><a href="/footer-category/pret-a-porter" className="hover:underline">Le prét à porter</a></li>
-              <li><a href="/footer-category/accessoires" className="hover:underline">Accessoires</a></li>
-              <li><a href="/footer-category/sur-mesure" className="hover:underline">Le sur mesure</a></li>
-              <li><a href="/footer-category/outlet" className="hover:underline">Outlet</a></li>
+              <li><a href="/monde-fiori/histoire" className="hover:underline">Le monde Fiori</a></li>
+              <li><a href="/univers-cadeaux" className="hover:underline">L'univers Cadeaux</a></li>
+              <li><a href="/category/pret-a-porter/homme/costumes" className="hover:underline">Le prét à porter</a></li>
+              <li><a href="/category/accessoires/homme/portefeuilles" className="hover:underline">Accessoires</a></li>
+              <li><a href="/sur-mesure" className="hover:underline">Le sur mesure</a></li>
+              <li><a href="/category/outlet/femme/chemises" className="hover:underline">Outlet</a></li>
             </ul>
             <div className="mt-8">
               <p className="text-sm mb-2">Nous acceptons</p>

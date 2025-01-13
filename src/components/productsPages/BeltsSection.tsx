@@ -23,14 +23,6 @@ const BeltsSection = () => {
         <p className="text-[16px] md:text-[20px] text-[#4C3A36] leading-6 mb-4">
           {content.description}
         </p>
-        <div className="flex justify-center md:justify-end">
-          <a
-            href="#"
-            className="text-[#4C3A36] uppercase text-[14px] md:text-[18px] font-semibold tracking-wide hover:underline"
-          >
-            Discover more
-          </a>
-        </div>
       </div>
       <div className="w-full md:w-1/3 mb-6 md:mb-0 md:pl-4">
         <img

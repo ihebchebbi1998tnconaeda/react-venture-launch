@@ -88,12 +88,12 @@ const CartPage = () => {
       <TopNavbar />
       <div className="flex-grow">
         <BrandNavbarSection />
-        <div className="container mx-auto px-4 py-2 space-y-4 mt-16">
+        <div className="container mx-auto px-4 py-2 space-y-4 mt-4 lg:mt-[-4%] mt-[-13%]">
           <BackButton onClick={() => navigate('/')} />
           <motion.h1 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-2xl md:text-3xl font-serif text-[#1A1F2C] mt-4"
+            className="text-2xl md:text-3xl font-serif text-[#1A1F2C] mt-2"
           >
             Mon Panier ({cartItems.length} articles)
           </motion.h1>
