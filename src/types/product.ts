@@ -5,9 +5,9 @@ export interface Product {
   color: string;
   price: number;
   image: string;
-  image2: string;
-  image3: string;
-  image4: string;
+  image2?: string;
+  image3?: string;
+  image4?: string;
   description: string;
   status: string;
   reference: string;

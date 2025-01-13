@@ -33,6 +33,7 @@ interface ApiResponse {
     "56_size": string;
     "58_size": string;
     status_product: string;
+    discount_product: string;
     related_products: string;
     color_product: string;
     createdate_product: string;
@@ -60,33 +61,20 @@ export const fetchAllProducts = async (): Promise<Product[]> => {
         itemGroup: product.itemgroup_product,
         relatedProducts: product.related_products,
         colorProduct: product.color_product,
-        discount: product.discount_product,
-        sizes: product.itemgroup_product === 'costumes' ? {
-          s: 0,
-          m: 0,
-          l: 0,
-          xl: 0,
-          xxl: 0,
-          "3xl": 0,
-          "48": parseInt(product["48_size"]) || 0,
-          "50": parseInt(product["50_size"]) || 0,
-          "52": parseInt(product["52_size"]) || 0,
-          "54": parseInt(product["54_size"]) || 0,
-          "56": parseInt(product["56_size"]) || 0,
-          "58": parseInt(product["58_size"]) || 0,
-        } : {
+        discount_product: product.discount_product || "",
+        sizes: {
           s: parseInt(product.s_size) || 0,
           m: parseInt(product.m_size) || 0,
           l: parseInt(product.l_size) || 0,
           xl: parseInt(product.xl_size) || 0,
           xxl: parseInt(product.xxl_size) || 0,
           "3xl": parseInt(product["3xl_size"]) || 0,
-          "48": 0,
-          "50": 0,
-          "52": 0,
-          "54": 0,
-          "56": 0,
-          "58": 0,
+          "48": parseInt(product["48_size"]) || 0,
+          "50": parseInt(product["50_size"]) || 0,
+          "52": parseInt(product["52_size"]) || 0,
+          "54": parseInt(product["54_size"]) || 0,
+          "56": parseInt(product["56_size"]) || 0,
+          "58": parseInt(product["58_size"]) || 0,
         },
         quantity: parseInt(product.qnty_product) || 0,
         type_product: product.type_product,

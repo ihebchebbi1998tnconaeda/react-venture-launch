@@ -138,7 +138,7 @@ const ProductDetailContainer = ({ product, onProductAdded }: ProductDetailContai
           name={product.name}
           description={product.description}
           price={product.price}
-          discount={product.discount_product || ""}
+          discount={product.discount_product}
         />
 
         {showPersonalization && (
