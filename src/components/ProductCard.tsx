@@ -9,8 +9,10 @@ interface ProductCardProps {
 
 const ProductCard = ({ product }: ProductCardProps) => {
   const navigate = useNavigate();
-  const discountedPrice = calculateDiscountedPrice(product.price, product.discount);
-  const hasDiscount = !!product.discount && parseFloat(product.discount) > 0;
+  console.log('ProductCard discount:', product.discount_product); // Debug log
+  
+  const discountedPrice = calculateDiscountedPrice(product.price, product.discount_product);
+  const hasDiscount = product.discount_product !== "" && !isNaN(parseFloat(product.discount_product)) && parseFloat(product.discount_product) > 0;
 
   return (
     <div 
@@ -20,7 +22,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
       <div className="h-[300px] bg-transparent overflow-hidden mb-3 relative">
         {hasDiscount && (
           <div className="absolute top-2 right-2 bg-[#700100] text-white px-2 py-1 rounded-full text-sm font-medium">
-            -{product.discount}%
+            -{product.discount_product}%
           </div>
         )}
         <img
