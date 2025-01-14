@@ -51,7 +51,7 @@ const ProductGrid = ({ products, onDragStart, onProductSelect }: ProductGridProp
           <motion.div
             key={product.id}
             draggable={!isMobile}
-            onDragStart={(e) => handleDragStart(e, product)}
+            onDragStart={(e: React.DragEvent<HTMLDivElement>) => handleDragStart(e, product)}
             onClick={() => handleClick(product)}
             data-product-type={product.itemgroup_product}
             initial={{ opacity: 0, y: 20 }}
