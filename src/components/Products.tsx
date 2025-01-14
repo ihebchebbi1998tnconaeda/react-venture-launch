@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { useQuery } from "@tanstack/react-query";
@@ -7,10 +7,11 @@ import ProductCard from "./ProductCard";
 import Categories from "./Categories";
 
 const Products = () => {
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
       loop: true,
-      align: "start", // Align slides to start
+      align: "start",
       skipSnaps: false,
       dragFree: false,
       containScroll: "trimSnaps",
@@ -28,6 +29,14 @@ const Products = () => {
     queryKey: ["products"],
     queryFn: fetchAllProducts,
   });
+
+  // Filter products based on selected category
+  const filteredProducts = React.useMemo(() => {
+    if (!selectedCategory) return products;
+    return products?.filter(
+      (product) => product.itemgroup_product === selectedCategory
+    );
+  }, [products, selectedCategory]);
 
   // Navigation handlers
   const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
@@ -50,6 +59,19 @@ const Products = () => {
     onSelect();
   }, [emblaApi, onSelect]);
 
+  // Listen for category filter events
+  useEffect(() => {
+    const handleFilterCategory = (event: CustomEvent<{ category: string }>) => {
+      setSelectedCategory(event.detail.category);
+      console.log('Filtering by category:', event.detail.category);
+    };
+
+    window.addEventListener('filterCategory', handleFilterCategory as EventListener);
+    return () => {
+      window.removeEventListener('filterCategory', handleFilterCategory as EventListener);
+    };
+  }, []);
+
   if (error) {
     console.error("Error loading products:", error);
     return <div className="text-center text-red-500">Failed to load products</div>;
@@ -68,7 +90,7 @@ const Products = () => {
                     <div className="skeleton-card"></div>
                   </div>
                 ))
-              : products?.map((product) => (
+              : filteredProducts?.map((product) => (
                   <div className="embla__slide" key={product.id}>
                     <ProductCard product={product} />
                   </div>

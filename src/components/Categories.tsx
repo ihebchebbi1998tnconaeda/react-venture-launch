@@ -1,7 +1,12 @@
 import React, { CSSProperties } from 'react';
 
 const Categories = () => {
-  const categories = ['Costume', 'Veste', 'Chemise', 'Accessoire'];
+  const categories = [
+    { id: 'costumes', label: 'Costumes', value: 'costumes' },
+    { id: 'chemises', label: 'Chemises', value: 'chemises' },
+    { id: 'ceintures', label: 'Ceintures', value: 'ceintures' },
+    { id: 'blazers', label: 'Blazers', value: 'blazers' }
+  ];
 
   const containerStyle: CSSProperties = {
     display: 'flex',
@@ -23,10 +28,20 @@ const Categories = () => {
     whiteSpace: 'nowrap',
   };
 
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (category: string) => {
+    // Dispatch a custom event that Products.tsx will listen to
+    const event = new CustomEvent('filterCategory', { 
+      detail: { category }
+    });
+    window.dispatchEvent(event);
+
+    // Update button styles
     const buttons = document.querySelectorAll('.filter-button');
     buttons.forEach(btn => (btn as HTMLElement).style.background = 'transparent');
-    (e.target as HTMLElement).style.background = '#f0f0f0';
+    const clickedButton = document.getElementById(`category-${category}`);
+    if (clickedButton) {
+      clickedButton.style.background = '#f0f0f0';
+    }
   };
 
   React.useEffect(() => {
@@ -53,12 +68,13 @@ const Categories = () => {
     <div style={containerStyle} className="categories-container">
       {categories.map((category) => (
         <button
-          key={category}
+          key={category.id}
+          id={`category-${category.value}`}
           className="filter-button hover:bg-[#f0f0f0] hover:scale-105 transition-all duration-300"
           style={buttonStyle}
-          onClick={handleClick}
+          onClick={() => handleClick(category.value)}
         >
-          {category}
+          {category.label}
         </button>
       ))}
     </div>
