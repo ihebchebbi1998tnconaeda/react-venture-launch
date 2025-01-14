@@ -5,7 +5,7 @@ export const faqData = [
   },
   {
     question: "Quels sont les délais de livraison ?",
-    answer: "Les délais de livraison varient généralement entre 2 à 5 jours ouvrables pour la Tunisie. Pour les commandes internationales, le délai peut aller jusqu'à 10 jours ouvrables."
+    answer: "Les délais de livraison varient généralement entre 24h et 72h pour la Tunisie. Pour les commandes internationales, le délai peut aller jusqu'à 10 jours ouvrables."
   },
   {
     question: "Quelle est votre politique de retour ?",
