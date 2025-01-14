@@ -12,7 +12,7 @@ const GiftCollection = () => {
   return (
     <section className="bg-[#F9FAFB] py-10 font-['WomanFontRegular']">
       <div
-        className="container mx-auto flex flex-wrap justify-between gap-2"
+        className="container mx-auto flex flex-wrap justify-center sm:justify-between gap-4"
         style={{
           padding: 0,
           width: "95vw",
@@ -25,10 +25,8 @@ const GiftCollection = () => {
           <a
             key={index}
             href={item.href}
-            className="relative"
+            className="relative w-[calc(50%-8px)] sm:w-[calc((95%-32px)/5)] last:sm:w-[calc((95%-32px)/5)] last:w-[calc(50%-8px)]"
             style={{
-              flex: "1 1 calc((95% - 2 * 8px) / 5)", // Distribute width equally among 5 cards with small gaps
-              maxWidth: "calc((95% - 2 * 8px) / 5)", // Maximum width for each card
               height: "430px",
               background: "#fff",
               boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",

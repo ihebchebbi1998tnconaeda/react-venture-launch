@@ -46,8 +46,8 @@ const ProductInfo = ({
                   <span className="text-2xl font-bold text-[#700100]">
                     {formatPrice(discountedPrice)} TND
                   </span>
-                  <span className="text-sm font-medium bg-red-100 text-red-600 px-2 py-1 rounded">
-                    -{discount}%
+                  <span className="text-sm font-medium  bg-[#700100] text-white px-2 py-1 rounded">
+                    - {discount}%
                   </span>
                 </div>
                 <span className="text-lg text-gray-500 line-through">

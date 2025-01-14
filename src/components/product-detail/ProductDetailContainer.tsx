@@ -12,6 +12,7 @@ import BoxSelectionDialog from './BoxSelectionDialog';
 import { getAvailableStockForSize } from '@/utils/stockValidation';
 import GiftBoxSelection from './GiftBoxSelection';
 import SizeSelector from './SizeSelector';
+import { calculateDiscountedPrice } from '@/utils/priceCalculations';
 
 interface ProductDetailContainerProps {
   product: Product;
@@ -85,15 +86,26 @@ const ProductDetailContainer = ({ product, onProductAdded }: ProductDetailContai
       return;
     }
 
+    // Calculate the discounted price if a discount exists
+    const hasDiscount = product.discount_product !== "" && 
+                       !isNaN(parseFloat(product.discount_product)) && 
+                       parseFloat(product.discount_product) > 0;
+    
+    const finalPrice = hasDiscount 
+      ? calculateDiscountedPrice(product.price, product.discount_product)
+      : product.price;
+
     addToCart({
       id: product.id,
       name: product.name,
-      price: product.price,
+      price: finalPrice, // Use the discounted price here
+      originalPrice: hasDiscount ? product.price : undefined, // Store original price for reference
       quantity: quantity,
       image: product.image,
       size: selectedSize,
       personalization: product.category_product === "homme" && product.itemgroup_product === "costumes" ? "" : personalizationText,
       withBox: withBox,
+      discount_product: product.discount_product,
     });
 
     onProductAdded?.(product.name);
@@ -141,14 +153,14 @@ const ProductDetailContainer = ({ product, onProductAdded }: ProductDetailContai
           discount={product.discount_product}
         />
 
-        {showPersonalization && (
+        {product.category_product !== "homme" || product.itemgroup_product !== "costumes" ? (
           <div className="mt-6">
             <PersonalizationInput
               itemId={product.id}
               onUpdate={setPersonalizationText}
             />
           </div>
-        )}
+        ) : null}
         
         <div className="h-px bg-gray-200" />
 
@@ -164,7 +176,9 @@ const ProductDetailContainer = ({ product, onProductAdded }: ProductDetailContai
             </div>
             <SizeSelector
               selectedSize={selectedSize}
-              sizes={availableSizes}
+              sizes={Object.entries(product.sizes)
+                .filter(([_, stock]) => stock > 0)
+                .map(([size]) => size)}
               onSizeSelect={setSelectedSize}
               isCostume={product.itemgroup_product === 'costumes'}
             />

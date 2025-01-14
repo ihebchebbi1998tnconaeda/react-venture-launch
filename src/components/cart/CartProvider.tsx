@@ -1,11 +1,13 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { saveCartItems, getCartItems } from '@/utils/cartStorage';
 import { getPersonalizations } from '@/utils/personalizationStorage';
+import { calculateDiscountedPrice } from '@/utils/priceCalculations';
 
 export interface CartItem {
   id: number;
   name: string;
   price: number;
+  originalPrice?: number;
   quantity: number;
   image: string;
   size?: string;
@@ -13,6 +15,9 @@ export interface CartItem {
   personalization?: string;
   fromPack?: boolean;
   withBox?: boolean;
+  discount_product?: string;
+  type_product?: string;
+  itemgroup_product?: string;
 }
 
 interface CartContextType {
@@ -50,7 +55,6 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       setCartItems(itemsWithPersonalization);
     }
 
-    // Check for newsletter subscription on mount
     const isSubscribed = localStorage.getItem('newsletterSubscribed') === 'true';
     if (isSubscribed) {
       setHasNewsletterDiscount(true);
@@ -82,7 +86,18 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
             : i
         );
       }
-      return [...prevItems, item];
+
+      // Calculate discounted price if applicable
+      const originalPrice = item.price;
+      const finalPrice = item.discount_product 
+        ? calculateDiscountedPrice(originalPrice, item.discount_product)
+        : originalPrice;
+
+      return [...prevItems, { 
+        ...item, 
+        price: finalPrice,
+        originalPrice: item.discount_product ? originalPrice : undefined
+      }];
     });
   };
 
@@ -91,6 +106,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const updateQuantity = (id: number, quantity: number) => {
+    if (quantity < 1) return;
     setCartItems(prevItems =>
       prevItems.map(item =>
         item.id === id
@@ -115,8 +131,13 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const calculateTotal = () => {
-    const itemsSubtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const boxTotal = cartItems.reduce((sum, item) => sum + (item.withBox ? BOX_PRICE * item.quantity : 0), 0);
+    const itemsSubtotal = cartItems.reduce((sum, item) => {
+      return sum + (item.price * item.quantity);
+    }, 0);
+    
+    const boxTotal = cartItems.reduce((sum, item) => 
+      sum + (item.withBox ? BOX_PRICE * item.quantity : 0), 0);
+    
     const subtotal = itemsSubtotal + boxTotal;
     const discount = hasNewsletterDiscount ? subtotal * 0.05 : 0;
     const total = subtotal - discount;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { MinusCircle, PlusCircle, Trash2, Tag, Edit2, Package, Gift } from 'lucide-react';
+import { MinusCircle, PlusCircle, Trash2, Tag, Package, Gift } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { CartItem } from './CartProvider';
 import PersonalizationInput from './PersonalizationInput';
@@ -12,6 +12,7 @@ interface CartItemCardProps {
 
 const CartItemCard = ({ item, onUpdateQuantity, onRemove }: CartItemCardProps) => {
   const packType = sessionStorage.getItem('selectedPackType') || 'aucun';
+  const hasDiscount = item.discount_product && item.discount_product !== "" && !isNaN(parseFloat(item.discount_product));
   
   return (
     <motion.div 
@@ -32,6 +33,12 @@ const CartItemCard = ({ item, onUpdateQuantity, onRemove }: CartItemCardProps) =
             <h3 className="text-base sm:text-lg font-serif text-[#1A1F2C] hover:text-[#700100] transition-colors cursor-pointer truncate max-w-full">
               {item.name}
             </h3>
+            {hasDiscount && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-[#700100] text-white">
+                <Tag size={12} />
+                -{item.discount_product}%
+              </span>
+            )}
             <div className="flex flex-wrap gap-1">
               {packType !== 'aucun' && (
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-[#700100]/10 text-[#700100] whitespace-nowrap">
@@ -47,7 +54,6 @@ const CartItemCard = ({ item, onUpdateQuantity, onRemove }: CartItemCardProps) =
               )}
             </div>
           </div>
-          <p className="text-[#8E9196] text-xs sm:text-sm mb-2">Réf: {item.id.toString().padStart(6, '0')}</p>
           
           {(item.size || item.color) && (
             <div className="flex flex-wrap gap-2 mb-2">
@@ -88,8 +94,19 @@ const CartItemCard = ({ item, onUpdateQuantity, onRemove }: CartItemCardProps) =
               </button>
             </div>
             <div className="flex items-center gap-3">
-              <div className="text-base sm:text-lg font-medium text-[#1A1F2C]">
-                {(item.price * item.quantity).toFixed(2)} TND
+              <div className="text-base sm:text-lg font-medium">
+                {hasDiscount && item.originalPrice ? (
+                  <div className="flex flex-col items-end">
+                    <span className="text-[#700100]">{(item.price * item.quantity).toFixed(2)} TND</span>
+                    <span className="text-sm text-gray-500 line-through">
+                      {(item.originalPrice * item.quantity).toFixed(2)} TND
+                    </span>
+                  </div>
+                ) : (
+                  <span className="text-[#1A1F2C]">
+                    {(item.price * item.quantity).toFixed(2)} TND
+                  </span>
+                )}
               </div>
               <button
                 onClick={() => onRemove(item.id)}
