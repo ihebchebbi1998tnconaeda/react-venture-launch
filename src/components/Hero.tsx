@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 const Hero = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const { t } = useTranslation();
 
   const banners = [
     {
       image: 'banner.png',
-      title: 'Univers cadeau'
+      title: t('hero.title1')
     },
     {
       image: 'banner2.png',
-      title: 'Nouvelle collection'
+      title: t('hero.title2')
     },
     {
       image: 'banner3.png',
-      title: 'Le sur mesure'
+      title: t('hero.title3')
     }
   ];
 
@@ -30,7 +32,7 @@ const Hero = () => {
   }, []);
 
   return (
-    <section className="relative h-[95vh] overflow-hidden"> {/* Changed from h-screen to h-[90vh] */}
+    <section className="relative h-[95vh] overflow-hidden">
       <AnimatePresence mode='wait'>
         <motion.div
           key={currentIndex}

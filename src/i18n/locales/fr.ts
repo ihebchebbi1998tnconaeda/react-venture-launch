@@ -21,30 +21,28 @@ export default {
   },
   footer: {
     newsletter: {
-      title: "Abonnez-vous à notre newsletter",
-      subtitle: "Abonnez-vous aujourd'hui et obtenez 5% de réduction sur votre premier achat",
+      title: "Abonnez-vous aujourd'hui et obtenez 5% de réduction sur votre premier achat",
       placeholder: "Entrez votre email",
-      button: "S'abonner",
-      success: "Merci de votre inscription !",
+      button: "S'abonner"
     },
     contact: {
       title: "CONTACTEZ-NOUS",
-      phone: "Téléphone",
+      phone: "+216 29 509 840",
       email: "Envoyez-nous un email",
       chat: "Chat en direct",
-      followUs: "Suivez-nous",
+      followUs: "Suivez-nous"
     },
     about: {
       title: "À PROPOS",
       whatIsFiori: "Qu'est-ce que Fiori",
-      impactReport: "Rapport d'impact",
+      impactReport: "Rapport d'impact"
     },
     customerService: {
       title: "SERVICE CLIENT",
-      contactUs: "Nous contacter",
+      contact: "Nous contacter",
       delivery: "Informations de livraison",
       faq: "FAQ",
-      returns: "Politique de retour",
+      returns: "Politique de retour"
     },
     ourPages: {
       title: "NOS PAGES",
@@ -53,38 +51,43 @@ export default {
       readyToWear: "Le prêt à porter",
       accessories: "Accessoires",
       custom: "Le sur mesure",
-      outlet: "Outlet",
+      outlet: "Outlet"
     },
+    copyright: "© 2024 FioriForYou",
+    madeWith: "Fait avec ❤️ en Tunisie par"
+  },
+  hero: {
+    title1: "Univers cadeau",
+    title2: "Nouvelle collection",
+    title3: "Le sur mesure"
   },
   products: {
-    new: "Nouveauté",
+    newArrivals: "Nouveautés",
     categories: {
-      suits: "Costumes",
-      shirts: "Chemises",
-      belts: "Ceintures",
-      blazers: "Blazers",
-    },
-    filters: {
-      price: "Prix",
-      color: "Couleur",
-      size: "Taille",
-      sort: "Trier par",
-    },
+      costumes: "Costumes",
+      chemises: "Chemises",
+      ceintures: "Ceintures",
+      blazers: "Blazers"
+    }
   },
-  cart: {
-    empty: "Votre panier est vide",
-    total: "Total",
-    checkout: "Commander",
-    continue: "Continuer les achats",
+  newCollection: {
+    title: "Nouvelle Collection",
+    description: "Découvrez nos derniers designs et notre savoir-faire exceptionnel",
+    discoverMore: "DÉCOUVRIR PLUS"
   },
-  auth: {
-    login: "Connexion",
-    register: "S'inscrire",
-    forgotPassword: "Mot de passe oublié ?",
-  },
-  brandIntro: {
-    title: "Le Monde de Fiori",
-    description: "Fiori, fondée en 2014, est une marque tunisienne qui s'intègre dans l'univers du prêt-à-porter et de la maroquinerie haut de gamme pour homme.",
-    learnMore: "En Savoir Plus !",
-  },
+  brandLocation: {
+    findStore: "Trouver un magasin",
+    leaveReview: "Laissez votre avis",
+    storeName: "Fiori Les Berges du Lac",
+    storeAddress: "Rue du Lac Tibériade, Les Berges du lac",
+    reviewForm: {
+      yourName: "Votre nom",
+      namePlaceholder: "Votre nom complet",
+      yourMessage: "Votre message",
+      messagePlaceholder: "Partagez votre expérience avec nous",
+      submit: "Envoyer votre avis",
+      thankYou: "Merci pour votre avis !",
+      feedback: "Votre feedback est très important pour nous."
+    }
+  }
 };

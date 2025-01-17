@@ -29,8 +29,8 @@ export default {
     },
     contact: {
       title: "CONTACT US",
-      phone: "Phone",
-      email: "Email us",
+      phone: "+216 29 509 840",
+      email: "Send us an email",
       chat: "Live chat",
       followUs: "Follow us",
     },
@@ -55,36 +55,41 @@ export default {
       custom: "Custom Made",
       outlet: "Outlet",
     },
+    copyright: "© 2024 FioriForYou",
+    madeWith: "Made with ❤️ in Tunisia by"
+  },
+  hero: {
+    title1: "Gift Universe",
+    title2: "New Collection",
+    title3: "Custom Made"
   },
   products: {
-    new: "New",
+    newArrivals: "New Arrivals",
     categories: {
-      suits: "Suits",
-      shirts: "Shirts",
-      belts: "Belts",
-      blazers: "Blazers",
-    },
-    filters: {
-      price: "Price",
-      color: "Color",
-      size: "Size",
-      sort: "Sort by",
-    },
+      costumes: "Suits",
+      chemises: "Shirts",
+      ceintures: "Belts",
+      blazers: "Blazers"
+    }
   },
-  cart: {
-    empty: "Your cart is empty",
-    total: "Total",
-    checkout: "Checkout",
-    continue: "Continue shopping",
+  newCollection: {
+    title: "New Collection",
+    description: "Discover our latest designs and exceptional craftsmanship",
+    discoverMore: "DISCOVER MORE"
   },
-  auth: {
-    login: "Login",
-    register: "Register",
-    forgotPassword: "Forgot password?",
-  },
-  brandIntro: {
-    title: "Le Monde de Fiori",
-    description: "Fiori, founded in 2014, is a Tunisian brand that integrates into the universe of ready-to-wear and high-end leather goods for men.",
-    learnMore: "Learn More!",
-  },
+  brandLocation: {
+    findStore: "Find a Store",
+    leaveReview: "Leave Your Review",
+    storeName: "Fiori Les Berges du Lac",
+    storeAddress: "Rue du Lac Tibériade, Les Berges du lac",
+    reviewForm: {
+      yourName: "Your Name",
+      namePlaceholder: "Your full name",
+      yourMessage: "Your Message",
+      messagePlaceholder: "Share your experience with us",
+      submit: "Send your review",
+      thankYou: "Thank you for your review!",
+      feedback: "Your feedback is very important to us."
+    }
+  }
 };
