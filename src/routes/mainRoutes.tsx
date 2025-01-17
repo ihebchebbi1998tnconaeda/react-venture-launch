@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Navigate } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import { PageLoader } from "@/components/PageLoader";
 
 // Lazy load pages
@@ -13,23 +13,43 @@ const PromoCodesPage = React.lazy(() => import('@/pages/PromoCodesPage'));
 const OrderPreviewPage = React.lazy(() => import('@/pages/OrderPreviewPage'));
 const ProductDetailPage = React.lazy(() => import('@/pages/ProductDetailPage'));
 
-const AppRoutes = () => {
-  return (
-    <React.Suspense fallback={<PageLoader />}>
-      <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/category/*" element={<CategoryPage />} />
-        <Route path="/univers-cadeaux/*" element={<GiftUniversePage />} />
-        <Route path="/cart" element={<CartPage />} />
-        <Route path="/payment-success" element={<PaymentSuccessPage />} />
-        <Route path="/payment-failure" element={<PaymentFailurePage />} />
-        <Route path="/promo-codes" element={<PromoCodesPage />} />
-        <Route path="/order-preview" element={<OrderPreviewPage />} />
-        <Route path="/product/:id" element={<ProductDetailPage />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </React.Suspense>
-  );
-};
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Index />,
+  },
+  {
+    path: "/category/*",
+    element: <CategoryPage />,
+  },
+  {
+    path: "/univers-cadeaux/*",
+    element: <GiftUniversePage />,
+  },
+  {
+    path: "/cart",
+    element: <CartPage />,
+  },
+  {
+    path: "/payment-success",
+    element: <PaymentSuccessPage />,
+  },
+  {
+    path: "/payment-failure",
+    element: <PaymentFailurePage />,
+  },
+  {
+    path: "/promo-codes",
+    element: <PromoCodesPage />,
+  },
+  {
+    path: "/order-preview",
+    element: <OrderPreviewPage />,
+  },
+  {
+    path: "/product/:id",
+    element: <ProductDetailPage />,
+  },
+]);
 
-export default AppRoutes;
+export default router;

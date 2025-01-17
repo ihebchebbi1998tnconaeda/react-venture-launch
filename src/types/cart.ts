@@ -25,5 +25,10 @@ export interface CartContextType {
   hasNewsletterDiscount: boolean;
   applyNewsletterDiscount: () => void;
   removeNewsletterDiscount: () => void;
-  calculateTotal: () => { subtotal: number; discount: number; total: number; boxTotal: number };
+  calculateTotal: () => { 
+    subtotal: number; 
+    discount: number; 
+    total: number; 
+    boxTotal: number;
+  };
 }

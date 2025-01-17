@@ -3,7 +3,7 @@ import { RouterProvider } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/toaster';
 import { CartProvider } from './components/cart/CartProvider';
-import mainRoutes from './routes/mainRoutes';
+import router from './routes/mainRoutes';
 import './i18n';
 import { useTranslation } from 'react-i18next';
 
@@ -22,7 +22,7 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <CartProvider>
-        <RouterProvider router={mainRoutes} />
+        <RouterProvider router={router} />
         <Toaster />
       </CartProvider>
     </QueryClientProvider>
