@@ -7,6 +7,7 @@ export default {
     loading: "Chargement...",
     error: "Une erreur est survenue",
     success: "Succès",
+    freeDelivery: "Livraison gratuite à partir de 299 TND",
   },
   navigation: {
     home: "Accueil",
@@ -15,6 +16,8 @@ export default {
     contact: "Contact",
     cart: "Panier",
     menu: "Menu",
+    toggleMenu: "Basculer le menu",
+    contactUs: "CONTACTEZ-NOUS",
   },
   footer: {
     newsletter: {

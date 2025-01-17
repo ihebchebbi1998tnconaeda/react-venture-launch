@@ -7,6 +7,7 @@ export default {
     loading: "Loading...",
     error: "An error occurred",
     success: "Success",
+    freeDelivery: "Free delivery from 299 TND",
   },
   navigation: {
     home: "Home",
@@ -15,6 +16,8 @@ export default {
     contact: "Contact",
     cart: "Cart",
     menu: "Menu",
+    toggleMenu: "Toggle menu",
+    contactUs: "CONTACT US",
   },
   footer: {
     newsletter: {
