@@ -20,9 +20,7 @@ declare global {
 }
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [language, setLanguage] = useState(() => {
-    return localStorage.getItem('preferredLanguage') || 'fr';
-  });
+  const [language, setLanguage] = useState('fr');
 
   useEffect(() => {
     // Load Google Translate script
@@ -38,54 +36,38 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           pageLanguage: 'fr',
           includedLanguages: 'en,fr',
           layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
-          autoDisplay: false,
         },
         'google_translate_element'
       );
     };
 
     return () => {
-      // Cleanup
       delete window.googleTranslateElementInit;
-      const script = document.querySelector('script[src*="translate.google.com"]');
-      if (script) {
-        script.remove();
-      }
     };
   }, []);
 
   useEffect(() => {
     const translateLanguage = (languageCode: string) => {
-      // Wait for Google Translate to be ready
-      const waitForGoogleTranslate = setInterval(() => {
-        const select = document.querySelector('.goog-te-combo') as HTMLSelectElement;
-        if (select) {
-          clearInterval(waitForGoogleTranslate);
-          select.value = languageCode;
-          select.dispatchEvent(new Event('change'));
-          
-          // Clean up Google Translate UI elements
-          const elements = document.querySelectorAll('.goog-te-banner-frame, .skiptranslate');
-          elements.forEach((element) => {
-            if (element instanceof HTMLElement) {
-              element.style.display = 'none';
-            }
-          });
-          
-          // Reset body position
-          document.body.style.top = '0px';
-          
-          // Store the language preference
-          localStorage.setItem('preferredLanguage', languageCode);
-        }
-      }, 100);
-
-      // Clear interval after 5 seconds to prevent infinite loop
-      setTimeout(() => clearInterval(waitForGoogleTranslate), 5000);
+      const selectElement = document.querySelector('.goog-te-combo') as HTMLSelectElement;
+      if (selectElement) {
+        selectElement.value = languageCode;
+        selectElement.dispatchEvent(new Event('change'));
+      }
     };
 
-    console.log('Language changed to:', language);
+    // Clean up Google Translate UI elements
+    const cleanup = () => {
+      const elements = document.querySelectorAll('.goog-te-banner-frame, .skiptranslate');
+      elements.forEach((element) => {
+        if (element instanceof HTMLElement) {
+          element.style.display = 'none';
+        }
+      });
+      document.body.style.top = '0px';
+    };
+
     translateLanguage(language);
+    cleanup();
   }, [language]);
 
   return (
