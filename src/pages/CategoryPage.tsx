@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import TopNavbar from "../components/TopNavbar";
 import BeltsSection from "../components/productsPages/BeltsSection";
@@ -8,6 +8,7 @@ import BrandNavbarSection from "@/components/productsPages/BrandNavbarSection";
 import MainNavbarProduct from "@/components/productsPages/MainNavbarProduct";
 import { ArrowLeft } from "lucide-react";
 import MainNavbar from "@/components/MainNavbar";
+import WhatsAppPopup from "@/components/WhatsAppPopup";
 
 const CategoryPage = () => {
   const navigate = useNavigate();
@@ -92,6 +93,9 @@ const CategoryPage = () => {
         </div>
         <ProductsSection />
       </div>
+      <Suspense fallback={null}>
+                      <WhatsAppPopup />
+   </Suspense>
       <Footer />
     </div>
   );

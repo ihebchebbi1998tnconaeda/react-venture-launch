@@ -3,11 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { FaWhatsapp } from "react-icons/fa";
 import { X } from "lucide-react";
+import FloatingCartIcon from './FloatingCartIcon';
 
 const WhatsAppPopup = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const [isMinimized, setIsMinimized] = useState(false);
-
+  const [isMinimized, setIsMinimized] = useState(true); // Changed to start minimized
+  
   useEffect(() => {
     const showPopup = () => {
       if (!isMinimized) {
@@ -21,7 +22,7 @@ const WhatsAppPopup = () => {
     // Set up interval for showing popup
     const interval = setInterval(() => {
       showPopup();
-    }, 15000); // Show every 15 seconds
+    }, 15000);
 
     return () => {
       clearTimeout(initialDelay);
@@ -45,8 +46,8 @@ const WhatsAppPopup = () => {
 
   return (
     <div className="fixed bottom-8 right-8 z-50">
+      <FloatingCartIcon />
       <AnimatePresence>
-        {/* Full popup when visible */}
         {isVisible && !isMinimized ? (
           <motion.div
             initial={{ opacity: 0, y: 50, x: 100 }}
@@ -80,13 +81,12 @@ const WhatsAppPopup = () => {
             </div>
           </motion.div>
         ) : (
-          /* Minimized state as a circle */
           <motion.button
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             whileHover={{ scale: 1.1 }}
             onClick={handleMinimizedClick}
-            className={`rounded-full bg-red-500 hover:bg-red-600 p-4 shadow-lg ${isMinimized ? 'block' : 'hidden'}`}
+            className={`rounded-full bg-green-500 hover:bg-green-600 p-4 shadow-lg ${isMinimized ? 'block' : 'hidden'}`}
           >
             <FaWhatsapp className="w-6 h-6 text-white" />
           </motion.button>

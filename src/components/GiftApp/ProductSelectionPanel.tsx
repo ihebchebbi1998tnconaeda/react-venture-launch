@@ -11,9 +11,10 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import AddItemDialog from './dialogs/AddItemDialog';
 import { playTickSound } from '@/utils/audio';
 import { toast } from '@/hooks/use-toast';
+import { getAvailableCategories } from '@/utils/categoryUtils';
 
 interface ProductSelectionPanelProps {
-  onItemDrop: (item: Product) => void;
+  onItemDrop: (item: Product, size: string, personalization: string) => void;
   packType: string;
   selectedContainerIndex: number;
   selectedItems: Product[];
@@ -34,79 +35,55 @@ const ProductSelectionPanel = ({
   const itemsPerPage = 4;
   const isMobile = useIsMobile();
 
-  // Get available categories based on pack type and container index
-  const getAvailableCategories = () => {
-    switch (packType) {
-      case 'Pack Chemise':
-        return [{ label: 'Chemises', type: 'itemgroup', value: 'chemises' }];
-      case 'Pack Prestige':
-        return selectedContainerIndex === 0 
-          ? [{ label: 'Chemises', type: 'itemgroup', value: 'chemises' }]
-          : [{ label: 'Accessoires', type: 'type', value: 'Accessoires' }];
-      case 'Pack Premium':
-        return selectedContainerIndex === 0
-          ? [{ label: 'Cravates', type: 'itemgroup', value: 'Cravates' }]
-          : [{ label: 'Accessoires', type: 'type', value: 'Accessoires' }];
-      case 'Pack Trio':
-        if (selectedContainerIndex === 0) {
-          return [{ label: 'Portefeuilles', type: 'itemgroup', value: 'Portefeuilles' }];
-        } else if (selectedContainerIndex === 1) {
-          return [{ label: 'Ceintures', type: 'itemgroup', value: 'Ceintures' }];
-        } else {
-          return [{ label: 'Accessoires', type: 'type', value: 'Accessoires' }];
-        }
-      case 'Pack Duo':
-        return selectedContainerIndex === 0
-          ? [{ label: 'Portefeuilles', type: 'itemgroup', value: 'Portefeuilles' }]
-          : [{ label: 'Ceintures', type: 'itemgroup', value: 'Ceintures' }];
-      case 'Pack Mini Duo':
-        return selectedContainerIndex === 0
-          ? [{ label: 'Porte-cartes', type: 'itemgroup', value: 'Porte-cartes' }]
-          : [{ label: 'Porte-clés', type: 'itemgroup', value: 'Porte-clés' }];
-      default:
-        return [];
-    }
-  };
+  const containerCount = React.useMemo(() => {
+    if (['Pack Chemise', 'Pack Ceinture', 'Pack Cravatte', 'Pack Malette'].includes(packType)) return 1;
+    return ['Pack Duo', 'Pack Mini Duo'].includes(packType) ? 2 : 3;
+  }, [packType]);
+
+  const isPackComplete = selectedItems.length >= containerCount;
 
   const { data: products = [], isLoading } = useQuery({
-    queryKey: ['products', packType, selectedContainerIndex, selectedItems],
+    queryKey: ['products', packType, selectedContainerIndex, selectedItems, searchTerm],
     queryFn: fetchAllProducts,
     select: (data) => {
+      if (isPackComplete) return [];
+      
       let filteredProducts = data;
-      const categories = getAvailableCategories();
+      const categories = getAvailableCategories(packType, selectedContainerIndex, selectedItems);
+      
+      console.log('Filtering with categories:', categories);
       
       if (categories.length > 0) {
         filteredProducts = data.filter(product => {
-          // Special handling for Pack Chemise - only show chemises
-          if (packType === 'Pack Chemise') {
-            return product.itemgroup_product === 'chemises';
-          }
-
-          // Check if we should filter out chemises for Pack Prestige
-          if (packType === 'Pack Prestige' && selectedContainerIndex === 0) {
-            const hasChemise = selectedItems.some(item => item.itemgroup_product === 'chemises');
-            if (hasChemise && product.itemgroup_product === 'chemises') {
-              return false;
-            }
-          }
-
-          // Check if we should filter out cravates for Pack Premium
-          if (packType === 'Pack Premium' && selectedContainerIndex === 0) {
-            const hasCravate = selectedItems.some(item => item.itemgroup_product === 'Cravates');
-            if (hasCravate && product.itemgroup_product === 'Cravates') {
-              return false;
-            }
-          }
-
           return categories.some(category => {
             if (category.type === 'itemgroup') {
+              if (category.additionalFilter) {
+                return product.itemgroup_product === category.value && 
+                       product[category.additionalFilter.field as keyof Product] === category.additionalFilter.value;
+              }
               return product.itemgroup_product === category.value;
-            } else if (category.type === 'type') {
+            }
+            if (category.type === 'type') {
               return product.type_product === category.value;
             }
             return false;
           });
         });
+
+        filteredProducts = filteredProducts.filter(product => 
+          !selectedItems.some(item => item.id === product.id)
+        );
+
+        if (packType === 'Pack Trio' && selectedItems.length > 0) {
+          const selectedAccessoryTypes = selectedItems
+            .filter(item => item.type_product === 'accessoires')
+            .map(item => item.itemgroup_product);
+
+          filteredProducts = filteredProducts.filter(product => 
+            product.type_product !== 'accessoires' || 
+            !selectedAccessoryTypes.includes(product.itemgroup_product)
+          );
+        }
       }
 
       return filteredProducts.filter(product => 
@@ -114,9 +91,6 @@ const ProductSelectionPanel = ({
       );
     }
   });
-
-  const totalPages = Math.ceil((products?.length || 0) / itemsPerPage);
-  const paginatedProducts = products.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handleDragStart = (event: React.DragEvent<HTMLDivElement>, product: Product) => {
     console.log('Drag started for product:', product.name);
@@ -138,7 +112,7 @@ const ProductSelectionPanel = ({
         size: selectedSize,
         personalization: personalization
       };
-      onItemDrop(productWithSize);
+      onItemDrop(productWithSize, selectedSize, personalization);
       setShowAddDialog(false);
       setSelectedSize('');
       setPersonalization('');
@@ -159,52 +133,65 @@ const ProductSelectionPanel = ({
   return (
     <div className="bg-white/90 backdrop-blur-lg rounded-xl shadow-xl p-6 border border-white/20 h-[90%] flex flex-col">
       <div className="space-y-6 flex-1 flex flex-col">
-        <div className="relative flex-shrink-0">
-          <Search className="absolute left-3 top-3 text-gray-400" size={20} />
-          <Input
-            type="text"
-            placeholder="Rechercher des produits..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 bg-white/50 border-white/30"
-          />
-        </div>
+        {isPackComplete ? (
+          <div className="flex flex-col items-center justify-center h-full space-y-4">
+            <div className="text-2xl font-semibold text-[#700100] text-center">
+              Pack Complété !
+            </div>
+            <p className="text-gray-600 text-center">
+              Vous avez sélectionné tous les articles pour votre pack.
+            </p>
+          </div>
+        ) : (
+          <>
+            <div className="relative flex-shrink-0">
+              <Search className="absolute left-3 top-3 text-gray-400" size={20} />
+              <Input
+                type="text"
+                placeholder="Rechercher des produits..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 bg-white/50 border-white/30"
+              />
+            </div>
 
-        <CategoriesDisplay 
-          categories={getAvailableCategories()} 
-          selectedItems={selectedItems}
-          packType={packType}
-        />
-        
-        <ProductGrid 
-          products={paginatedProducts}
-          onDragStart={handleDragStart}
-          onProductSelect={handleProductSelect}
-        />
+            <CategoriesDisplay 
+              categories={getAvailableCategories(packType, selectedContainerIndex, selectedItems)} 
+              selectedItems={selectedItems}
+              packType={packType}
+            />
+            
+            <ProductGrid 
+              products={products.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)}
+              onDragStart={handleDragStart}
+              onProductSelect={handleProductSelect}
+            />
 
-        <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-100">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-            disabled={currentPage === 1}
-            className="bg-[#700100] hover:bg-[#590000] text-white border-none"
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <span className="text-sm text-gray-600">
-            Page {currentPage} sur {totalPages}
-          </span>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-            disabled={currentPage >= totalPages}
-            className="bg-[#700100] hover:bg-[#590000] text-white border-none"
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
+            <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-100">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="bg-[#700100] hover:bg-[#590000] text-white border-none"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <span className="text-sm text-gray-600">
+                Page {currentPage} sur {Math.ceil(products.length / itemsPerPage)}
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(p => Math.min(Math.ceil(products.length / itemsPerPage), p + 1))}
+                disabled={currentPage >= Math.ceil(products.length / itemsPerPage)}
+                className="bg-[#700100] hover:bg-[#590000] text-white border-none"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </>
+        )}
       </div>
 
       <AddItemDialog

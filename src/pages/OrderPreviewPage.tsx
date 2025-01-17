@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
@@ -10,6 +10,7 @@ import OrderItems from '@/components/order/OrderItems';
 import OrderSummary from '@/components/order/OrderSummary';
 import { useCart } from '@/components/cart/CartProvider';
 import { submitOrder } from '@/services/orderSubmissionApi';
+import WhatsAppPopup from '@/components/WhatsAppPopup';
 
 const OrderPreviewPage = () => {
   const { state } = useLocation();
@@ -66,6 +67,9 @@ const OrderPreviewPage = () => {
           />
         </motion.div>
       </div>
+      <Suspense fallback={null}>
+                      <WhatsAppPopup />
+   </Suspense>
       <Footer />
     </div>
   );

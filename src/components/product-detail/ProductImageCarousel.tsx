@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   Dialog,
   DialogContent,
 } from "@/components/ui/dialog";
-import { motion, AnimatePresence } from "framer-motion";
-import { ZoomIn, ZoomOut, X } from 'lucide-react';
+import { motion } from "framer-motion";
+import { ZoomIn, ZoomOut } from 'lucide-react';
 
 interface ProductImageCarouselProps {
   images: string[];
@@ -14,13 +14,45 @@ interface ProductImageCarouselProps {
 const ProductImageCarousel = ({ images, name }: ProductImageCarouselProps) => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [isZoomed, setIsZoomed] = useState(false);
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const [showMagnifier, setShowMagnifier] = useState(false);
+  const [magnifierPosition, setMagnifierPosition] = useState({ x: 0, y: 0 });
+  const imageRef = useRef<HTMLDivElement>(null);
+  
   const filteredImages = images.filter(img => img !== '');
 
   if (filteredImages.length === 0) return null;
 
+  const zoomIn = () => setZoomLevel(prevZoom => Math.min(prevZoom + 0.25, 3));
+  const zoomOut = () => setZoomLevel(prevZoom => Math.max(prevZoom - 0.25, 1));
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!imageRef.current) return;
+
+    const rect = imageRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    setMagnifierPosition({ x, y });
+
+    // Calculate the position for the background image
+    // Using a higher zoom factor (4.5x) for better magnification
+    const zoomFactor = 4.5;
+    
+    // Calculate the background position as a percentage
+    const bgX = (x / rect.width) * 100;
+    const bgY = (y / rect.height) * 100;
+
+    const magnifier = document.querySelector('.magnifier-content') as HTMLElement;
+    if (magnifier) {
+      // Center the zoom on the cursor position
+      magnifier.style.backgroundPosition = `${bgX}% ${bgY}%`;
+      magnifier.style.backgroundSize = `${zoomFactor * 100}%`;
+    }
+  };
+
   return (
     <div className="flex gap-4 h-[600px]">
-      {/* Thumbnails column */}
       <div className="flex flex-col gap-2 w-24 h-full justify-between">
         {filteredImages.map((image, index) => (
           <motion.button
@@ -38,6 +70,8 @@ const ProductImageCarousel = ({ images, name }: ProductImageCarouselProps) => {
               src={image}
               alt={`${name} - Thumbnail ${index + 1}`}
               className="w-full h-full object-cover"
+              loading="lazy"
+              decoding="async"
             />
             {selectedImage === index && (
               <div className="absolute inset-0 bg-black/10" />
@@ -46,46 +80,62 @@ const ProductImageCarousel = ({ images, name }: ProductImageCarouselProps) => {
         ))}
       </div>
 
-      {/* Main image */}
       <div className="flex-1 relative">
-        <motion.div 
-          className="relative h-full bg-white rounded-xl overflow-hidden shadow-lg cursor-zoom-in"
+        <div 
+          ref={imageRef}
+          className="relative h-full bg-white rounded-xl overflow-hidden shadow-lg cursor-none"
+          onMouseEnter={() => setShowMagnifier(true)}
+          onMouseLeave={() => setShowMagnifier(false)}
+          onMouseMove={handleMouseMove}
           onClick={() => setIsZoomed(true)}
-          whileHover={{ scale: 1.02 }}
-          transition={{ duration: 0.3 }}
         >
-          <motion.img
-            key={selectedImage}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3 }}
+          <img
             src={filteredImages[selectedImage]}
             alt={`${name} - Image ${selectedImage + 1}`}
             className="w-full h-full object-contain p-4"
+            loading="eager"
+            decoding="async"
           />
-          <button
-            className="absolute bottom-4 right-4 p-2 bg-white/80 rounded-full opacity-0 hover:opacity-100 transition-opacity shadow-md"
-          >
-            <ZoomIn className="w-5 h-5 text-gray-700" />
-          </button>
-        </motion.div>
+          {showMagnifier && (
+            <div 
+              className="absolute w-32 h-32 pointer-events-none rounded-full border-2 border-[#700100] overflow-hidden bg-white"
+              style={{
+                left: magnifierPosition.x - 64,
+                top: magnifierPosition.y - 64,
+                transform: 'translate(-50%, -50%)',
+                boxShadow: '0 0 10px rgba(0,0,0,0.2)',
+              }}
+            >
+              <div 
+                className="magnifier-content absolute w-full h-full"
+                style={{
+                  backgroundImage: `url(${filteredImages[selectedImage]})`,
+                  backgroundRepeat: 'no-repeat'
+                }}
+              />
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Zoom Modal */}
       <Dialog open={isZoomed} onOpenChange={setIsZoomed}>
         <DialogContent className="max-w-[90vw] max-h-[90vh] p-0 bg-black/95">
-          <button
-            onClick={() => setIsZoomed(false)}
-            className="absolute right-4 top-4 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-50"
-          >
-            <X className="w-6 h-6 text-white" />
-          </button>
           <div className="w-full h-full flex items-center justify-center p-4">
-            <img
+            <motion.img
               src={filteredImages[selectedImage]}
               alt={name}
               className="max-w-full max-h-[80vh] object-contain"
+              style={{ transform: `scale(${zoomLevel})` }}
             />
+          </div>
+
+          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2">
+            <button onClick={zoomOut} className="p-2 bg-white rounded-full">
+              <ZoomOut className="w-5 h-5 text-gray-700" />
+            </button>
+            <button onClick={zoomIn} className="p-2 bg-white rounded-full">
+              <ZoomIn className="w-5 h-5 text-gray-700" />
+            </button>
           </div>
         </DialogContent>
       </Dialog>

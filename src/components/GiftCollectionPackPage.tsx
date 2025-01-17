@@ -2,18 +2,11 @@ import React from "react";
 
 const GiftCollectionPackPage = () => {
   const items = [
-    { src: "GiftGuide.png", label: "Pack Prestige", href: "/univers-cadeaux/packprestige" },
-    { src: "LuxurtGifts.png", label: "Pack Premium", href: "/univers-cadeaux/packpremium" },
-    { src: "MustHaveGifts.png", label: "Pack Trio", href: "/univers-cadeaux/packtrio" },
-    { src: "GiftCards.png", label: "Pack Duo", href: "/univers-cadeaux/packduo" },
-    { src: "Services.png", label: "Pack Duo Mini", href: "/univers-cadeaux/packminiduo" },
-    { src: "GiftGuide.png", label: "Pack Luxury", href: "/univers-cadeaux/packluxury" },
-    { src: "LuxurtGifts.png", label: "Pack Ultra", href: "/univers-cadeaux/packultra" },
-    { src: "MustHaveGifts.png", label: "Pack Deluxe", href: "/univers-cadeaux/packdeluxe" },
-    { src: "GiftCards.png", label: "Pack Exclusive", href: "/univers-cadeaux/packexclusive" },
-    { src: "Services.png", label: "Pack Classique", href: "/univers-cadeaux/packclassique" },
-    { src: "GiftGuide.png", label: "Pack Signature", href: "/univers-cadeaux/packsignature" },
-    { src: "LuxurtGifts.png", label: "Pack Prestige Plus", href: "/univers-cadeaux/packprestigeplus" },
+    { src: "/Packs/PackPrestige2.png", label: "Pack Prestige", href: "/univers-cadeaux/packprestige" },
+    { src: "/Packs/PackPremuim.jpg", label: "Pack Premium", href: "/univers-cadeaux/packpremium" },
+    { src: "/Packs/PackTrio.jpg", label: "Pack Trio", href: "/univers-cadeaux/packtrio" },
+    { src: "packduo.png", label: "Pack Duo", href: "/univers-cadeaux/packduo" },
+    { src: "Packduomini2.png", label: "Pack Mini Duo", href: "/univers-cadeaux/packminiduo" },
   ];
 
   return (
@@ -25,20 +18,14 @@ const GiftCollectionPackPage = () => {
             Offrez l'élégance, personnalisez le style.
           </p>
         </div>
-        
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 justify-items-center">
+
+        {/* Updated Flexbox Layout with Responsive Classes */}
+        <div className="flex flex-wrap justify-between gap-6 md:gap-8">
           {items.map((item, index) => (
             <a
               key={index}
               href={item.href}
-              className={`
-                relative w-full max-w-[250px] h-[430px] bg-white shadow-lg overflow-hidden group
-                ${items.length % 2 === 1 && index === items.length - 1 ? 'sm:col-span-2 sm:justify-self-center' : ''}
-                ${items.length % 5 === 1 && index === items.length - 1 ? 'lg:col-span-5 lg:max-w-[300px]' : ''}
-                ${items.length % 5 === 2 && index >= items.length - 2 ? 'lg:col-span-3' : ''}
-                ${items.length % 5 === 3 && index >= items.length - 3 ? 'lg:col-span-2' : ''}
-                ${items.length % 5 === 4 && index >= items.length - 4 ? 'lg:col-span-3' : ''}
-              `}
+              className="relative flex-grow max-w-full sm:max-w-[47%] md:max-w-[18%] w-full h-[430px] bg-white shadow-lg overflow-hidden group"
             >
               <img
                 src={item.src}

@@ -7,6 +7,8 @@ import AddItemDialog from './dialogs/AddItemDialog';
 import ProductDetailsDialog from './dialogs/ProductDetailsDialog';
 import AddItemParticles from '../effects/AddItemParticles';
 import BoxRevealAnimation from './animations/BoxRevealAnimation';
+import { packSpaceLabels } from '@/config/packSpaceLabels';
+import { packSpaceDimensions } from '@/config/packSpaceDimensions';
 
 interface GiftBasket3DProps {
   items: Product[];
@@ -32,6 +34,10 @@ const GiftBasket3D = ({
   const [targetContainer, setTargetContainer] = useState<number>(0);
   const [particlePosition, setParticlePosition] = useState<{ x: number; y: number } | null>(null);
 
+  const packType = sessionStorage.getItem('selectedPackType') || 'Pack Prestige';
+  const spaceLabels = packSpaceLabels[packType];
+  const spaceDimensions = packSpaceDimensions[packType];
+
   const handleDrop = (containerId: number) => (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const item = JSON.parse(e.dataTransfer.getData('product'));
@@ -53,7 +59,7 @@ const GiftBasket3D = ({
   };
 
   const handleConfirm = () => {
-    if (droppedItem && selectedSize && onItemDrop) {
+    if (droppedItem && selectedSize) {
       onItemDrop(droppedItem, selectedSize, personalization);
       setShowAddDialog(false);
       setSelectedSize('');
@@ -68,6 +74,12 @@ const GiftBasket3D = ({
           border: '1px solid #590000',
         },
         duration: 3000,
+      });
+    } else {
+      toast({
+        title: "Taille requise",
+        description: "Veuillez sélectionner une taille avant d'ajouter l'article",
+        variant: "destructive",
       });
     }
   };
@@ -84,49 +96,61 @@ const GiftBasket3D = ({
         
         {containerCount === 3 ? (
           <div className="flex gap-3">
-            {/* Left side - GRAND FORMAT container */}
-            <div className="w-[65%] h-[583px]">
+            <div className={`${spaceDimensions.main.width} ${spaceDimensions.main.height}`}>
               <GiftPackContainer
-                title="GRAND FORMAT"
+                title={spaceLabels?.mainSpace || "ESPACE PRINCIPAL"}
                 item={items[0]}
                 onDrop={handleDrop(0)}
                 onItemClick={handleProductClick}
                 onRemoveItem={() => onRemoveItem?.(0)}
                 containerIndex={0}
                 className="h-full bg-black/90 backdrop-blur-sm shadow-2xl rounded-xl border border-gray-800 transition-all duration-300 hover:shadow-2xl hover:border-gray-700"
+                imageScale={1.3}
               />
               {particlePosition && targetContainer === 0 && (
                 <AddItemParticles position={particlePosition} />
               )}
             </div>
             
-            {/* Right side - Two MINI containers stacked */}
-            <div className="w-[35%] flex flex-col gap-3">
-              {[1, 2].map((index) => (
-                <div key={index} className="h-[280px]">
-                  <GiftPackContainer
-                    title="MINI"
-                    item={items[index]}
-                    onDrop={handleDrop(index)}
-                    onItemClick={handleProductClick}
-                    onRemoveItem={() => onRemoveItem?.(index)}
-                    containerIndex={index}
-                    className="h-full bg-black/90 backdrop-blur-sm shadow-2xl rounded-xl border border-gray-800 transition-all duration-300 hover:shadow-2xl hover:border-gray-700"
-                  />
-                  {particlePosition && targetContainer === index && (
-                    <AddItemParticles position={particlePosition} />
-                  )}
-                </div>
-              ))}
+            <div className={`${spaceDimensions.secondary?.width || 'w-[40%]'} flex flex-col gap-3`}>
+              <div className={spaceDimensions.secondary?.height || 'h-[291px]'}>
+                <GiftPackContainer
+                  title={spaceLabels?.secondarySpace || "ESPACE SECONDAIRE"}
+                  item={items[1]}
+                  onDrop={handleDrop(1)}
+                  onItemClick={handleProductClick}
+                  onRemoveItem={() => onRemoveItem?.(1)}
+                  containerIndex={1}
+                  className="h-full bg-black/90 backdrop-blur-sm shadow-2xl rounded-xl border border-gray-800 transition-all duration-300 hover:shadow-2xl hover:border-gray-700"
+                  imageScale={1.3}
+                />
+                {particlePosition && targetContainer === 1 && (
+                  <AddItemParticles position={particlePosition} />
+                )}
+              </div>
+              <div className={spaceDimensions.tertiary?.height || 'h-[291px]'}>
+                <GiftPackContainer
+                  title={spaceLabels?.tertiarySpace || "ESPACE TERTIAIRE"}
+                  item={items[2]}
+                  onDrop={handleDrop(2)}
+                  onItemClick={handleProductClick}
+                  onRemoveItem={() => onRemoveItem?.(2)}
+                  containerIndex={2}
+                  className="h-full bg-black/90 backdrop-blur-sm shadow-2xl rounded-xl border border-gray-800 transition-all duration-300 hover:shadow-2xl hover:border-gray-700"
+                  imageScale={1.3}
+                />
+                {particlePosition && targetContainer === 2 && (
+                  <AddItemParticles position={particlePosition} />
+                )}
+              </div>
             </div>
           </div>
         ) : (
-          // For Pack Duo and Pack Mini Duo (2 containers)
           <div className="grid grid-cols-1 gap-4">
             {Array.from({ length: containerCount }).map((_, index) => (
-              <div key={index} className="relative h-[300px]">
+              <div key={index} className={`relative ${spaceDimensions.main.height}`}>
                 <GiftPackContainer
-                  title="GRAND FORMAT"
+                  title={spaceLabels?.mainSpace || "ESPACE PRINCIPAL"}
                   item={items[index]}
                   onDrop={handleDrop(index)}
                   onItemClick={handleProductClick}

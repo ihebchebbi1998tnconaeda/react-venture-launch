@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import TopNavbar from '../components/TopNavbar';
 import BrandNavbarSection from '../components/productsPages/BrandNavbarSection';
 import MainNavbar from '@/components/MainNavbar';
 import Footer from '../components/Footer';
 import BeltsSection from '@/components/productsPages/BeltsSection';
+import WhatsAppPopup from '@/components/WhatsAppPopup';
 
 const SurMesurePage = () => {
   return (
@@ -16,6 +17,9 @@ const SurMesurePage = () => {
       <div className="lg:mt-[0.5%] mt-[-15%]">
     <BeltsSection />
     </div>
+    <Suspense fallback={null}>
+                      <WhatsAppPopup />
+   </Suspense>
       <Footer />
     </div>
   );

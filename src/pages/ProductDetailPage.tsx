@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { fetchAllProducts } from '@/services/productsApi';
@@ -7,6 +7,7 @@ import RelatedProducts from '@/components/product-detail/RelatedProducts';
 import ProductDetailLayout from '@/components/product-detail/ProductDetailLayout';
 import ProductDetailContainer from '@/components/product-detail/ProductDetailContainer';
 import CheckoutConfirmationModal from '@/components/modals/CheckoutConfirmationModal';
+import WhatsAppPopup from '@/components/WhatsAppPopup';
 
 const ProductDetailPage = () => {
   const { id } = useParams();
@@ -81,6 +82,9 @@ const ProductDetailPage = () => {
         onClose={() => setShowCheckoutModal(false)}
         productName={addedProductName}
       />
+        <Suspense fallback={null}>
+                      <WhatsAppPopup />
+   </Suspense>
     </ProductDetailLayout>
   );
 };

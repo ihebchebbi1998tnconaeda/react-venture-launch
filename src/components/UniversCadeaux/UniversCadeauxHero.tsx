@@ -12,15 +12,32 @@ const UniversCadeauxHero = ({ onToggleView }) => {
         Offrez l'élégance, personnalisez le style.
       </h2>
 
-      <p className="text-base md:text-lg mb-8 max-w-4xl mx-auto text-[#666666] leading-relaxed text-center">
-        Découvrez une collection d'élégance et de raffinement avec L'Univers Cadeaux. Chaque pack
-        est soigneusement conçu pour répondre aux goûts variés tout en offrant une touche
-        personnalisée unique. Du Pack Prestige, réunissant chemise, portefeuille et ceinture, au Pack
-        Duo Mini, parfait pour la simplicité et l'utilité, chaque coffret est une célébration du style et de
-        la praticité. Avec la personnalisation gratuite incluse, ajoutez une gravure de nom ou un
-        message spécial pour rendre chaque cadeau mémorable. Offrez un présent qui a du sens,
-        soigneusement emballé pour surprendre et ravir.
-      </p>
+      <div className="text-base md:text-lg mb-8 max-w-4xl mx-auto text-[#666666] leading-relaxed text-center space-y-6">
+        <p>
+          Bienvenue dans notre univers du cadeau, un lieu magique où l'art d'offrir se transforme en une expérience exceptionnelle.
+          Notre collection comprend <span className="font-semibold text-[#700100]">10 coffrets de haute qualité</span>, soigneusement conçus avec des emballages prestigieux pour faire de chaque moment un souvenir inoubliable.
+        </p>
+        
+        <p>
+          Nous proposons des packs variés : des ensembles composés ainsi que des packs mono-article, pour satisfaire tous les goûts et toutes les occasions.
+        </p>
+
+        <p>
+          Le <span className="font-semibold text-[#700100]">Pack Prestige</span>, notre coffret best-seller, fait partie de notre ligne composée. Il comprend une chemise de votre choix, une ceinture et un portefeuille, avec la possibilité de personnaliser gratuitement chaque article pour une touche encore plus personnelle. En plus du Pack Prestige, nous proposons également le <span className="font-semibold text-[#700100]">Pack Premium</span>, le <span className="font-semibold text-[#700100]">Pack Trio</span>, le <span className="font-semibold text-[#700100]">Pack Duo</span> et le <span className="font-semibold text-[#700100]">Mini Duo</span>. Chaque pack a été conçu pour offrir à vos proches une expérience de cadeau unique.
+        </p>
+
+        <p>
+          L'un des atouts majeurs de nos packs composés est la personnalisation gratuite, qui permet d'ajouter une touche personnelle à chaque article, rendant ainsi le cadeau encore plus spécial et mémorable.
+        </p>
+
+        <p>
+          Parlant de l'emballage, nos packs en carton noir avec la personnalisation de la marque en argent est accompagné du papier en soie pour une présentation luxueuse de l'article et le ruban en rouge pour s'assurer de la fermeture du coffret et rajouter le charme du suspens.
+        </p>
+
+        <p>
+          Offrir un cadeau de notre collection, c'est offrir bien plus qu'un objet : c'est offrir une expérience pleine d'amour de raffinement.
+        </p>
+      </div>
 
       <div className="text-center">
         <Button

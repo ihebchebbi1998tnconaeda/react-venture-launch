@@ -40,6 +40,12 @@ const TopNavbar = () => {
               )}
             </button>
 
+            <div className="flex-1 text-center sm:hidden">
+              <span className="text-sm text-white whitespace-nowrap">
+                Livraison gratuite à partir de 299 TND
+              </span>
+            </div>
+
             <div className="hidden sm:flex items-center gap-4">
               <span className="flex items-center gap-2 text-sm text-white whitespace-nowrap">
                 Livraison gratuite à partir de 299 TND

@@ -14,6 +14,10 @@ const BrandIntro = () => {
               src="About.png"
               alt="Fiori brand"
               className="w-full h-auto object-cover min-h-[800px]"
+              loading="lazy"
+              decoding="async"
+              fetchPriority="high"
+              sizes="(max-width: 768px) 100vw, 50vw"
             />
           </div>
 

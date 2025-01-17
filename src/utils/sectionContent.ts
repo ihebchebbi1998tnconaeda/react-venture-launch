@@ -16,7 +16,7 @@ const sectionContent: Record<string, Record<string, Record<string, SectionConten
       },
       "collection": {
         title: "Collections",
-        subtitle: "ARTISANAT",
+        subtitle: "-",
         description: "EXPLOREZ NOS COLLECTIONS EXCLUSIVES, CRÉÉES AVEC PASSION ET SAVOIR-FAIRE.",
         imageUrl: "/Articles/2.png"
       },
@@ -57,8 +57,8 @@ const sectionContent: Record<string, Record<string, Record<string, SectionConten
       "portefeuilles": {
         title: "Portefeuilles",
         subtitle: "CUIR",
-        description: "ARTISANAT TUNISIEN D'EXCELLENCE, FAÇONNÉ DANS LES PLUS BEAUX CUIRS ITALIENS.",
-        imageUrl: "/Articles/4.png"
+        description: "- TUNISIEN D'EXCELLENCE, FAÇONNÉ DANS LES PLUS BEAUX CUIRS ITALIENS.",
+        imageUrl: "/Menu/accessoires.png"
       },
       "ceintures": {
         title: "Ceintures",
@@ -93,7 +93,7 @@ const sectionContent: Record<string, Record<string, Record<string, SectionConten
 export const getSectionContent = (type: string, category: string, itemgroup: string): SectionContent => {
   const defaultContent: SectionContent = {
     title: "Fiori Collection",
-    subtitle: "ARTISANAT",
+    subtitle: "-",
     description: "DÉCOUVREZ NOS CRÉATIONS EXCLUSIVES, FAÇONNÉES AVEC PASSION ET SAVOIR-FAIRE EN TUNISIE.",
     imageUrl: "/Articles/Main.png"
   };

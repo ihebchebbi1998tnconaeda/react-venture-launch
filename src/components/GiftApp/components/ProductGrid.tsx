@@ -57,6 +57,7 @@ const ProductGrid = ({ products, onDragStart, onProductSelect }: ProductGridProp
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.2 }}
             className={`bg-white rounded-lg shadow-sm p-4 border border-gray-100/50 hover:shadow-md transition-all ${
               isMobile ? 'cursor-pointer active:scale-95' : 'cursor-grab active:cursor-grabbing'
             }`}
@@ -67,6 +68,7 @@ const ProductGrid = ({ products, onDragStart, onProductSelect }: ProductGridProp
                 src={product.image}
                 alt={product.name}
                 className="w-full h-24 object-contain mb-2"
+                loading="lazy"
               />
               <h3 className="text-sm font-medium text-gray-900 truncate">
                 {product.name}

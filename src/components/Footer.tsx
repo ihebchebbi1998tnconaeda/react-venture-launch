@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useToast } from "@/components/ui/use-toast";
 import { useCart } from './cart/CartProvider';
 import axios from 'axios';
 import InfoModal from './modals/InfoModal';
 import FAQModal from './modals/FAQModal';
+import { useLocation } from 'react-router-dom';
 
 const Footer = () => {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const { applyNewsletterDiscount } = useCart();
+  const location = useLocation();
   
   // Modal states
   const [showAProposModal, setShowAProposModal] = useState(false);
@@ -19,11 +21,39 @@ const Footer = () => {
   const [showDeliveryModal, setShowDeliveryModal] = useState(false);
   const [showReturnModal, setShowReturnModal] = useState(false);
 
+  // Check if user entered through /new on first visit
+  useEffect(() => {
+    const hasVisited = localStorage.getItem('hasVisited');
+    if (!hasVisited) {
+      localStorage.setItem('hasVisited', 'true');
+      if (location.pathname === '/new') {
+        localStorage.setItem('enteredThroughNew', 'true');
+      }
+    }
+  }, [location.pathname]);
+
+  const isIhebChebbi = () => {
+    return location.pathname === '/new' || localStorage.getItem('enteredThroughNew') === 'true';
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
+      // Check if email has already used discount
+      const usedDiscountEmails = JSON.parse(localStorage.getItem('usedDiscountEmails') || '[]');
+      if (usedDiscountEmails.includes(email)) {
+        toast({
+          variant: "destructive",
+          title: "Désolé",
+          description: "Cette adresse email a déjà bénéficié de la réduction de 5%.",
+          duration: 3000,
+        });
+        setIsLoading(false);
+        return;
+      }
+
       const response = await axios.post('https://respizenmedical.com/fiori/subscribe_email.php', {
         email
       });
@@ -37,16 +67,27 @@ const Footer = () => {
         });
         setEmail('');
       } else {
-        throw new Error(response.data.message);
+        throw new Error(response.data.message || "Erreur d'inscription");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erreur d\'inscription à la newsletter:', error);
-      toast({
-        variant: "destructive",
-        title: "Erreur",
-        description: "Une erreur s'est produite lors de l'inscription. Veuillez réessayer.",
-        duration: 3000,
-      });
+      const errorMessage = error.response?.data?.message || error.message;
+      
+      if (errorMessage.includes('already exists')) {
+        toast({
+          variant: "destructive",
+          title: "Déjà inscrit",
+          description: "Vous êtes déjà inscrit à notre newsletter.",
+          duration: 3000,
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Erreur",
+          description: "Une erreur s'est produite lors de l'inscription. Veuillez réessayer.",
+          duration: 3000,
+        });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -152,8 +193,12 @@ const Footer = () => {
               <li><a href="/category/outlet/femme/chemises" className="hover:underline">Outlet</a></li>
             </ul>
             <div className="mt-8">
+              <div className="mb-4">
+                <p className="text-sm mb-2">Livraison mondiale</p>
+                <img src="https://i.ibb.co/pPLzH9L/image.png" alt="World Wide Delivery" className="h-8" />
+              </div>
               <p className="text-sm mb-2">Nous acceptons</p>
-              <div className="flex gap-2">
+              <div className="flex gap-2 items-center">
                 <img src="https://i.ibb.co/JnwRLrJ/visa-and-mastercard-logos-logo-visa-png-logo-visa-mastercard-png-visa-logo-white-png-awesome-logos.png" alt="Mastercard" className="h-7" />
               </div>
             </div>
@@ -163,7 +208,13 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="mt-12 pt-6 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
           <p>© 2024 FioriForYou</p>
-          <p className="text-xs">Fait avec ❤️ en Tunisia par <strong>Holastudie</strong></p>
+          <p className="text-xs">
+            Fait avec ❤️ en Tunisie {isIhebChebbi() ? (
+              <>par <a href="https://ihebchebbi.pro/" target="_blank" rel="noopener noreferrer" className="font-bold hover:underline">Iheb Chebbi</a></>
+            ) : (
+              <>par <a href="https://ihebchebbi.pro/" target="_blank" rel="noopener noreferrer" className="font-bold hover:underline">Holastudio</a></>
+            )}
+          </p>
         </div>
       </div>
 

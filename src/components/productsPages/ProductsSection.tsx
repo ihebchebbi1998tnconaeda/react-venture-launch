@@ -34,8 +34,8 @@ const ProductsSection = ({ isFromFooter = false }: ProductsSectionProps) => {
     queryKey: ['products', ...pathSegments, isFromFooter],
     queryFn: fetchAllProducts,
     select: (data) => {
+      // If we're on the univers-cadeaux page
       if (pathSegments[0] === 'univers-cadeaux') {
-        // For univers-cadeaux, return random items from gift universe
         return data
           .filter((product: Product) => 
             normalizeString(product.type_product) === 'univers-cadeaux'
@@ -44,36 +44,51 @@ const ProductsSection = ({ isFromFooter = false }: ProductsSectionProps) => {
           .slice(0, 6);
       }
 
-      return data.filter((product: Product) => {
-        if (pathSegments.length >= 2) {
-          const [type, category] = pathSegments;
+      // If we're on the accessories page
+      if (pathSegments.includes('accessoires') && pathSegments.length === 1) {
+        return data.filter((product: Product) => 
+          product.type_product.toLowerCase() === 'accessoires'
+        );
+      }
+
+      // Handle specific category/type/itemgroup paths
+      if (pathSegments.length >= 2) {
+        return data.filter((product: Product) => {
+          const [type, category, itemgroup] = pathSegments;
           
           const normalizedType = normalizeString(type);
           const normalizedCategory = normalizeString(category);
           const productType = normalizeString(product.type_product);
           const productCategory = normalizeString(product.category_product);
 
-          // If accessing from footer, only filter by type and category
-          if (isFromFooter) {
-            return normalizedType === productType && 
-                   (category ? normalizedCategory === productCategory : true);
-          }
+          console.log('Filtering product:', {
+            productType,
+            productCategory,
+            normalizedType,
+            normalizedCategory,
+            itemgroup: itemgroup ? normalizeString(itemgroup) : null,
+            productItemgroup: product.itemgroup_product ? normalizeString(product.itemgroup_product) : null
+          });
 
-          // Regular filtering including itemgroup
-          const itemgroup = pathSegments[2];
+          // If we have an itemgroup specified (e.g., chemises, cravates)
           if (itemgroup) {
             const normalizedItemgroup = normalizeString(itemgroup);
             const productItemgroup = normalizeString(product.itemgroup_product);
+
+            // Match type (e.g., pret-a-porter), category (homme/femme), and itemgroup (chemises)
             return normalizedType === productType && 
                    normalizedCategory === productCategory && 
                    normalizedItemgroup === productItemgroup;
           }
 
+          // If no itemgroup specified, just match type and category
           return normalizedType === productType && 
                  normalizedCategory === productCategory;
-        }
-        return true;
-      });
+        });
+      }
+
+      // Default case: return all products
+      return data;
     }
   });
 

@@ -19,7 +19,7 @@ const BoxInfoTooltip = () => {
         <TooltipContent className="w-80 p-4 bg-white shadow-xl border border-gray-200">
           <div className="space-y-3">
             <img 
-              src="/Menu/Sur musure .png" 
+              src="/BoxToSelected.png" 
               alt="Gift Box" 
               className="w-full h-32 object-cover rounded-lg"
             />

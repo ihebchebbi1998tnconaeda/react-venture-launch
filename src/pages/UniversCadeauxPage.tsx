@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import TopNavbar from "../components/TopNavbar";
 import Footer from "../components/Footer";
@@ -7,6 +7,7 @@ import MainNavbar from "@/components/MainNavbar";
 import UniversCadeauxHero from "@/components/UniversCadeaux/UniversCadeauxHero";
 import GiftCollectionPackPage from "@/components/GiftCollectionPackPage";
 import { ArrowLeft } from "lucide-react";
+import WhatsAppPopup from "@/components/WhatsAppPopup";
 
 const UniversCadeauxPage = () => {
   const navigate = useNavigate();
@@ -93,7 +94,9 @@ const UniversCadeauxPage = () => {
       </div>
       </div>
 
-
+      <Suspense fallback={null}>
+                      <WhatsAppPopup />
+   </Suspense>
       <Footer />
     </div>
   );

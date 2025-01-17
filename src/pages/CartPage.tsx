@@ -10,6 +10,7 @@ import { motion } from "framer-motion";
 import { UserDetails, getUserDetails } from '@/utils/userDetailsStorage';
 import BackButton from '@/components/cart/BackButton';
 import EmptyCartMessage from '@/components/cart/EmptyCartMessage';
+import WhatsAppPopup from '@/components/WhatsAppPopup';
 
 // Lazy load components for better performance
 const UserDetailsForm = React.lazy(() => import('@/components/cart/UserDetailsForm'));
@@ -151,6 +152,9 @@ const CartPage = () => {
           )}
         </div>
       </div>
+      <Suspense fallback={null}>
+                      <WhatsAppPopup />
+   </Suspense>
       <Footer />
     </div>
   );

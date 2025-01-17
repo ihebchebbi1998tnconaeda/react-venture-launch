@@ -1,3 +1,6 @@
+import React from 'react';
+import FloatingCard from './FloatingCard';
+
 const ContentSection = () => {
   return (
     <section className="py-24 px-6" id="features">

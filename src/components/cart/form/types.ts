@@ -8,6 +8,7 @@ export const userFormSchema = z.object({
   address: z.string(),
   country: z.string(),
   zipCode: z.string(),
+  orderNote: z.string().optional(),
 });
 
 export type UserFormData = z.infer<typeof userFormSchema>;

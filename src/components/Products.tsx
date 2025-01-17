@@ -28,6 +28,10 @@ const Products = () => {
   const { data: products, isLoading, error } = useQuery({
     queryKey: ["products"],
     queryFn: fetchAllProducts,
+    select: (data) => {
+      // Filter out products with type_product === "outlet"
+      return data.filter(product => product.type_product !== "outlet");
+    }
   });
 
   // Filter products based on selected category

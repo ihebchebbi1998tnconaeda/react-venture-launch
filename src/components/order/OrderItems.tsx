@@ -1,8 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { CartItem } from '@/components/cart/CartProvider';
-import { getPersonalizations } from '@/utils/personalizationStorage';
-import { Tag, Package2, Ruler, Gift } from 'lucide-react';
+import { Tag, Package2, Ruler, Gift, Text } from 'lucide-react';
 
 interface OrderItemsProps {
   items: CartItem[];
@@ -10,8 +9,6 @@ interface OrderItemsProps {
 }
 
 const OrderItems = ({ items, packType }: OrderItemsProps) => {
-  const personalizations = getPersonalizations();
-
   return (
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
@@ -71,14 +68,14 @@ const OrderItems = ({ items, packType }: OrderItemsProps) => {
                   )}
                 </div>
 
-                {(personalizations[item.id] || item.personalization) && (
+                {item.personalization && (
                   <div className="bg-[#F8F8F8] p-3 rounded-lg space-y-2">
                     <div className="flex items-center gap-2 text-sm font-medium text-[#471818]">
-                      <Tag className="w-4 h-4 text-[#700100]" />
+                      <Text className="w-4 h-4 text-[#700100]" />
                       Personnalisation
                     </div>
                     <p className="text-sm text-gray-600">
-                      {personalizations[item.id] || item.personalization}
+                      {item.personalization}
                     </p>
                   </div>
                 )}

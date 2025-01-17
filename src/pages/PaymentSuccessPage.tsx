@@ -6,76 +6,188 @@ import { useCart } from '@/components/cart/CartProvider';
 import { updateProductStock } from '@/utils/stockManagement';
 import { submitOrder } from '@/services/orderSubmissionApi';
 import { toast } from "@/hooks/use-toast";
+import { getUserDetails } from '@/utils/userDetailsStorage';
+import { stockReduceManager } from '@/utils/StockReduce';
 
 const PaymentSuccessPage = () => {
   const navigate = useNavigate();
-  const { clearCart, cartItems, hasNewsletterDiscount, calculateTotal } = useCart();
-  const { subtotal, discount: newsletterDiscount, total } = calculateTotal();
+  const { clearCart, cartItems, hasNewsletterDiscount, calculateTotal, removeNewsletterDiscount } = useCart();
+  const { subtotal, discount: newsletterDiscount, total, boxTotal } = calculateTotal();
   const shipping = subtotal > 500 ? 0 : 7;
   const finalTotal = total + shipping;
 
   useEffect(() => {
+    // Security check: Verify payment session exists
+    const pendingOrderString = sessionStorage.getItem('pendingOrder');
+    const paymentTimestamp = sessionStorage.getItem('paymentInitiated');
+    
+    if (!pendingOrderString || !paymentTimestamp) {
+      console.error('Unauthorized access to success page - redirecting to cart');
+      toast({
+        title: "Accès non autorisé",
+        description: "Veuillez passer par le processus de paiement normal",
+        variant: "destructive",
+      });
+      navigate('/cart');
+      return;
+    }
+
+    // Verify payment timestamp is recent (within last 30 minutes)
+    const timestampAge = Date.now() - parseInt(paymentTimestamp);
+    const maxAge = 30 * 60 * 1000; // 30 minutes in milliseconds
+    
+    if (timestampAge > maxAge) {
+      console.error('Payment session expired - redirecting to cart');
+      sessionStorage.removeItem('pendingOrder');
+      sessionStorage.removeItem('paymentInitiated');
+      toast({
+        title: "Session expirée",
+        description: "Votre session de paiement a expiré. Veuillez réessayer",
+        variant: "destructive",
+      });
+      navigate('/cart');
+      return;
+    }
+
     const handlePaymentSuccess = async () => {
       try {
-        const pendingOrderString = sessionStorage.getItem('pendingOrder');
-        if (pendingOrderString) {
-          const pendingOrder = JSON.parse(pendingOrderString);
-          console.log('Processing pending order:', pendingOrder);
-          
-          await updateProductStock(pendingOrder.cartItems);
+        console.log('Starting payment success handler...');
+        const pendingOrder = JSON.parse(pendingOrderString);
+        console.log('Processing pending order:', pendingOrder);
+        
+        const userDetails = getUserDetails();
+        const sessionUserDetails = sessionStorage.getItem('userDetails');
+        const finalUserDetails = userDetails || (sessionUserDetails ? JSON.parse(sessionUserDetails) : null);
+        
+        if (!finalUserDetails) {
+          const errorMessage = 'User details not found. Please complete the checkout process again.';
+          console.error(errorMessage);
+          toast({
+            title: "Error - Missing User Details",
+            description: errorMessage,
+            duration: Infinity,
+            variant: "destructive"
+          });
+          setTimeout(() => navigate('/cart'), 3000);
+          return;
+        }
 
-          const userDetails = JSON.parse(sessionStorage.getItem('userDetails') || '{}');
-          const packType = sessionStorage.getItem('selectedPackType') || 'aucun';
+        // Add items to stock reduce manager before updating stock
+        pendingOrder.cartItems.forEach((item: any) => {
+          if (item.size && item.quantity) {
+            stockReduceManager.addItem(
+              item.id.toString(),
+              item.size,
+              item.quantity
+            );
+          }
+        });
 
-          const formattedItems = pendingOrder.cartItems.map((item: any) => ({
-            id: item.id,
-            name: item.personalization 
-              ? `${item.name} (Personnalisation = ${item.personalization})`
-              : item.name,
-            price: item.price,
+        try {
+          await stockReduceManager.sendStockUpdate();
+          console.log('Stock reduce update completed successfully');
+        } catch (error) {
+          console.error('Failed to update stock reduce:', error);
+          // Continue with order processing even if stock reduce fails
+        }
+
+        console.log('Retrieved user details:', finalUserDetails);
+        await updateProductStock(pendingOrder.cartItems);
+
+        const currentPackType = sessionStorage.getItem('selectedPackType');
+        console.log('Current pack type:', currentPackType);
+
+        const formattedItems = pendingOrder.cartItems.map((item: any) => {
+          console.log('Processing item:', item);
+          const itemPrice = item.discount_product ? 
+            item.price * (1 - parseFloat(item.discount_product) / 100) : 
+            item.price;
+
+          const imageUrl = item.image.startsWith('http') ? 
+            item.image : 
+            `https://respizenmedical.com/fiori/${item.image}`;
+
+          const isPackCharge = item.type_product === "Pack";
+          let packInfo = "aucun";
+          if (item.fromPack && currentPackType) {
+            packInfo = currentPackType;
+          }
+
+          return {
+            item_id: item.id.toString(),
             quantity: item.quantity,
-            image: item.image,
+            price: itemPrice,
+            total_price: itemPrice * item.quantity,
+            name: item.name,
             size: item.size || '-',
             color: item.color || '-',
             personalization: item.personalization || '-',
-            pack: packType,
-            box: item.withBox ? 'Avec box' : 'Sans box'
-          }));
-
-          const orderData = {
-            order_id: pendingOrder.orderId,
-            user_details: {
-              first_name: userDetails.firstName,
-              last_name: userDetails.lastName,
-              email: userDetails.email,
-              phone: userDetails.phone,
-              address: userDetails.address,
-              country: userDetails.country,
-              zip_code: userDetails.zipCode
-            },
-            items: formattedItems,
-            price_details: {
-              subtotal,
-              shipping_cost: shipping,
-              has_newsletter_discount: hasNewsletterDiscount,
-              newsletter_discount_amount: newsletterDiscount,
-              final_total: finalTotal
-            },
-            payment: {
-              method: 'card' as const,
-              status: 'completed',
-              konnect_payment_url: pendingOrder.payUrl || '-',
-              completed_at: new Date().toISOString()
-            },
-            order_status: {
-              status: 'not yet',
-              shipped_at: '-',
-              delivered_at: '-'
-            }
+            pack: packInfo,
+            box: item.withBox ? 'Avec box' : 'Sans box',
+            image: imageUrl
           };
+        });
 
-          await submitOrder(orderData);
-          
+        const orderData = {
+          order_id: pendingOrder.orderId,
+          user_details: {
+            first_name: finalUserDetails.firstName || '',
+            last_name: finalUserDetails.lastName || '',
+            email: finalUserDetails.email || '',
+            phone: finalUserDetails.phone || '',
+            address: finalUserDetails.address || '',
+            country: finalUserDetails.country || '',
+            zip_code: finalUserDetails.zipCode || '',
+            order_note: finalUserDetails.orderNote || '-' // Added order note
+          },
+          items: formattedItems,
+          price_details: {
+            subtotal: subtotal,
+            box_total: boxTotal,
+            shipping_cost: shipping,
+            has_newsletter_discount: hasNewsletterDiscount,
+            newsletter_discount_amount: newsletterDiscount,
+            final_total: finalTotal
+          },
+          payment: {
+            method: 'card' as const,
+            status: 'completed',
+            konnect_payment_url: pendingOrder.payUrl || '-',
+            completed_at: new Date().toISOString()
+          },
+          order_status: {
+            status: 'pending',
+            shipped_at: null,
+            delivered_at: null
+          }
+        };
+
+        console.log('Submitting order data to API:', JSON.stringify(orderData, null, 2));
+
+        const isTestMode = pendingOrder.payUrl === 'test-mode';
+        
+        if (isTestMode) {
+          toast({
+            title: "Mode Test - Détails de la requête API",
+            description: (
+              <pre className="mt-2 w-full max-h-96 overflow-auto rounded-lg bg-slate-950 p-4">
+                <code className="text-white text-xs">
+                  {JSON.stringify(orderData, null, 2)}
+                </code>
+              </pre>
+            ),
+            duration: Infinity
+          });
+        }
+
+        const response = await submitOrder(orderData);
+        console.log('API Response:', response);
+
+        if (!response.success) {
+          throw new Error(response.message || 'Failed to submit order');
+        }
+        
+        if (!isTestMode) {
           toast({
             title: "Commande confirmée !",
             description: "Un email de confirmation vous a été envoyé.",
@@ -84,25 +196,59 @@ const PaymentSuccessPage = () => {
               color: 'white',
               border: '1px solid #590000',
             },
+            duration: Infinity
           });
-          
-          sessionStorage.removeItem('pendingOrder');
-          sessionStorage.removeItem('selectedPackType');
         }
 
+        // Clear payment session after successful processing
+        sessionStorage.removeItem('pendingOrder');
+        sessionStorage.removeItem('paymentInitiated');
+        sessionStorage.removeItem('selectedPackType');
         clearCart();
-      } catch (error) {
-        console.error('Error processing payment success:', error);
+
+        // Remove newsletter discount after successful payment
+        if (hasNewsletterDiscount) {
+          removeNewsletterDiscount();
+          const subscribedEmail = localStorage.getItem('subscribedEmail');
+          if (subscribedEmail) {
+            const usedDiscountEmails = JSON.parse(localStorage.getItem('usedDiscountEmails') || '[]');
+            if (!usedDiscountEmails.includes(subscribedEmail)) {
+              usedDiscountEmails.push(subscribedEmail);
+              localStorage.setItem('usedDiscountEmails', JSON.stringify(usedDiscountEmails));
+            }
+          }
+        }
+      } catch (error: any) {
+        console.error('Error processing order:', error);
+        
+        const errorDetails = {
+          message: error.message,
+          response: error.response?.data,
+          stack: error.stack
+        };
+
+        console.error('Detailed error:', errorDetails);
+
         toast({
           title: "Erreur",
-          description: "Une erreur est survenue lors du traitement de votre commande. Notre équipe a été notifiée.",
+          description: (
+            <div className="space-y-2">
+              <p>Erreur lors du traitement de la commande:</p>
+              <pre className="mt-2 w-full max-h-96 overflow-auto rounded-lg bg-slate-950 p-4">
+                <code className="text-white text-xs">
+                  {JSON.stringify(errorDetails, null, 2)}
+                </code>
+              </pre>
+            </div>
+          ),
           variant: "destructive",
+          duration: Infinity
         });
       }
     };
 
     handlePaymentSuccess();
-  }, [clearCart, hasNewsletterDiscount, subtotal, newsletterDiscount, finalTotal]);
+  }, [clearCart, hasNewsletterDiscount, removeNewsletterDiscount]);
 
   return (
     <div className="min-h-screen bg-[#F1F0FB] flex items-center justify-center p-4">

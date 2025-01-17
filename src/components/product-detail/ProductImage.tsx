@@ -32,6 +32,8 @@ const ProductImage = ({ image, name }: ProductImageProps) => {
               alt={name}
               className="max-w-full max-h-full object-contain"
               layoutId="product-image"
+              loading="lazy"
+              decoding="async"
             />
             <button
               className="absolute top-4 right-4 p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors"
@@ -51,6 +53,9 @@ const ProductImage = ({ image, name }: ProductImageProps) => {
                 src={image}
                 alt={name}
                 className="w-full h-full object-contain mix-blend-normal p-4 transition-transform duration-300 group-hover:scale-105"
+                loading="lazy"
+                decoding="async"
+                fetchPriority="low"
               />
             </motion.div>
             <button

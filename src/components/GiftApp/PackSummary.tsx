@@ -5,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Package2, ShoppingBag, Gift, PenLine } from 'lucide-react';
+import { getPersonalizationPrice } from '@/utils/personalizationPricing';
 
 interface PackSummaryProps {
   items: Product[];
@@ -17,7 +18,19 @@ const PackSummary = ({
   note,
   onNoteChange,
 }: PackSummaryProps) => {
-  const totalPrice = items.reduce((sum, item) => sum + item.price, 0);
+  const calculateTotalWithPersonalization = () => {
+    return items.reduce((sum, item) => {
+      const basePrice = item.price;
+      const personalizationPrice = getPersonalizationPrice(
+        item.itemgroup_product || '',
+        item.personalization,
+        true // items in packs have free personalization
+      );
+      return sum + basePrice + personalizationPrice;
+    }, 0);
+  };
+
+  const totalPrice = calculateTotalWithPersonalization();
 
   return (
     <motion.div 
@@ -59,6 +72,12 @@ const PackSummary = ({
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-gray-900 truncate">{item.name}</p>
                 <p className="text-sm text-[#6D0201]">{item.price.toFixed(2)} TND</p>
+              {/*   {item.personalization && item.itemgroup_product === 'chemises' && (
+                  <div className="flex items-center gap-1 text-xs text-[#700100] mt-1">
+                    <PenLine size={12} />
+                    Personnalisation incluse
+                  </div>
+                )} */}
               </div>
             </motion.div>
           ))}

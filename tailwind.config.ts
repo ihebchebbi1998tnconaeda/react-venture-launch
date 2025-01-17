@@ -53,6 +53,12 @@ export default {
           foreground: 'hsl(var(--card-foreground))'
         }
       },
+      keyframes: {
+        pulse: {
+          '0%, 100%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.05)' }
+        }
+      },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',

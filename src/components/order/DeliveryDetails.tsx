@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, Truck } from 'lucide-react';
+import { Calendar, Truck, StickyNote } from 'lucide-react';
 import { UserDetails } from '@/utils/userDetailsStorage';
 import { motion } from 'framer-motion';
 
@@ -27,6 +27,15 @@ const DeliveryDetails = ({ userDetails }: DeliveryDetailsProps) => {
             {userDetails.zipCode} {userDetails.country}<br />
             {userDetails.phone}
           </p>
+          {userDetails.orderNote && userDetails.orderNote !== '-' && (
+            <div className="mt-4">
+              <h3 className="font-medium mb-2 flex items-center gap-2 text-black">
+                <StickyNote size={20} />
+                Note de commande
+              </h3>
+              <p className="text-black italic">{userDetails.orderNote}</p>
+            </div>
+          )}
         </div>
         <div className="space-y-4">
           <div>

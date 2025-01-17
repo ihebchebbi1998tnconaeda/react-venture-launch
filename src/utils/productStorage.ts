@@ -47,3 +47,11 @@ export const clearProducts = (): void => {
     console.error('Error clearing products from localStorage:', error);
   }
 };
+
+export const calculateFinalPrice = (basePrice: number, discount: string): number => {
+  if (discount && !isNaN(parseFloat(discount)) && parseFloat(discount) > 0) {
+    const discountAmount = (parseFloat(discount) / 100) * basePrice;
+    return basePrice - discountAmount;
+  }
+  return basePrice;
+};

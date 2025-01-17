@@ -1,6 +1,6 @@
-const KONNECT_API_URL =  'https://api.konnect.network/api/v2';
-const KONNECT_API_KEY =  '657af1930bef8bdfd045b3a3:SGfAZSWuEtQcPbUU2I5hXsOK';
-const RECEIVER_WALLET_ID =  '657af1930bef8bdfd045b3a7';
+const KONNECT_API_URL = 'https://api.konnect.network/api/v2';
+const KONNECT_API_KEY = '657af1930bef8bdfd045b3a3:SGfAZSWuEtQcPbUU2I5hXsOK';
+const RECEIVER_WALLET_ID = '657af1930bef8bdfd045b3a7';
 
 interface InitPaymentResponse {
   payUrl: string;
@@ -34,12 +34,17 @@ export const initKonnectPayment = async (
   failUrl = `${window.location.origin}/payment-failure`,
   theme = 'light'
 ): Promise<InitPaymentResponse> => {
-  if (amount <= 0) throw new Error('Invalid amount. Must be greater than 0.');
+  if (!amount || amount <= 0) throw new Error('Invalid amount. Must be greater than 0.');
   if (!firstName || !lastName) throw new Error('First and last names are required.');
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error('Invalid email format.');
   if (!orderId) throw new Error('Order ID is required.');
 
+  // Convert amount to millimes (1 TND = 1000 millimes)
+  const amountInMillimes = Math.round(amount * 1000);
+
   try {
+    console.log('Initiating Konnect payment with amount:', amount, 'TND (', amountInMillimes, 'millimes)');
+    
     const response = await fetchWithTimeout(`${KONNECT_API_URL}/payments/init-payment`, {
       method: 'POST',
       headers: {
@@ -48,7 +53,7 @@ export const initKonnectPayment = async (
       },
       body: JSON.stringify({
         receiverWalletId: RECEIVER_WALLET_ID,
-        amount: amount * 1000, // Convert to millimes
+        amount: amountInMillimes,
         token: 'TND',
         type: 'immediate',
         description: `Order #${orderId}`,
@@ -65,13 +70,15 @@ export const initKonnectPayment = async (
 
     if (!response.ok) {
       const errorDetails = await response.json();
-      console.error('Error details:', errorDetails);
+      console.error('Konnect API error details:', errorDetails);
       throw new Error(`Payment initialization failed: ${errorDetails.message || 'Unknown error'}`);
     }
 
-    return await response.json();
+    const data = await response.json();
+    console.log('Konnect API response:', data);
+    return data;
   } catch (error) {
-    console.error('Error initializing payment:', error);
+    console.error('Error initializing Konnect payment:', error);
     throw error;
   }
 };

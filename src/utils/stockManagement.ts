@@ -1,6 +1,8 @@
+import { Product } from '@/types/product';
+
 interface CartItem {
   id: number;
-  size?: 'xs' | 's' | 'm' | 'l' | 'xl' | 'xxl';
+  size?: 'xs' | 's' | 'm' | 'l' | 'xl' | 'xxl' | '40' | '42' | '44' | '46' | '48' | '50';
   quantity: number;
 }
 
@@ -14,13 +16,20 @@ interface StockUpdatePayload {
   xxl_size: number;
 }
 
-const SIZE_MAP: { [key: string]: keyof StockUpdatePayload } = {
-  xs: 'xs_size',
-  s: 's_size',
-  m: 'm_size',
-  l: 'l_size',
-  xl: 'xl_size',
-  xxl: 'xxl_size',
+export const getStockForSize = (product: Product, size: string): number => {
+  if (!product.sizes) {
+    return 0;
+  }
+  
+  // Convert size to lowercase for consistent comparison
+  const sizeKey = size.toLowerCase();
+  
+  // Check if the size exists in the product's sizes
+  if (sizeKey in product.sizes) {
+    return product.sizes[sizeKey] || 0;
+  }
+  
+  return 0;
 };
 
 export const updateProductStock = async (cartItems: CartItem[]): Promise<any[]> => {
@@ -96,4 +105,13 @@ export const updateProductStock = async (cartItems: CartItem[]): Promise<any[]> 
     console.error('Error updating stock:', error);
     throw error; // Rethrow the error to be handled by the caller
   }
+};
+
+const SIZE_MAP: { [key: string]: keyof StockUpdatePayload } = {
+  xs: 'xs_size',
+  s: 's_size',
+  m: 'm_size',
+  l: 'l_size',
+  xl: 'xl_size',
+  xxl: 'xxl_size',
 };

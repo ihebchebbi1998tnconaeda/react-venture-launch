@@ -23,7 +23,7 @@ const GiftBoxSelection = ({ selectedBoxOption, setSelectedBoxOption }: GiftBoxSe
             }`}
         >
           <img 
-            src="BoxToSelected.png" 
+            src="/BoxToSelected.png" 
             alt="With Box" 
             className="w-12 h-12 object-cover rounded"
           />

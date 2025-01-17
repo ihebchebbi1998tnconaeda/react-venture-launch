@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ShoppingBag, Truck, CreditCard, Clock } from 'lucide-react';
+import { ShoppingBag, Truck, CreditCard, Clock, PenLine, StickyNote } from 'lucide-react';
 
 interface OrderSummaryProps {
   subtotal: number;
@@ -8,6 +8,8 @@ interface OrderSummaryProps {
   finalTotal: number;
   hasNewsletterDiscount?: boolean;
   newsletterDiscount?: number;
+  personalizationTotal?: number;
+  orderNote?: string;
 }
 
 const OrderSummary = ({ 
@@ -15,7 +17,9 @@ const OrderSummary = ({
   shipping, 
   finalTotal,
   hasNewsletterDiscount = false,
-  newsletterDiscount = 0
+  newsletterDiscount = 0,
+  personalizationTotal = 0,
+  orderNote
 }: OrderSummaryProps) => {
   return (
     <motion.div 
@@ -30,6 +34,16 @@ const OrderSummary = ({
             <span>Sous-total</span>
             <span>{subtotal.toFixed(2)} TND</span>
           </div>
+          
+          {personalizationTotal > 0 && (
+            <div className="flex justify-between text-[#700100]">
+              <div className="flex items-center gap-2">
+                <PenLine size={16} />
+                <span>Personnalisation</span>
+              </div>
+              <span>+{personalizationTotal.toFixed(2)} TND</span>
+            </div>
+          )}
           
           {hasNewsletterDiscount && newsletterDiscount > 0 && (
             <div className="flex justify-between text-green-600">
@@ -48,6 +62,16 @@ const OrderSummary = ({
             <span className="text-[#700100]">{finalTotal.toFixed(2)} TND</span>
           </div>
         </div>
+
+        {orderNote && orderNote !== '-' && (
+          <div className="bg-[#F8F8F8] rounded-lg p-4 space-y-2">
+            <div className="flex items-center gap-2 text-[#471818] font-medium">
+              <StickyNote className="w-4 h-4 text-[#700100]" />
+              Note de commande
+            </div>
+            <p className="text-sm text-gray-600">{orderNote}</p>
+          </div>
+        )}
 
         <div className="bg-[#F8F8F8] rounded-lg p-4 space-y-3">
           <h3 className="font-medium text-[#471818] mb-2">Informations de commande</h3>

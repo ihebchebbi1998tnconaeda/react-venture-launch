@@ -58,7 +58,7 @@ const PersonalizationButton = ({ productId, onSave, initialText = '' }: Personal
                 className="min-h-[120px] p-4 text-gray-800 bg-gray-50 border-2 border-gray-200 focus:border-[#700100] focus:ring-[#700100] rounded-lg resize-none transition-all duration-300"
               />
               <p className="text-sm text-gray-500 italic">
-                Exemple: "Pour ma chère maman, avec tout mon amour ❤️"
+                Exemple: "Flen Falten"
               </p>
             </div>
             

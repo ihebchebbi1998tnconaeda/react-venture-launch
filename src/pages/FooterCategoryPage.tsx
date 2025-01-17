@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import TopNavbar from "../components/TopNavbar";
 import Footer from "../components/Footer";
@@ -6,6 +6,7 @@ import ProductsSection from "../components/productsPages/ProductsSection";
 import BrandNavbarSection from "@/components/productsPages/BrandNavbarSection";
 import MainNavbar from "@/components/MainNavbar";
 import { ArrowLeft } from "lucide-react";
+import WhatsAppPopup from "@/components/WhatsAppPopup";
 
 const FooterCategoryPage = () => {
   const navigate = useNavigate();
@@ -82,6 +83,9 @@ const FooterCategoryPage = () => {
         </div>
         <ProductsSection isFromFooter={true} />
       </div>
+      <Suspense fallback={null}>
+                      <WhatsAppPopup />
+   </Suspense>
       <Footer />
     </div>
   );

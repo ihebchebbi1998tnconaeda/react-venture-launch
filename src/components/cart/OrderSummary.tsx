@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { UserDetails } from '@/utils/userDetailsStorage';
 import PaymentButtons from './PaymentButtons';
-import { Pencil, Trash2, Tag } from 'lucide-react';
+import { Pencil, Trash2, StickyNote } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { Link } from 'react-router-dom';
 import { useCart } from './CartProvider';
 
@@ -36,8 +36,13 @@ const OrderSummary = ({
   const shipping = subtotal > 299 ? 0 : 8;
   const finalTotal = total + shipping;
 
-  // Check if any item has personalization
-  const hasPersonalization = cartItems.some(item => item.personalization);
+  // Calculate personalization total
+  const personalizationTotal = cartItems.reduce((sum, item) => {
+    if (item.personalization && item.personalization !== '-' && !item.fromPack) {
+      return sum + (30 * item.quantity);
+    }
+    return sum;
+  }, 0);
 
   const handleApplyDiscount = () => {
     const promoCode = promoCodes[discountCode];
@@ -100,6 +105,16 @@ const OrderSummary = ({
               {userDetails.phone}<br />
               {userDetails.email}
             </p>
+            
+            {userDetails.orderNote && userDetails.orderNote !== '-' && (
+              <div className="mt-4 p-3 bg-white rounded-md">
+                <div className="flex items-center gap-2 text-[#1A1F2C]">
+                  <StickyNote size={16} className="text-[#700100]" />
+                  <span className="font-medium">Note de commande:</span>
+                </div>
+                <p className="mt-1 text-sm text-[#8E9196]">{userDetails.orderNote}</p>
+              </div>
+            )}
           </div>
         )}
 
@@ -115,6 +130,13 @@ const OrderSummary = ({
               <span>{boxTotal.toFixed(2)} TND</span>
             </div>
           )}
+
+          {personalizationTotal > 0 && (
+            <div className="flex justify-between text-[#8E9196]">
+              <span>Personnalisation</span>
+              <span>{personalizationTotal.toFixed(2)} TND</span>
+            </div>
+          )}
           
           {hasNewsletterDiscount && newsletterDiscount > 0 && (
             <div className="flex justify-between text-green-600">
@@ -128,27 +150,10 @@ const OrderSummary = ({
             <span>{shipping === 0 ? 'Gratuite' : `${shipping.toFixed(2)} TND`}</span>
           </div>
           
-          <div className="space-y-2 pt-2 border-t border-gray-100">
-            <div className="flex gap-2">
-              <Input
-                placeholder="Code promo"
-                value={discountCode}
-                onChange={(e) => setDiscountCode(e.target.value.toUpperCase())}
-                className="bg-white border-gray-300 focus:border-[#700100] focus:ring-[#700100]"
-              />
-              <Button
-                onClick={handleApplyDiscount}
-                className="bg-[#700100] text-white hover:bg-[#591C1C] transition-colors"
-              >
-                Appliquer
-              </Button>
-            </div>
-          </div>
-
           <div className="border-t border-gray-100 pt-4">
             <div className="flex justify-between text-lg font-medium text-[#1A1F2C]">
               <span>Total</span>
-              <span>{finalTotal.toFixed(2)} TND</span>
+              <span>{(finalTotal + personalizationTotal).toFixed(2)} TND</span>
             </div>
             <p className="text-xs text-[#8E9196] mt-1">TVA incluse</p>
           </div>
@@ -160,20 +165,27 @@ const OrderSummary = ({
           userDetails={userDetails}
           total={subtotal}
           shipping={shipping}
-          finalTotal={finalTotal}
-          hasPersonalization={hasPersonalization}
+          finalTotal={finalTotal + personalizationTotal}
+          hasPersonalization={cartItems.some(item => item.personalization)}
         />
 
         <div className="mt-6 space-y-2 text-sm text-[#8E9196]">
+      
           <p className="flex items-center gap-2 hover:text-[#1A1F2C] transition-colors">
             • Livraison gratuite à partir de 299 TND
           </p>
           <p className="flex items-center gap-2 hover:text-[#1A1F2C] transition-colors">
-            • Retours gratuits sous 14 jours
-          </p>
+  • Échange de produit sous 30 jours (payant)
+</p>
           <p className="flex items-center gap-2 hover:text-[#1A1F2C] transition-colors">
             • Service client disponible 24/7
           </p>
+          <p className="flex items-center gap-2 hover:text-[#1A1F2C] transition-colors">
+            • Livraison mondial disponible
+          </p>
+          <div className="flex justify-left items-center gap-4 mt-2">
+          <img src="https://i.ibb.co/pPLzH9L/image.png" alt="Payment Methods" className="h-6" />
+        </div>
         </div>
       </div>
     </motion.div>

@@ -14,6 +14,7 @@ import ProductDetailHeader from './product-detail/ProductDetailHeader';
 import ProductDetailContent from './product-detail/ProductDetailContent';
 import ProductDetailActions from './product-detail/ProductDetailActions';
 import GiftBoxSelection from './product-detail/GiftBoxSelection';
+import { canItemBePersonalized, getPersonalizationMessage } from '@/utils/personalizationConfig';
 
 interface ProductDetailModalProps {
   isOpen: boolean;
@@ -43,6 +44,9 @@ const ProductDetailModal = ({ isOpen, onClose, product }: ProductDetailModalProp
   
   const { addToCart } = useCart();
   const { toast } = useToast();
+
+  const canPersonalize = canItemBePersonalized(product.itemgroup_product);
+  const personalizationMessage = getPersonalizationMessage(product.itemgroup_product);
 
   const handleAddToCart = () => {
     if (!selectedSize) {
@@ -156,11 +160,17 @@ const ProductDetailModal = ({ isOpen, onClose, product }: ProductDetailModalProp
                   />
                 )}
 
-                <PersonalizationButton
-                  productId={product.id}
-                  onSave={setPersonalization}
-                  initialText={personalization}
-                />
+                {canPersonalize ? (
+                  <PersonalizationButton
+                    productId={product.id}
+                    onSave={setPersonalization}
+                    initialText={personalization}
+                  />
+                ) : personalizationMessage && (
+                  <div className="text-sm text-gray-500 italic">
+                    {personalizationMessage}
+                  </div>
+                )}
               </div>
             </div>
 

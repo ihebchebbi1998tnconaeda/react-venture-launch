@@ -39,6 +39,7 @@ const Men = () => {
               loading="lazy"
               decoding="async"
               fetchPriority={index === 0 ? "high" : "low"}
+              sizes="(max-width: 768px) 100vw, 340px"
             />
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
                         text-center py-[2.2rem] px-[6.5rem] rounded-lg">

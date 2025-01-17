@@ -16,8 +16,11 @@ const NewsletterPopup = () => {
   useEffect(() => {
     // Check if user has already subscribed
     const hasSubscribed = localStorage.getItem('newsletterSubscribed');
+    const subscribedEmail = localStorage.getItem('subscribedEmail');
+    const usedDiscountEmails = JSON.parse(localStorage.getItem('usedDiscountEmails') || '[]');
     
-    if (!hasSubscribed) {
+    // Only show popup if user hasn't subscribed or hasn't used discount
+    if (!hasSubscribed && (!subscribedEmail || !usedDiscountEmails.includes(subscribedEmail))) {
       setIsVisible(true);
     }
   }, []);
@@ -31,12 +34,25 @@ const NewsletterPopup = () => {
     setIsLoading(true);
 
     try {
+      // Check if email has already used discount
+      const usedDiscountEmails = JSON.parse(localStorage.getItem('usedDiscountEmails') || '[]');
+      if (usedDiscountEmails.includes(email)) {
+        toast({
+          variant: "destructive",
+          title: "Désolé",
+          description: "Cette adresse email a déjà bénéficié de la réduction de 5%.",
+          duration: 3000,
+        });
+        setIsLoading(false);
+        return;
+      }
+
       const response = await axios.post('https://respizenmedical.com/fiori/subscribe_email.php', {
         email
       });
 
       if (response.data.status === 'success') {
-        // Save subscription status
+        // Save subscription status and email
         localStorage.setItem('newsletterSubscribed', 'true');
         localStorage.setItem('subscribedEmail', email);
         
