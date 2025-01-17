@@ -1,0 +1,87 @@
+export default {
+  common: {
+    search: "Search",
+    close: "Close",
+    submit: "Submit",
+    cancel: "Cancel",
+    loading: "Loading...",
+    error: "An error occurred",
+    success: "Success",
+  },
+  navigation: {
+    home: "Home",
+    products: "Products",
+    about: "About",
+    contact: "Contact",
+    cart: "Cart",
+    menu: "Menu",
+  },
+  footer: {
+    newsletter: {
+      title: "Subscribe to our newsletter",
+      subtitle: "Subscribe today and get 5% off your first purchase",
+      placeholder: "Enter your email",
+      button: "Subscribe",
+      success: "Thank you for subscribing!",
+    },
+    contact: {
+      title: "CONTACT US",
+      phone: "Phone",
+      email: "Email us",
+      chat: "Live chat",
+      followUs: "Follow us",
+    },
+    about: {
+      title: "ABOUT",
+      whatIsFiori: "What is Fiori",
+      impactReport: "Impact Report",
+    },
+    customerService: {
+      title: "CUSTOMER SERVICE",
+      contactUs: "Contact us",
+      delivery: "Delivery information",
+      faq: "FAQ",
+      returns: "Returns policy",
+    },
+    ourPages: {
+      title: "OUR PAGES",
+      fioriWorld: "Fiori World",
+      gifts: "Gifts Universe",
+      readyToWear: "Ready to Wear",
+      accessories: "Accessories",
+      custom: "Custom Made",
+      outlet: "Outlet",
+    },
+  },
+  products: {
+    new: "New",
+    categories: {
+      suits: "Suits",
+      shirts: "Shirts",
+      belts: "Belts",
+      blazers: "Blazers",
+    },
+    filters: {
+      price: "Price",
+      color: "Color",
+      size: "Size",
+      sort: "Sort by",
+    },
+  },
+  cart: {
+    empty: "Your cart is empty",
+    total: "Total",
+    checkout: "Checkout",
+    continue: "Continue shopping",
+  },
+  auth: {
+    login: "Login",
+    register: "Register",
+    forgotPassword: "Forgot password?",
+  },
+  brandIntro: {
+    title: "Le Monde de Fiori",
+    description: "Fiori, founded in 2014, is a Tunisian brand that integrates into the universe of ready-to-wear and high-end leather goods for men.",
+    learnMore: "Learn More!",
+  },
+};

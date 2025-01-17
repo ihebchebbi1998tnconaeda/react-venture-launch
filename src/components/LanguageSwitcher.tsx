@@ -1,20 +1,20 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Globe } from 'lucide-react';
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useLanguage } from './language/LanguageProvider';
+import { Button } from "@/components/ui/button";
 
 const LanguageSwitcher = () => {
-  const { language, setLanguage } = useLanguage();
+  const { i18n } = useTranslation();
 
-  const handleLanguageChange = (lang: string) => {
-    setLanguage(lang);
-    localStorage.setItem('preferredLanguage', lang);
+  const changeLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
+    localStorage.setItem('preferredLanguage', lng);
   };
 
   return (
@@ -27,14 +27,14 @@ const LanguageSwitcher = () => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem 
-            onClick={() => handleLanguageChange('en')}
-            className={language === 'en' ? 'bg-accent' : ''}
+            onClick={() => changeLanguage('en')}
+            className={i18n.language === 'en' ? 'bg-accent' : ''}
           >
             English
           </DropdownMenuItem>
           <DropdownMenuItem 
-            onClick={() => handleLanguageChange('fr')}
-            className={language === 'fr' ? 'bg-accent' : ''}
+            onClick={() => changeLanguage('fr')}
+            className={i18n.language === 'fr' ? 'bg-accent' : ''}
           >
             Français
           </DropdownMenuItem>

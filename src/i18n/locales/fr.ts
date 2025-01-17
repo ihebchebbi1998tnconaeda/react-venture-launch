@@ -1,0 +1,87 @@
+export default {
+  common: {
+    search: "Rechercher",
+    close: "Fermer",
+    submit: "Envoyer",
+    cancel: "Annuler",
+    loading: "Chargement...",
+    error: "Une erreur est survenue",
+    success: "Succès",
+  },
+  navigation: {
+    home: "Accueil",
+    products: "Produits",
+    about: "À propos",
+    contact: "Contact",
+    cart: "Panier",
+    menu: "Menu",
+  },
+  footer: {
+    newsletter: {
+      title: "Abonnez-vous à notre newsletter",
+      subtitle: "Abonnez-vous aujourd'hui et obtenez 5% de réduction sur votre premier achat",
+      placeholder: "Entrez votre email",
+      button: "S'abonner",
+      success: "Merci de votre inscription !",
+    },
+    contact: {
+      title: "CONTACTEZ-NOUS",
+      phone: "Téléphone",
+      email: "Envoyez-nous un email",
+      chat: "Chat en direct",
+      followUs: "Suivez-nous",
+    },
+    about: {
+      title: "À PROPOS",
+      whatIsFiori: "Qu'est-ce que Fiori",
+      impactReport: "Rapport d'impact",
+    },
+    customerService: {
+      title: "SERVICE CLIENT",
+      contactUs: "Nous contacter",
+      delivery: "Informations de livraison",
+      faq: "FAQ",
+      returns: "Politique de retour",
+    },
+    ourPages: {
+      title: "NOS PAGES",
+      fioriWorld: "Le monde Fiori",
+      gifts: "L'univers Cadeaux",
+      readyToWear: "Le prêt à porter",
+      accessories: "Accessoires",
+      custom: "Le sur mesure",
+      outlet: "Outlet",
+    },
+  },
+  products: {
+    new: "Nouveauté",
+    categories: {
+      suits: "Costumes",
+      shirts: "Chemises",
+      belts: "Ceintures",
+      blazers: "Blazers",
+    },
+    filters: {
+      price: "Prix",
+      color: "Couleur",
+      size: "Taille",
+      sort: "Trier par",
+    },
+  },
+  cart: {
+    empty: "Votre panier est vide",
+    total: "Total",
+    checkout: "Commander",
+    continue: "Continuer les achats",
+  },
+  auth: {
+    login: "Connexion",
+    register: "S'inscrire",
+    forgotPassword: "Mot de passe oublié ?",
+  },
+  brandIntro: {
+    title: "Le Monde de Fiori",
+    description: "Fiori, fondée en 2014, est une marque tunisienne qui s'intègre dans l'univers du prêt-à-porter et de la maroquinerie haut de gamme pour homme.",
+    learnMore: "En Savoir Plus !",
+  },
+};
