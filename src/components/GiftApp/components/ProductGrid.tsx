@@ -69,6 +69,9 @@ const ProductGrid = ({ products, onDragStart, onProductSelect }: ProductGridProp
                 alt={product.name}
                 className="w-full h-24 object-contain mb-2"
                 loading="lazy"
+                decoding="async"
+                fetchPriority="low"
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
               <h3 className="text-sm font-medium text-gray-900 truncate">
                 {product.name}
