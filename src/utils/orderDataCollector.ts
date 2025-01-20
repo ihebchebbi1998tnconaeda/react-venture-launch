@@ -1,4 +1,4 @@
-import { CartItem } from "@/components/cart/CartProvider";
+import { CartItem } from "@/types/cart";
 import { UserDetails, getUserDetails } from "./userDetailsStorage";
 import { getCartItems } from "./cartStorage";
 import { getPersonalizations } from "./personalizationStorage";
@@ -16,12 +16,11 @@ export interface OrderData {
 }
 
 export const collectOrderData = (): OrderData => {
-  console.log('Collecting order data from localStorage...');
   
   // Get cart items and calculate totals
   const cartItems = getCartItems();
   const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const shipping = total >= 500 ? 0 : 7; // Free shipping over 500 TND
+  const shipping = total >= 299 ? 0 : 8; // Free shipping over 500 TND
   const finalTotal = total + shipping;
 
   // Get user details
@@ -48,14 +47,12 @@ export const collectOrderData = (): OrderData => {
     orderDate: new Date().toISOString(),
   };
 
-  console.log('Collected order data:', orderData);
   return orderData;
 };
 
 // Helper function to save payment method
 export const savePaymentMethod = (method: 'card' | 'cash') => {
   localStorage.setItem('paymentMethod', method);
-  console.log('Payment method saved:', method);
 };
 
 // Helper function to clear all order related data
@@ -64,15 +61,12 @@ export const clearOrderData = () => {
   localStorage.removeItem('userDetails');
   localStorage.removeItem('personalizations');
   localStorage.removeItem('paymentMethod');
-  console.log('All order data cleared from localStorage');
 };
 
 // Example of how to use this with an API call
 export const submitOrderToAPI = async (orderData: OrderData) => {
-  console.log('Preparing to submit order to API:', orderData);
   
   try {
-    // This is just a placeholder for the actual API call
     // Replace with your actual API endpoint and logic
     const response = await fetch('/api/orders', {
       method: 'POST',
@@ -87,7 +81,6 @@ export const submitOrderToAPI = async (orderData: OrderData) => {
     }
 
     const result = await response.json();
-    console.log('Order submitted successfully:', result);
     
     // Clear local storage after successful submission
     clearOrderData();

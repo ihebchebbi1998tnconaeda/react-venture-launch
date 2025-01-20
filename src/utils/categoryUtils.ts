@@ -56,23 +56,24 @@ export const getAvailableCategories = (
   }
 
   if (packType === 'Pack Trio') {
-    // First slot must be ceinture
+    // First step: only show ceintures if none selected
     if (selectedItems.length === 0) {
       return [{ label: 'Ceintures', type: 'itemgroup', value: 'ceintures' }];
     }
-    
-    // Second slot must be portefeuille
+
+    // Second step: only show portefeuilles if ceinture is selected but no portefeuille
     if (selectedItems.length === 1 && selectedItems[0].itemgroup_product === 'ceintures') {
       return [{ label: 'Portefeuilles', type: 'itemgroup', value: 'portefeuilles' }];
     }
-    
-    // Third slot must be porte-clés, only if we have ceinture and portefeuille
+
+    // Third step: only show porte-clés if both ceinture and portefeuille are selected
     if (selectedItems.length === 2 && 
         selectedItems.some(item => item.itemgroup_product === 'ceintures') &&
         selectedItems.some(item => item.itemgroup_product === 'portefeuilles')) {
       return [{ label: 'Porte-clés', type: 'itemgroup', value: 'porte-cles' }];
     }
-    
+
+    // If the order is not correct, show no options
     return [];
   }
 

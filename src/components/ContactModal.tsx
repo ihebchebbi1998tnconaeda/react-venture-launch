@@ -36,7 +36,7 @@ const ContactModal = ({ isOpen, onOpenChange }: ContactModalProps) => {
     setIsSubmitting(true);
 
     try {
-      const response = await axios.post('https://respizenmedical.com/fiori/add_review.php', {
+      const response = await axios.post('https://www.fioriforyou.com/backfiori/add_review.php', {
         subject: formData.subject,
         message: formData.message
       });

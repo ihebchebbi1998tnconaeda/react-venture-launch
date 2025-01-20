@@ -113,7 +113,6 @@ const GiftApp = () => {
   }, [isSubmitting, selectedItems, containerCount, packType, addToCart, navigate]);
 
   const handleItemDrop = (item: Product, size: string, personalization: string) => {
-    console.log('Item dropped with size:', size, 'and personalization:', personalization);
     
     if (selectedItems.length >= containerCount) {
       toast({
@@ -132,7 +131,6 @@ const GiftApp = () => {
       personalization: personalization || '-'
     };
 
-    console.log('Adding item to selected items with details:', itemWithDetails);
     setSelectedItems((prev) => [...prev, itemWithDetails]);
     playTickSound();
     
@@ -200,6 +198,8 @@ const GiftApp = () => {
             <ConfirmationButton
               onConfirm={handleConfirmPack}
               disabled={selectedItems.length === 0 || isSubmitting}
+              packType={packType}
+              selectedItemsCount={selectedItems.length}
             />
           </div>
         </div>

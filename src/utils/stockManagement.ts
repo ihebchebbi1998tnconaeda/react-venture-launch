@@ -33,7 +33,6 @@ export const getStockForSize = (product: Product, size: string): number => {
 };
 
 export const updateProductStock = async (cartItems: CartItem[]): Promise<any[]> => {
-  console.log('Updating stock for items:', cartItems);
 
   try {
     // Construct the stock update payload for each item
@@ -57,16 +56,14 @@ export const updateProductStock = async (cartItems: CartItem[]): Promise<any[]> 
       return stockUpdate;
     });
 
-    console.log('Sending stock updates:', stockUpdates);
 
     // Send update requests for each product
     const updatePromises = stockUpdates.map(update => {
       const requestBody = JSON.stringify(update);
 
       // Log the request body (query) before sending it
-      console.log('Sending query for product ID:', update.id_product, requestBody);
 
-      return fetch('https://respizenmedical.com/fiori/recount_product.php', {
+      return fetch('https://www.fioriforyou.com/backfiori/recount_product.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -75,7 +72,6 @@ export const updateProductStock = async (cartItems: CartItem[]): Promise<any[]> 
       })
       .then(response => {
         // Log the raw response for debugging
-        console.log('Raw response from server:', response);
 
         // Check if response is ok (status code 200)
         if (!response.ok) {
@@ -87,7 +83,6 @@ export const updateProductStock = async (cartItems: CartItem[]): Promise<any[]> 
       })
       .catch(error => {
         // Log any errors during the fetch request
-        console.error('Error during fetch request for product', update.id_product, error);
         return { success: false, error: error.message }; // Return a custom error response for each failed request
       });
     });
@@ -95,7 +90,6 @@ export const updateProductStock = async (cartItems: CartItem[]): Promise<any[]> 
     // Wait for all update promises to complete
     const results = await Promise.all(updatePromises);
 
-    console.log('Stock update results:', results);
 
     // Return results for further handling (e.g., success/failure feedback)
     return results;

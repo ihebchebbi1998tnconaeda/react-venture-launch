@@ -18,6 +18,11 @@ const ProductPretAPorterSection = () => {
             description: "Blazers raffinés"
           },
           {
+            href: "/category/outlet/homme/blazers",
+            title: "Vestes",
+            description: "Vestes élégantes"
+          },
+          {
             href: "/category/pret-a-porter/homme/chemises",
             title: "Chemises",
             description: "Chemises classiques"

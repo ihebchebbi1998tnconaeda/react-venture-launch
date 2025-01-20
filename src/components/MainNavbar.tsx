@@ -4,8 +4,10 @@ import MainNavbarMenus from './main-navigation/MainNavbarMenus';
 import { useLocation } from 'react-router-dom';
 import { NavigationMenuProducts } from './ui/navigation-menuProducts';
 import MainNavbarMenusProducts from './main-navigation/MainNavbarMenusProducts';
+import { useTranslation } from 'react-i18next';
 
 const MainNavbar = () => {
+  const { t } = useTranslation();
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
   const isIndexPage = location.pathname === '/';
@@ -30,8 +32,8 @@ const MainNavbar = () => {
           : 'bg-transparent'
       }`}
       style={{
-        marginTop: '-60px', // Dynamically set marginTop
-        position: isIndexPage ? 'relative' : 'absolute', // Dynamically set position
+        marginTop: '-60px',
+        position: isIndexPage ? 'relative' : 'absolute',
         backgroundColor: isIndexPage ? '' : '#EFEDED',
       }}
     >

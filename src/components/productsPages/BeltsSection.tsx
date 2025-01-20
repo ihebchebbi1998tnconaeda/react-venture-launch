@@ -9,7 +9,74 @@ const BeltsSection = () => {
 
   const [type, category, itemgroup] = pathSegments;
 
+  const getImageUrl = () => {
+    if (type === 'pret-a-porter') {
+      if (category === 'homme') {
+        switch (itemgroup) {
+          case 'costumes':
+            return "/Pcis/costumes.png";
+          case 'blazers':
+            return "/Pcis/blazers.png";
+          case 'chemises':
+            return "/Pcis/chemisehomme.png";
+          case 'pantalons':
+            return "/Pcis/PantallonHomme.png";
+          case 'pollo':
+            return "/Pcis/pull.png";
+          default:
+            return "/Articles/Main.png";
+        }
+      } else if (category === 'femme') {
+        switch (itemgroup) {
+          case 'chemises':
+            return "/Pcis/chemisefemme.png";
+          case 'robes':
+            return "/Pcis/robe.png";
+          case 'vestes':
+            return "/Pcis/VestesFemme.png";
+          default:
+            return "/Articles/Main.png";
+        }
+      }
+    } else if (type === 'accessoires') {
+      switch (itemgroup) {
+        case 'porte-cartes':
+          return "/Pcis/Porte carte.png";
+        case 'cravates':
+          return "/Pcis/Tie.png";
+        case 'portefeuilles':
+          return "/Pcis/Wallet.png";
+        case 'porte-cles':
+          return "/Pcis/Keychain.png";
+        case 'mallettes':
+          return "/Pcis/malette.png";
+        default:
+          return "/Articles/Main.png";
+      }
+    }
+    return "/Articles/Main.png";
+  };
+
   const getContent = () => {
+    // Special handling for outlet items
+    if (type === 'outlet') {
+      return {
+        title: "Outlet",
+        subtitle: "SOLDES ET PROMOTIONS",
+        description: (
+          <div className="space-y-4">
+            <p className="text-[#700100] font-semibold">
+              Profitez de la catégorie Outlet dont vous bénéficiez des Offres exceptionnelles
+            </p>
+            <p className="text-[#700100] font-bold text-lg">
+              Jusqu'à 70% de réduction
+            </p>
+          </div>
+        ),
+        imageUrl: getImageUrl()
+      };
+    }
+    
     if (itemgroup === 'portefeuilles') {
       return {
         title: "Portefeuilles",
@@ -21,7 +88,7 @@ const BeltsSection = () => {
             Accompagnée avec son coffret cadeau, cette pièce peut être offerte en ajoutant l'option de personnalisation des initiales en dorure à chaud ou nom et prénom ou un petit mot en gravure laser.
           </p>
         ),
-        imageUrl: "/Articles/Main.png"
+        imageUrl: getImageUrl()
       };
     } else if (itemgroup === 'ceintures') {
       return {
@@ -35,14 +102,79 @@ const BeltsSection = () => {
             Cette pièce est accompagnée d'une housse personnalisée avec le nom de la marque et un coffret qui met en valeur la ceinture qui peut être offerte en lui rajoutant une personnalisation des initiales à l'extérieur ou une gravure à l'intérieur.
           </p>
         ),
-        imageUrl: "/Articles/Main.png"
+        imageUrl: getImageUrl()
+      };
+    } else if (itemgroup === 'porte-cartes') {
+      return {
+        title: "Porte-cartes",
+        subtitle: "ÉLÉGANCE ET PRATICITÉ",
+        description: (
+          <p>
+            Le porte-cartes en cuir est un accessoire élégant et pratique, parfait pour le quotidien. Sa conception soignée allie style et fonctionnalité.
+            <br /><br />
+            Livré dans un coffret cadeau raffiné, il peut être personnalisé avec des initiales ou un message spécial.
+          </p>
+        ),
+        imageUrl: getImageUrl()
+      };
+    } else if (itemgroup === 'cravates') {
+      return {
+        title: "Cravates",
+        subtitle: "RAFFINEMENT ET STYLE",
+        description: (
+          <p>
+            Nos cravates sont confectionnées avec les plus beaux tissus pour apporter une touche d'élégance à votre tenue.
+            Chaque cravate est soigneusement sélectionnée pour sa qualité et son style distinctif.
+            <br /><br />
+            Présentée dans un coffret élégant, elle peut être personnalisée pour en faire un cadeau unique.
+          </p>
+        ),
+        imageUrl: getImageUrl()
+      };
+    } else if (itemgroup === 'porte-cles') {
+      return {
+        title: "Porte-clés",
+        subtitle: "ACCESSOIRE ESSENTIEL",
+        description: (
+          <p>
+            Nos porte-clés en cuir allient style et praticité. Chaque pièce est fabriquée avec soin pour assurer durabilité et élégance.
+            <br /><br />
+            Livré dans un emballage soigné, il peut être personnalisé pour créer un cadeau unique et mémorable.
+          </p>
+        ),
+        imageUrl: getImageUrl()
+      };
+    } else if (itemgroup === 'mallettes') {
+      return {
+        title: "Mallettes",
+        subtitle: "ÉLÉGANCE PROFESSIONNELLE",
+        description: (
+          <p>
+            Nos mallettes en cuir sont conçues pour allier style professionnel et fonctionnalité. Chaque détail est pensé pour répondre aux besoins du quotidien tout en maintenant une esthétique raffinée.
+            <br /><br />
+            Livrée dans un emballage protecteur, chaque mallette peut être personnalisée pour en faire un accessoire unique.
+          </p>
+        ),
+        imageUrl: getImageUrl()
       };
     }
+
+    // Default content based on current category
+    const titles: { [key: string]: string } = {
+      'chemises': 'Chemises',
+      'robes': 'Robes',
+      'vestes': 'Vestes/Manteaux',
+      'costumes': 'Costumes',
+      'blazers': 'Blazers',
+      'pantalons': 'Pantalons',
+      'pollo': 'Polo'
+    };
+
     return {
-      title: "Collection Accessoires",
-      subtitle: "-",
+      title: titles[itemgroup] || "Collection",
+      subtitle: "ÉLÉGANCE ET RAFFINEMENT",
       description: "Découvrez nos créations exclusives, façonnées avec passion et savoir-faire en Tunisie.",
-      imageUrl: "/Articles/Main.png"
+      imageUrl: getImageUrl()
     };
   };
 
@@ -62,11 +194,13 @@ const BeltsSection = () => {
         </div>
       </div>
       <div className="w-full md:w-1/3 mt-6 md:mt-0">
-        <img
-          src={content.imageUrl}
-          alt={content.title}
-          className="rounded-md object-cover w-full h-auto max-h-[260px]"
-        />
+        <div className="relative w-full h-[250px]">
+          <img
+            src={content.imageUrl}
+            alt={content.title}
+            className="absolute inset-0 w-full h-full object-contain rounded-md"
+          />
+        </div>
       </div>
     </section>
   );

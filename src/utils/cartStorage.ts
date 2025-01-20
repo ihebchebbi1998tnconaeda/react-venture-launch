@@ -1,4 +1,4 @@
-import { CartItem } from "@/components/cart/CartProvider";
+import { CartItem } from "@/types/cart";
 
 export const saveCartItems = (items: CartItem[]): void => {
   localStorage.setItem('cartItems', JSON.stringify(items));

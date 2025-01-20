@@ -32,6 +32,7 @@ export const menuItems = [
     subItems: [
       { href: "/category/pret-a-porter/homme/costumes", title: "Costumes" },
       { href: "/category/pret-a-porter/homme/blazers", title: "Blazers" },
+      { href: "/category/pret-a-porter/homme/vestes", title: "Vestes" },
       { href: "/category/pret-a-porter/homme/chemises", title: "Chemises" },
       { href: "/category/pret-a-porter/homme/pantalons", title: "Pantalons" },
       { href: "/category/pret-a-porter/homme/pollo", title: "Polo" },

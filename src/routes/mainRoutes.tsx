@@ -1,5 +1,5 @@
 import React from 'react';
-import { createBrowserRouter } from "react-router-dom";
+import { Route, Navigate } from "react-router-dom";
 import { PageLoader } from "@/components/PageLoader";
 
 // Lazy load pages
@@ -13,43 +13,45 @@ const PromoCodesPage = React.lazy(() => import('@/pages/PromoCodesPage'));
 const OrderPreviewPage = React.lazy(() => import('@/pages/OrderPreviewPage'));
 const ProductDetailPage = React.lazy(() => import('@/pages/ProductDetailPage'));
 
-const router = createBrowserRouter([
+export const mainRoutes = [
   {
     path: "/",
-    element: <Index />,
+    element: <Index />
   },
   {
     path: "/category/*",
-    element: <CategoryPage />,
+    element: <CategoryPage />
   },
   {
     path: "/univers-cadeaux/*",
-    element: <GiftUniversePage />,
+    element: <GiftUniversePage />
   },
   {
     path: "/cart",
-    element: <CartPage />,
+    element: <CartPage />
   },
   {
     path: "/payment-success",
-    element: <PaymentSuccessPage />,
+    element: <PaymentSuccessPage />
   },
   {
     path: "/payment-failure",
-    element: <PaymentFailurePage />,
+    element: <PaymentFailurePage />
   },
   {
     path: "/promo-codes",
-    element: <PromoCodesPage />,
+    element: <PromoCodesPage />
   },
   {
     path: "/order-preview",
-    element: <OrderPreviewPage />,
+    element: <OrderPreviewPage />
   },
   {
     path: "/product/:id",
-    element: <ProductDetailPage />,
+    element: <ProductDetailPage />
   },
-]);
-
-export default router;
+  {
+    path: "*",
+    element: <Navigate to="/" replace />
+  }
+];

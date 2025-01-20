@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { X, MapPin, Phone } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SubMenuSectionMobile from './SubMenuSectionMobile';
 import { Link, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -23,29 +24,10 @@ const MobileMenu = ({
   onStoreClick,
   onContactClick,
 }: MobileMenuProps) => {
-  const [touchStart, setTouchStart] = React.useState(0);
-  const [touchEnd, setTouchEnd] = React.useState(0);
+  const { t } = useTranslation();
   const location = useLocation();
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStart(e.touches[0].clientX);
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.touches[0].clientX);
-  };
-
-  const handleTouchEnd = () => {
-    if (touchStart - touchEnd > 100) {
-      onClose();
-    }
-    setTouchStart(0);
-    setTouchEnd(0);
-  };
-
   const handleLinkClick = (href: string, callback?: () => void) => {
-    console.log('MobileMenu: Link clicked:', href);
-    // Don't close the menu for /univers-cadeaux
     if (href && href !== "#" && href !== location.pathname && href !== "/univers-cadeaux") {
       if (callback) {
         callback();
@@ -62,16 +44,15 @@ const MobileMenu = ({
           animate={{ x: 0 }}
           exit={{ x: "-100%" }}
           transition={{ type: "spring", damping: 25, stiffness: 200 }}
-          className="fixed top-0 left-0 h-full bg-primary w-[75vw] max-w-[360px] z-50 overflow-hidden"
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
+          className="fixed top-0 left-0 h-full bg-[#700100] w-[75vw] max-w-[360px] z-50 overflow-hidden"
         >
           <div className="flex items-center justify-between p-6 border-b border-white/10">
-            <h2 className="text-2xl font-semibold text-white tracking-wider">Menu</h2>
+            <h2 className="text-2xl font-semibold text-white tracking-wider">
+              {t('mobileMenu.menu')}
+            </h2>
             <button
               onClick={onClose}
-              aria-label="Close menu"
+              aria-label={t('mobileMenu.close')}
               className="text-white/80 hover:text-white transition-colors duration-300"
             >
               <X size={28} />
@@ -83,11 +64,11 @@ const MobileMenu = ({
               <li className="text-white">
                 <div className="group">
                   <SubMenuSectionMobile
-                    title="Le monde Fiori"
+                    title={t('mobileNav.mondeFiori.title')}
                     items={[
-                      { href: "/monde-fiori/histoire", title: "Histoire", description: "Notre histoire" },
-                      { href: "/monde-fiori/collection", title: "Collection", description: "Nos collections" },
-                      { href: "/monde-fiori/dna", title: "DNA", description: "Notre ADN" }
+                      { href: "/monde-fiori/histoire", title: t('mobileNav.mondeFiori.histoire'), description: t('subMenuSections.items.histoire.description') },
+                      { href: "/monde-fiori/collection", title: t('mobileNav.mondeFiori.collection'), description: t('subMenuSections.items.collection.description') },
+                      { href: "/monde-fiori/dna", title: t('mobileNav.mondeFiori.dna'), description: t('subMenuSections.items.dna.description') }
                     ]}
                     onClick={(href) => handleLinkClick(href)}
                   />
@@ -97,14 +78,14 @@ const MobileMenu = ({
               <li className="text-white/90">
                 <div className="group">
                   <SubMenuSectionMobile
-                    title="L'univers Cadeaux"
+                    title={t('mobileNav.universCadeaux.title')}
                     items={[
-                      { href: "/univers-cadeaux", title: "L'univers Cadeaux", description: "À propos" },
-                      { href: "/univers-cadeaux/packprestige", title: "Pack Prestige", description: "Notre collection prestige" },
-                      { href: "/univers-cadeaux/packpremuim", title: "Pack Premium", description: "Collection premium" },
-                      { href: "/univers-cadeaux/packtrio", title: "Pack Trio", description: "Ensemble de trois pièces" },
-                      { href: "/univers-cadeaux/packduo", title: "Pack Duo", description: "Ensemble de deux pièces" },
-                      { href: "/univers-cadeaux/packminiduo", title: "Pack Mini Duo", description: "Petit ensemble duo" }
+                      { href: "/univers-cadeaux", title: t('mobileNav.universCadeaux.about'), description: "À propos" },
+                      { href: "/univers-cadeaux/packprestige", title: t('mobileNav.universCadeaux.packPrestige'), description: "Notre collection prestige" },
+                      { href: "/univers-cadeaux/packpremuim", title: t('mobileNav.universCadeaux.packPremium'), description: "Collection premium" },
+                      { href: "/univers-cadeaux/packtrio", title: t('mobileNav.universCadeaux.packTrio'), description: "Ensemble de trois pièces" },
+                      { href: "/univers-cadeaux/packduo", title: t('mobileNav.universCadeaux.packDuo'), description: "Ensemble de deux pièces" },
+                      { href: "/univers-cadeaux/packminiduo", title: t('mobileNav.universCadeaux.packMiniDuo'), description: "Petit ensemble duo" }
                     ]}
                     onClick={(href) => handleLinkClick(href)}
                   />
@@ -114,13 +95,14 @@ const MobileMenu = ({
               <li className="text-white/90">
                 <div className="group">
                   <SubMenuSectionMobile
-                    title="Le prêt à porter"
+                    title={t('mobileNav.pretAPorter.title')}
                     items={[
-                      { href: "/category/pret-a-porter/homme/costumes", title: "Costume", description: "Costumes élégants" },
-                      { href: "/category/pret-a-porter/homme/blazers", title: "Blazer", description: "Blazers raffinés" },
-                      { href: "/category/pret-a-porter/homme/chemises", title: "Chemise", description: "Chemises classiques" },
-                      { href: "/category/pret-a-porter/homme/pantalons", title: "Pantalon", description: "Pantalons élégants" },
-                      { href: "/category/pret-a-porter/homme/pollo", title: "Polo", description: "Polos élégants" }
+                      { href: "/category/pret-a-porter/homme/costumes", title: t('mobileNav.pretAPorter.costume'), description: t('subMenuSections.items.costumes.description') },
+                      { href: "/category/pret-a-porter/homme/blazers", title: t('mobileNav.pretAPorter.blazer'), description: t('subMenuSections.items.blazers.description') },
+                      { href: "/category/pret-a-porter/homme/vestes", title: t('mobileNav.pretAPorter.vestes'), description: t('subMenuSections.items.vestes.description') },
+                      { href: "/category/pret-a-porter/homme/chemises", title: t('mobileNav.pretAPorter.chemise'), description: t('subMenuSections.items.chemises.description') },
+                      { href: "/category/pret-a-porter/homme/pantalons", title: t('mobileNav.pretAPorter.pantalon'), description: t('subMenuSections.items.pantalons.description') },
+                      { href: "/category/pret-a-porter/homme/pollo", title: t('mobileNav.pretAPorter.polo'), description: t('subMenuSections.items.polo.description') }
                     ]}
                     onClick={(href) => handleLinkClick(href)}
                   />
@@ -130,13 +112,13 @@ const MobileMenu = ({
               <li className="text-white/90">
                 <div className="group">
                   <SubMenuSectionMobile
-                    title="Accessoires"
+                    title={t('mobileNav.accessoires.title')}
                     items={[
-                      { href: "/category/accessoires/homme/portefeuilles", title: "Portefeuille", description: "Portefeuilles élégants" },
-                      { href: "/category/accessoires/homme/ceintures", title: "Ceinture", description: "Ceintures raffinées" },
-                      { href: "/category/accessoires/homme/cravates", title: "Cravate", description: "Cravates élégantes" },
-                      { href: "/category/accessoires/homme/mallettes", title: "Mallette", description: "Mallettes professionnelles" },
-                      { href: "/category/accessoires/homme/porte-cartes", title: "Porte-carte", description: "Porte-cartes élégants" }
+                      { href: "/category/accessoires/homme/portefeuilles", title: t('mobileNav.accessoires.portefeuille'), description: t('subMenuSections.items.portefeuilles.description') },
+                      { href: "/category/accessoires/homme/ceintures", title: t('mobileNav.accessoires.ceinture'), description: t('subMenuSections.items.ceintures.description') },
+                      { href: "/category/accessoires/homme/cravates", title: t('mobileNav.accessoires.cravate'), description: t('subMenuSections.items.cravates.description') },
+                      { href: "/category/accessoires/homme/mallettes", title: t('mobileNav.accessoires.mallette'), description: t('subMenuSections.items.mallettes.description') },
+                      { href: "/category/accessoires/homme/porte-cartes", title: t('mobileNav.accessoires.porteCarte'), description: t('subMenuSections.items.porteCartes.description') }
                     ]}
                     onClick={(href) => handleLinkClick(href)}
                   />
@@ -146,16 +128,16 @@ const MobileMenu = ({
               <li className="text-white/90">
                 <div className="group">
                   <SubMenuSectionMobile
-                    title="Outlet"
+                    title={t('mobileNav.outlet.title')}
                     items={[
-                      { href: "/category/outlet/homme/costumes", title: "Costumes", description: "Costumes en promotion" },
-                      { href: "/category/outlet/homme/blazers", title: "Blazers", description: "Blazers en solde" },
-                      { href: "/category/outlet/homme/chemises", title: "Chemises", description: "Chemises en promotion" },
-                      { href: "/category/outlet/homme/pantalons", title: "Pantalons", description: "Pantalons en solde" },
-                      { href: "/category/outlet/homme/pollo", title: "Polo", description: "Polos en promotion" },
-                      { href: "/category/outlet/femme/chemises", title: "Chemises Femme", description: "Chemises en promotion" },
-                      { href: "/category/outlet/femme/robes", title: "Robes", description: "Robes en solde" },
-                      { href: "/category/outlet/femme/vestes", title: "Vestes/Manteaux", description: "Vestes et manteaux en promotion" }
+                      { href: "/category/outlet/homme/costumes", title: t('mobileNav.outlet.costumes'), description: t('subMenuSections.items.costumes.description') },
+                      { href: "/category/outlet/homme/blazers", title: t('mobileNav.outlet.blazers'), description: t('subMenuSections.items.blazers.description') },
+                      { href: "/category/outlet/homme/chemises", title: t('mobileNav.outlet.chemises'), description: t('subMenuSections.items.chemises.description') },
+                      { href: "/category/outlet/homme/pantalons", title: t('mobileNav.outlet.pantalons'), description: t('subMenuSections.items.pantalons.description') },
+                      { href: "/category/outlet/homme/pollo", title: t('mobileNav.outlet.polo'), description: t('subMenuSections.items.polo.description') },
+                      { href: "/category/outlet/femme/chemises", title: t('mobileNav.outlet.chemisesFemme'), description: t('subMenuSections.items.chemises.description') },
+                      { href: "/category/outlet/femme/robes", title: t('mobileNav.outlet.robes'), description: t('subMenuSections.items.robes.description') },
+                      { href: "/category/outlet/femme/vestes", title: t('mobileNav.outlet.vestesManteaux'), description: t('subMenuSections.items.vestesManteaux.description') }
                     ]}
                     onClick={(href) => handleLinkClick(href)}
                   />
@@ -168,7 +150,9 @@ const MobileMenu = ({
                   className="w-full flex items-center gap-3 text-white hover:text-white/80 transition-colors duration-300 py-3 px-4 rounded-lg hover:bg-white/5 group"
                 >
                   <MapPin size={20} className="group-hover:scale-110 transition-transform duration-300" />
-                  <span className="text-lg group-hover:translate-x-1 transition-transform duration-300">Trouver une boutique</span>
+                  <span className="text-lg group-hover:translate-x-1 transition-transform duration-300">
+                    {t('mobileMenu.findStore')}
+                  </span>
                 </button>
 
                 <button
@@ -176,7 +160,9 @@ const MobileMenu = ({
                   className="w-full flex items-center gap-3 text-white hover:text-white/80 transition-colors duration-300 py-3 px-4 rounded-lg hover:bg-white/5 group"
                 >
                   <Phone size={20} className="group-hover:scale-110 transition-transform duration-300" />
-                  <span className="text-lg group-hover:translate-x-1 transition-transform duration-300">Contactez-nous</span>
+                  <span className="text-lg group-hover:translate-x-1 transition-transform duration-300">
+                    {t('mobileMenu.contactUs')}
+                  </span>
                 </button>
               </li>
             </ul>

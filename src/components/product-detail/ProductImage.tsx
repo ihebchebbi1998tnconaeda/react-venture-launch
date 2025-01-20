@@ -34,6 +34,8 @@ const ProductImage = ({ image, name }: ProductImageProps) => {
               layoutId="product-image"
               loading="lazy"
               decoding="async"
+              fetchPriority="low"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
             <button
               className="absolute top-4 right-4 p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors"
@@ -56,6 +58,7 @@ const ProductImage = ({ image, name }: ProductImageProps) => {
                 loading="lazy"
                 decoding="async"
                 fetchPriority="low"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
             </motion.div>
             <button

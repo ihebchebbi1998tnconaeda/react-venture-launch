@@ -175,7 +175,7 @@ const OrderSummary = ({
             • Livraison gratuite à partir de 299 TND
           </p>
           <p className="flex items-center gap-2 hover:text-[#1A1F2C] transition-colors">
-  • Échange de produit sous 30 jours (payant)
+  • Échange de produit sous 30 jours ( 4 TND )
 </p>
           <p className="flex items-center gap-2 hover:text-[#1A1F2C] transition-colors">
             • Service client disponible 24/7

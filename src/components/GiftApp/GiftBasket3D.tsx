@@ -89,6 +89,18 @@ const GiftBasket3D = ({
     setShowProductModal(true);
   };
 
+  const getContainerTitle = (index: number) => {
+    if (containerCount === 2) {
+      return index === 0 ? spaceLabels?.mainSpace : spaceLabels?.mainSpace2;
+    }
+    if (containerCount === 3) {
+      if (index === 0) return spaceLabels?.mainSpace;
+      if (index === 1) return spaceLabels?.secondarySpace;
+      return spaceLabels?.tertiarySpace;
+    }
+    return spaceLabels?.mainSpace;
+  };
+
   return (
     <div className="space-y-2">
       <div className="p-6 bg-black/95 border border-gray-800 rounded-xl shadow-2xl relative">
@@ -98,7 +110,7 @@ const GiftBasket3D = ({
           <div className="flex gap-3">
             <div className={`${spaceDimensions.main.width} ${spaceDimensions.main.height}`}>
               <GiftPackContainer
-                title={spaceLabels?.mainSpace || "ESPACE PRINCIPAL"}
+                title={getContainerTitle(0) || "ESPACE PRINCIPAL"}
                 item={items[0]}
                 onDrop={handleDrop(0)}
                 onItemClick={handleProductClick}
@@ -115,7 +127,7 @@ const GiftBasket3D = ({
             <div className={`${spaceDimensions.secondary?.width || 'w-[40%]'} flex flex-col gap-3`}>
               <div className={spaceDimensions.secondary?.height || 'h-[291px]'}>
                 <GiftPackContainer
-                  title={spaceLabels?.secondarySpace || "ESPACE SECONDAIRE"}
+                  title={getContainerTitle(1) || "ESPACE SECONDAIRE"}
                   item={items[1]}
                   onDrop={handleDrop(1)}
                   onItemClick={handleProductClick}
@@ -130,7 +142,7 @@ const GiftBasket3D = ({
               </div>
               <div className={spaceDimensions.tertiary?.height || 'h-[291px]'}>
                 <GiftPackContainer
-                  title={spaceLabels?.tertiarySpace || "ESPACE TERTIAIRE"}
+                  title={getContainerTitle(2) || "ESPACE TERTIAIRE"}
                   item={items[2]}
                   onDrop={handleDrop(2)}
                   onItemClick={handleProductClick}
@@ -150,7 +162,7 @@ const GiftBasket3D = ({
             {Array.from({ length: containerCount }).map((_, index) => (
               <div key={index} className={`relative ${spaceDimensions.main.height}`}>
                 <GiftPackContainer
-                  title={spaceLabels?.mainSpace || "ESPACE PRINCIPAL"}
+                  title={getContainerTitle(index) || "ESPACE PRINCIPAL"}
                   item={items[index]}
                   onDrop={handleDrop(index)}
                   onItemClick={handleProductClick}

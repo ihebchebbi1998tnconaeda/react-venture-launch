@@ -27,7 +27,6 @@ const ProductQuantitySelector = ({
     }
 
     const availableStock = getAvailableStockForSize(product, selectedSize);
-    console.log(`Available stock for size ${selectedSize}: ${availableStock}`);
     
     if (newQuantity > availableStock) {
       toast({

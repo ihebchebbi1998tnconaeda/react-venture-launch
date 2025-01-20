@@ -51,8 +51,6 @@ class StockReduceManager {
   }
 
   public addItem(productId: string, size: string, quantity: number): void {
-    console.log(`Adding item to stock reduce: Product ${productId}, Size ${size}, Quantity ${quantity}`);
-    
     const existingItem = this.stockItems.get(productId) || {
       id_product: productId,
       quantities: this.getEmptySizeQuantities()
@@ -65,11 +63,9 @@ class StockReduceManager {
     }
 
     this.stockItems.set(productId, existingItem);
-    console.log('Updated stock items:', this.getStockItems());
   }
 
   public clearItems(): void {
-    console.log('Clearing all stock reduce items');
     this.stockItems.clear();
   }
 
@@ -80,14 +76,11 @@ class StockReduceManager {
   public async sendStockUpdate(): Promise<void> {
     const items = this.getStockItems();
     if (items.length === 0) {
-      console.log('No stock items to update');
       return;
     }
 
-    console.log('Sending stock update to API:', items);
-
     try {
-      const response = await fetch('https://respizenmedical.com/fiori/reduicestock.php', {
+      const response = await fetch('https://www.fioriforyou.com/backfiori/reduicestock.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -100,16 +93,8 @@ class StockReduceManager {
       }
 
       const result = await response.text();
-      try {
-        const jsonResult = JSON.parse(result);
-        console.log('Stock update successful:', jsonResult);
-      } catch (parseError) {
-        console.log('Response was not JSON, but update might have succeeded:', result);
-      }
-
       this.clearItems();
     } catch (error) {
-      console.error('Error updating stock:', error);
       throw error;
     }
   }

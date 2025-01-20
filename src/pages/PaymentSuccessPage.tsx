@@ -17,43 +17,16 @@ const PaymentSuccessPage = () => {
   const finalTotal = total + shipping;
 
   useEffect(() => {
-    // Security check: Verify payment session exists
-    const pendingOrderString = sessionStorage.getItem('pendingOrder');
-    const paymentTimestamp = sessionStorage.getItem('paymentInitiated');
-    
-    if (!pendingOrderString || !paymentTimestamp) {
-      console.error('Unauthorized access to success page - redirecting to cart');
-      toast({
-        title: "Accès non autorisé",
-        description: "Veuillez passer par le processus de paiement normal",
-        variant: "destructive",
-      });
-      navigate('/cart');
-      return;
-    }
-
-    // Verify payment timestamp is recent (within last 30 minutes)
-    const timestampAge = Date.now() - parseInt(paymentTimestamp);
-    const maxAge = 30 * 60 * 1000; // 30 minutes in milliseconds
-    
-    if (timestampAge > maxAge) {
-      console.error('Payment session expired - redirecting to cart');
-      sessionStorage.removeItem('pendingOrder');
-      sessionStorage.removeItem('paymentInitiated');
-      toast({
-        title: "Session expirée",
-        description: "Votre session de paiement a expiré. Veuillez réessayer",
-        variant: "destructive",
-      });
-      navigate('/cart');
-      return;
-    }
-
     const handlePaymentSuccess = async () => {
       try {
         console.log('Starting payment success handler...');
+        const pendingOrderString = sessionStorage.getItem('pendingOrder');
+        if (!pendingOrderString) {
+          console.error('No pending order found');
+          return;
+        }
+
         const pendingOrder = JSON.parse(pendingOrderString);
-        console.log('Processing pending order:', pendingOrder);
         
         const userDetails = getUserDetails();
         const sessionUserDetails = sessionStorage.getItem('userDetails');
@@ -83,29 +56,26 @@ const PaymentSuccessPage = () => {
           }
         });
 
+        // Send stock reduce update
         try {
           await stockReduceManager.sendStockUpdate();
-          console.log('Stock reduce update completed successfully');
         } catch (error) {
           console.error('Failed to update stock reduce:', error);
           // Continue with order processing even if stock reduce fails
         }
 
-        console.log('Retrieved user details:', finalUserDetails);
         await updateProductStock(pendingOrder.cartItems);
 
         const currentPackType = sessionStorage.getItem('selectedPackType');
-        console.log('Current pack type:', currentPackType);
 
         const formattedItems = pendingOrder.cartItems.map((item: any) => {
-          console.log('Processing item:', item);
           const itemPrice = item.discount_product ? 
             item.price * (1 - parseFloat(item.discount_product) / 100) : 
             item.price;
 
           const imageUrl = item.image.startsWith('http') ? 
             item.image : 
-            `https://respizenmedical.com/fiori/${item.image}`;
+            `https://www.fioriforyou.com/backfiori/${item.image}`;
 
           const isPackCharge = item.type_product === "Pack";
           let packInfo = "aucun";
@@ -162,7 +132,6 @@ const PaymentSuccessPage = () => {
           }
         };
 
-        console.log('Submitting order data to API:', JSON.stringify(orderData, null, 2));
 
         const isTestMode = pendingOrder.payUrl === 'test-mode';
         
@@ -181,7 +150,6 @@ const PaymentSuccessPage = () => {
         }
 
         const response = await submitOrder(orderData);
-        console.log('API Response:', response);
 
         if (!response.success) {
           throw new Error(response.message || 'Failed to submit order');
@@ -199,10 +167,8 @@ const PaymentSuccessPage = () => {
             duration: Infinity
           });
         }
-
-        // Clear payment session after successful processing
+        
         sessionStorage.removeItem('pendingOrder');
-        sessionStorage.removeItem('paymentInitiated');
         sessionStorage.removeItem('selectedPackType');
         clearCart();
 

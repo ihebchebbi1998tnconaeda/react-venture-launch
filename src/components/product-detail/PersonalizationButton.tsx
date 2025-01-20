@@ -5,19 +5,41 @@ import { Textarea } from "@/components/ui/textarea";
 import { Text, Save } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { savePersonalization, getPersonalizations } from '@/utils/personalizationStorage';
+import { useToast } from "@/hooks/use-toast";
+import { getMaxLength } from '@/utils/personalizationConfig';
 
 interface PersonalizationButtonProps {
   productId: number;
   onSave: (text: string) => void;
   initialText?: string;
+  itemgroup_product?: string;
 }
 
-const PersonalizationButton = ({ productId, onSave, initialText = '' }: PersonalizationButtonProps) => {
+const PersonalizationButton = ({ productId, onSave, initialText = '', itemgroup_product = '' }: PersonalizationButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [text, setText] = useState(initialText);
+  const { toast } = useToast();
+
+  const maxLength = getMaxLength(itemgroup_product);
+  const remainingChars = maxLength - text.length;
+
+  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newText = e.target.value;
+    if (newText.length <= maxLength) {
+      setText(newText);
+    }
+  };
 
   const handleSave = () => {
     if (text.trim()) {
+      if (itemgroup_product === 'chemises' && text.length > 4) {
+        toast({
+          title: "Erreur de personnalisation",
+          description: "Pour les chemises, la personnalisation est limitée à 4 caractères maximum",
+          variant: "destructive",
+        });
+        return;
+      }
       savePersonalization(productId, text.trim());
       onSave(text.trim());
       setIsOpen(false);
@@ -48,17 +70,25 @@ const PersonalizationButton = ({ productId, onSave, initialText = '' }: Personal
           </DialogHeader>
           <div className="space-y-6 p-6 bg-white">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">
-                Votre message personnalisé
+              <label className="text-sm font-medium text-gray-700 flex justify-between">
+                <span>Votre message personnalisé</span>
+                <span className={`text-sm ${remainingChars === 0 ? 'text-red-500' : 'text-gray-500'}`}>
+                  {remainingChars} caractères restants
+                </span>
               </label>
               <Textarea
-                placeholder="Ajoutez votre texte personnalisé ici..."
+                placeholder={itemgroup_product === 'chemises' 
+                  ? "Maximum 4 caractères (ex: IHEB)"
+                  : "Ajoutez votre texte personnalisé ici..."}
                 value={text}
-                onChange={(e) => setText(e.target.value)}
+                onChange={handleTextChange}
+                maxLength={maxLength}
                 className="min-h-[120px] p-4 text-gray-800 bg-gray-50 border-2 border-gray-200 focus:border-[#700100] focus:ring-[#700100] rounded-lg resize-none transition-all duration-300"
               />
               <p className="text-sm text-gray-500 italic">
-                Exemple: "Flen Falten"
+                {itemgroup_product === 'chemises' 
+                  ? "Pour les chemises, la personnalisation est limitée à 4 caractères"
+                  : "Maximum 100 caractères"}
               </p>
             </div>
             

@@ -18,7 +18,7 @@ const OrderPreviewPage = () => {
   const { toast } = useToast();
   const { hasNewsletterDiscount, calculateTotal, cartItems, clearCart } = useCart();
   const { subtotal, discount: newsletterDiscount, total } = calculateTotal();
-  const shipping = subtotal > 500 ? 0 : 7;
+  const shipping = subtotal > 299 ? 0 : 8;
   const finalTotal = total + shipping;
 
   if (!state?.orderDetails) {

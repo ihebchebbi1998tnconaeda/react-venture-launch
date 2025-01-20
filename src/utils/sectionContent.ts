@@ -34,13 +34,37 @@ const sectionContent: Record<string, Record<string, Record<string, SectionConten
         title: "Costumes",
         subtitle: "ÉLÉGANCE",
         description: "DES COSTUMES RAFFINÉS, TAILLÉS DANS LES PLUS BEAUX TISSUS ITALIENS.",
-        imageUrl: "/Men1.png"
+        imageUrl: "/pcis/costumes.png"
       },
       "blazers": {
         title: "Blazers",
         subtitle: "STYLE",
         description: "LA SOPHISTICATION AU QUOTIDIEN AVEC NOS BLAZERS INTEMPORELS.",
-        imageUrl: "/Men2.png"
+        imageUrl: "/pcis/blazers.png"
+      },
+      "vestes": {
+        title: "Vestes",
+        subtitle: "STYLE",
+        description: "LA SOPHISTICATION AU QUOTIDIEN AVEC NOS VESTES INTEMPORELS.",
+        imageUrl: "/pcis/blazers.png"
+      },
+      "chemises": {
+        title: "Chemises",
+        subtitle: "RAFFINEMENT",
+        description: "L'ÉLÉGANCE AU FÉMININ À TRAVERS NOS CHEMISES DÉLICATES.",
+        imageUrl: "/NewCollection/1.png"
+      },
+      "pantalons": {
+        title: "Pantalons",
+        subtitle: "CONFORT",
+        description: "PANTALONS ÉLÉGANTS ET CONFORTABLES POUR TOUS LES OCCASIONS.",
+        imageUrl: "/pcis/pantalons.png"
+      },
+      "pollo": {
+        title: "Pollo",
+        subtitle: "DÉCONTRACTÉ",
+        description: "POLLOS ÉLÉGANTS POUR UN STYLE DÉCONTRACTÉ.",
+        imageUrl: "/pcis/pollo.png"
       }
     },
     "femme": {

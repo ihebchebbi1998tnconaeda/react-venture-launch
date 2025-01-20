@@ -195,16 +195,3 @@ body {
 .skiptranslate {
   display: none !important;
 }
-
-#google_translate_element {
-  display: none !important;
-}
-
-.goog-te-gadget {
-  font-size: 0 !important;
-}
-
-.goog-text-highlight {
-  background-color: transparent !important;
-  box-shadow: none !important;
-}

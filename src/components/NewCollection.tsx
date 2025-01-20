@@ -1,7 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import { Button } from './ui/button';
 import { Link } from 'react-router-dom';
+import { preloadVideo } from '../utils/imageOptimization';
 import { useTranslation } from 'react-i18next';
+
+const VIDEO_URL = "https://www.fioriforyou.com/apis/videos/newcollection.mp4";
 
 const NewCollection = () => {
   const { t } = useTranslation();
@@ -12,16 +15,30 @@ const NewCollection = () => {
       videoRef.current.preload = "auto";
       videoRef.current.playbackRate = 1.2;
       
-      const playVideo = async () => {
+      const initializeVideo = async () => {
         try {
-          await videoRef.current?.play();
+          // Preload the video
+          await preloadVideo(VIDEO_URL);
+          
+          // Play video after preloading
+          if (videoRef.current) {
+            await videoRef.current.play();
+          }
         } catch (error) {
-          console.error("Video autoplay failed:", error);
+          console.error("Video initialization failed:", error);
         }
       };
       
-      playVideo();
+      initializeVideo();
     }
+
+    // Cleanup function
+    return () => {
+      if (videoRef.current) {
+        videoRef.current.pause();
+        videoRef.current.src = '';
+      }
+    };
   }, []);
 
   return (
@@ -39,7 +56,7 @@ const NewCollection = () => {
               className="w-full h-[345px] object-cover"
             >
               <source
-                src="https://www.fioriforyou.com/apis/videos/newcollection.mp4"
+                src={VIDEO_URL}
                 type="video/mp4"
               />
               Your browser does not support the video tag.
@@ -48,15 +65,12 @@ const NewCollection = () => {
 
           <div className="space-y-4 md:space-y-6 px-4 lg:px-8 py-8 md:py-15">
             <div>
-              <h2 className="text-3xl md:text-4xl font-['WomanFontBold']">
-                {t('newCollection.title')}
-              </h2>
-              <p className="text-sm md:text-base mt-2 text-gray-300">
-                {t('newCollection.description')}
-              </p>
+              <h2 className="text-3xl md:text-4xl font-['WomanFontBold']">{t('newCollectionTitle')}</h2>
+              <p className="text-sm md:text-base mt-2 text-gray-300">{t('newCollectionSubtitle')}</p>
             </div>
 
             <div className="flex gap-2 h-[600px]">
+              {/* Main large image on the left */}
               <div className="w-1/2 h-full">
                 <div className="h-full overflow-hidden">
                   <img
@@ -67,6 +81,7 @@ const NewCollection = () => {
                 </div>
               </div>
               
+              {/* Two smaller images stacked on the right */}
               <div className="w-1/2 flex flex-col gap-2 h-full">
                 <div className="h-1/2 overflow-hidden">
                   <img
@@ -91,7 +106,7 @@ const NewCollection = () => {
                   variant="outline"
                   className="px-6 md:px-8 py-2 bg-transparent border-white text-white hover:bg-white hover:text-[#4A0404] transition-colors font-['WomanFontBold'] text-sm md:text-base"
                 >
-                  {t('newCollection.discoverMore')}
+                  {t('discoverMore')}
                 </Button>
               </Link>
             </div>
@@ -108,7 +123,7 @@ const NewCollection = () => {
               className="w-full h-full object-cover"
             >
               <source
-                src="https://www.fioriforyou.com/apis/videos/newcollection.mp4"
+                src={VIDEO_URL}
                 type="video/mp4"
               />
               Your browser does not support the video tag.

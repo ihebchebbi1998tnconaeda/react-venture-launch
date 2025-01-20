@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 const BrandLocation = () => {
   const { t } = useTranslation();
@@ -69,10 +69,10 @@ const BrandLocation = () => {
                     </svg>
                   </div>
                   <h3 className="text-2xl text-[#591C1C] font-['WomanFontBold'] mb-3">
-                    {t('brandLocation.reviewForm.thankYou')}
+                    {t('brandLocation.thankYou')}
                   </h3>
                   <p className="text-gray-600">
-                    {t('brandLocation.reviewForm.feedback')}
+                    {t('brandLocation.feedbackImportant')}
                   </p>
                 </div>
               ) : (
@@ -80,7 +80,7 @@ const BrandLocation = () => {
                   <form onSubmit={handleSubmitReview} className="space-y-5">
                     <div className="relative">
                       <label className="block text-[#591C1C] mb-2 font-['WomanFontBold'] text-lg">
-                        {t('brandLocation.reviewForm.yourName')}
+                        {t('brandLocation.yourName')}
                       </label>
                       <input
                         type="text"
@@ -94,13 +94,13 @@ const BrandLocation = () => {
                           transition-all duration-200
                           focus:outline-none focus:ring-2 focus:ring-[#591C1C]/20
                           placeholder:text-gray-400"
-                        placeholder={t('brandLocation.reviewForm.namePlaceholder')}
+                        placeholder={t('brandLocation.yourNamePlaceholder')}
                         required
                       />
                     </div>
                     <div className="relative">
                       <label className="block text-[#591C1C] mb-2 font-['WomanFontBold'] text-lg">
-                        {t('brandLocation.reviewForm.yourMessage')}
+                        {t('brandLocation.yourMessage')}
                       </label>
                       <textarea
                         value={newReview.text}
@@ -114,7 +114,7 @@ const BrandLocation = () => {
                           focus:outline-none focus:ring-2 focus:ring-[#591C1C]/20
                           placeholder:text-gray-400
                           h-32 resize-none"
-                        placeholder={t('brandLocation.reviewForm.messagePlaceholder')}
+                        placeholder={t('brandLocation.messagePlaceholder')}
                         required
                       />
                     </div>
@@ -127,7 +127,7 @@ const BrandLocation = () => {
                         shadow-lg hover:shadow-xl
                         flex items-center justify-center gap-2"
                     >
-                      <span>{t('brandLocation.reviewForm.submit')}</span>
+                      <span>{t('brandLocation.submitReview')}</span>
                       <svg
                         className="w-5 h-5"
                         fill="none"

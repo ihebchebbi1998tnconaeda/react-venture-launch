@@ -18,7 +18,6 @@ const SubMenuSectionMobile = ({ title, items, onClick }: SubMenuSectionMobilePro
 
   const handleItemClick = (href: string) => {
     if (onClick) {
-      console.log('SubMenuSectionMobile: Link clicked:', href);
       onClick(href);
     }
   };

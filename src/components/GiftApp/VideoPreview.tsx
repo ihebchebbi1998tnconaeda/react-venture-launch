@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { preloadVideo } from '../../utils/imageOptimization';
 
 interface VideoPreviewProps {
   videoUrl: string;
@@ -7,6 +8,7 @@ interface VideoPreviewProps {
 
 export function VideoPreview({ videoUrl, onClick }: VideoPreviewProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -15,17 +17,19 @@ export function VideoPreview({ videoUrl, onClick }: VideoPreviewProps) {
       video.playsInline = true;
       video.loop = true;
       video.autoplay = true;
-      video.playbackRate = 1.5; // Increased playback speed
+      video.playbackRate = 1.5;
       
-      const playVideo = async () => {
+      const loadVideo = async () => {
         try {
+          await preloadVideo(videoUrl);
+          setIsLoaded(true);
           await video.play();
         } catch (error) {
-          console.error("Autoplay failed:", error);
+          console.error("Video loading/autoplay failed:", error);
         }
       };
       
-      playVideo();
+      loadVideo();
     }
   }, [videoUrl]);
 
@@ -34,15 +38,18 @@ export function VideoPreview({ videoUrl, onClick }: VideoPreviewProps) {
       className="h-full relative cursor-pointer group"
       onClick={onClick}
     >
+      {!isLoaded && (
+        <div className="absolute inset-0 bg-gray-200 animate-pulse" />
+      )}
       <video 
         ref={videoRef}
-        className="w-full h-full object-cover"
+        className={`w-full h-full object-cover ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
         muted
         playsInline
         loop
         autoPlay
         preload="auto"
-        style={{ willChange: 'transform' }} // Optimize performance
+        style={{ willChange: 'transform' }}
       >
         <source src={videoUrl} type="video/mp4" />
       </video>

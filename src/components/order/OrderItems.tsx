@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { CartItem } from '@/components/cart/CartProvider';
+import { CartItem } from '@/types/cart';
 import { Tag, Package2, Ruler, Gift, Text } from 'lucide-react';
 
 interface OrderItemsProps {

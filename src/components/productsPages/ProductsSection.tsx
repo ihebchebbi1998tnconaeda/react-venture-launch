@@ -19,6 +19,19 @@ interface ProductsSectionProps {
   isFromFooter?: boolean;
 }
 
+const NoProductsFound = () => (
+  <div className="flex flex-col items-center justify-center py-12 px-4">
+    <PackageX className="w-16 h-16 text-gray-400 mb-4" />
+    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+      Aucun produit trouvé
+    </h3>
+    <p className="text-gray-500 text-center max-w-md">
+      Désolé, nous n'avons pas trouvé de produits correspondant à vos critères. 
+      Veuillez essayer une autre catégorie ou revenir plus tard.
+    </p>
+  </div>
+);
+
 const ProductsSection = ({ isFromFooter = false }: ProductsSectionProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
@@ -34,7 +47,6 @@ const ProductsSection = ({ isFromFooter = false }: ProductsSectionProps) => {
     queryKey: ['products', ...pathSegments, isFromFooter],
     queryFn: fetchAllProducts,
     select: (data) => {
-      // If we're on the univers-cadeaux page
       if (pathSegments[0] === 'univers-cadeaux') {
         return data
           .filter((product: Product) => 
@@ -44,14 +56,12 @@ const ProductsSection = ({ isFromFooter = false }: ProductsSectionProps) => {
           .slice(0, 6);
       }
 
-      // If we're on the accessories page
       if (pathSegments.includes('accessoires') && pathSegments.length === 1) {
         return data.filter((product: Product) => 
           product.type_product.toLowerCase() === 'accessoires'
         );
       }
 
-      // Handle specific category/type/itemgroup paths
       if (pathSegments.length >= 2) {
         return data.filter((product: Product) => {
           const [type, category, itemgroup] = pathSegments;
@@ -61,21 +71,26 @@ const ProductsSection = ({ isFromFooter = false }: ProductsSectionProps) => {
           const productType = normalizeString(product.type_product);
           const productCategory = normalizeString(product.category_product);
 
-          console.log('Filtering product:', {
-            productType,
-            productCategory,
-            normalizedType,
-            normalizedCategory,
-            itemgroup: itemgroup ? normalizeString(itemgroup) : null,
-            productItemgroup: product.itemgroup_product ? normalizeString(product.itemgroup_product) : null
-          });
+        
+          // Special case: if we're in pret-a-porter/homme/vestes OR outlet/homme/blazers, show outlet blazers
+          if ((normalizedType === 'pret a porter' && 
+              normalizedCategory === 'homme' && 
+              itemgroup && 
+              normalizeString(itemgroup) === 'vestes') ||
+              (normalizedType === 'outlet' &&
+              normalizedCategory === 'homme' &&
+              itemgroup &&
+              normalizeString(itemgroup) === 'blazers')) {
+            return product.type_product === 'outlet' && 
+                   product.itemgroup_product === 'blazers' && 
+                   product.category_product.toLowerCase() === 'homme';
+          }
 
           // If we have an itemgroup specified (e.g., chemises, cravates)
           if (itemgroup) {
             const normalizedItemgroup = normalizeString(itemgroup);
             const productItemgroup = normalizeString(product.itemgroup_product);
 
-            // Match type (e.g., pret-a-porter), category (homme/femme), and itemgroup (chemises)
             return normalizedType === productType && 
                    normalizedCategory === productCategory && 
                    normalizedItemgroup === productItemgroup;
@@ -104,19 +119,6 @@ const ProductsSection = ({ isFromFooter = false }: ProductsSectionProps) => {
     currentPage * itemsPerPage
   );
 
-  const NoProductsFound = () => (
-    <div className="flex flex-col items-center justify-center py-12 px-4">
-      <PackageX className="w-16 h-16 text-gray-400 mb-4" />
-      <h3 className="text-xl font-semibold text-gray-900 mb-2">
-        Aucun produit trouvé
-      </h3>
-      <p className="text-gray-500 text-center max-w-md">
-        Désolé, nous n'avons pas trouvé de produits correspondant à vos critères. 
-        Veuillez essayer une autre catégorie ou revenir plus tard.
-      </p>
-    </div>
-  );
-
   return (
     <div className="w-full bg-gray-50">
       <div className={`container mx-auto px-4 ${isFromFooter ? 'py-12' : 'py-8'}`}>
@@ -128,7 +130,7 @@ const ProductsSection = ({ isFromFooter = false }: ProductsSectionProps) => {
               </div>
             ))}
           </div>
-        ) : currentProducts.length === 0 ? (
+        ) : products?.length === 0 ? (
           <NoProductsFound />
         ) : (
           <>

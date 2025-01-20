@@ -4,9 +4,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { useCart } from './cart/CartProvider';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 
 const NewsletterPopup = () => {
+  const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -34,37 +36,30 @@ const NewsletterPopup = () => {
     setIsLoading(true);
 
     try {
-      // Check if email has already used discount
       const usedDiscountEmails = JSON.parse(localStorage.getItem('usedDiscountEmails') || '[]');
       if (usedDiscountEmails.includes(email)) {
         toast({
           variant: "destructive",
-          title: "Désolé",
-          description: "Cette adresse email a déjà bénéficié de la réduction de 5%.",
+          title: t('newsletter.alreadySubscribed'),
+          description: t('newsletter.alreadySubscribedMessage'),
           duration: 3000,
         });
         setIsLoading(false);
         return;
       }
 
-      const response = await axios.post('https://respizenmedical.com/fiori/subscribe_email.php', {
+      const response = await axios.post('https://www.fioriforyou.com/backfiori/subscribe_email.php', {
         email
       });
 
       if (response.data.status === 'success') {
-        // Save subscription status and email
-        localStorage.setItem('newsletterSubscribed', 'true');
-        localStorage.setItem('subscribedEmail', email);
-        
-        // Apply discount if available
         applyNewsletterDiscount();
-        
         toast({
-          title: "Inscription réussie !",
-          description: "Merci de vous être inscrit à notre newsletter. Votre réduction de 5% a été appliquée à votre panier.",
+          title: t('newsletter.success'),
+          description: t('newsletter.successMessage'),
           duration: 3000,
         });
-        
+        setEmail('');
         handleClose();
       } else {
         throw new Error(response.data.message);
@@ -73,8 +68,8 @@ const NewsletterPopup = () => {
       console.error('Newsletter subscription error:', error);
       toast({
         variant: "destructive",
-        title: "Erreur",
-        description: "Une erreur s'est produite lors de l'inscription. Veuillez réessayer.",
+        title: t('newsletter.error'),
+        description: t('newsletter.errorMessage'),
         duration: 3000,
       });
     } finally {
@@ -110,11 +105,11 @@ const NewsletterPopup = () => {
             </button>
 
             <h2 className="text-xl sm:text-2xl font-bold mb-2">
-              Offres Exclusives & Nouveautés
+              {t('newsletter.title')}
             </h2>
             
             <p className="text-white/80 mb-4 sm:mb-6 text-sm sm:text-base">
-              Inscrivez-vous à notre newsletter et bénéficiez de -5% sur votre première commande !
+              {t('newsletter.description')}
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
@@ -122,7 +117,7 @@ const NewsletterPopup = () => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Votre adresse email"
+                placeholder={t('newsletter.placeholder')}
                 required
                 className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg bg-white/10 border border-white/20 
                           placeholder-white/60 text-white outline-none focus:border-white/40
@@ -134,11 +129,11 @@ const NewsletterPopup = () => {
                 disabled={isLoading}
                 className="w-full bg-white text-primary hover:bg-white/90 transition-colors"
               >
-                {isLoading ? "Inscription..." : "S'inscrire"}
+                {isLoading ? t('newsletter.loading') : t('newsletter.signUp')}
               </Button>
 
               <p className="text-[10px] sm:text-xs text-white/60 text-center">
-                En vous inscrivant, vous acceptez de recevoir nos newsletters et nos offres commerciales.
+                {t('newsletter.terms')}
               </p>
             </form>
           </motion.div>

@@ -20,12 +20,10 @@ const ProductInfo = ({
   rating = 4.7, 
   reviews = 118 
 }: ProductInfoProps) => {
-  console.log('ProductInfo props:', { name, price, discount }); // Debug log
   
   const hasDiscount = discount !== "" && !isNaN(parseFloat(discount)) && parseFloat(discount) > 0;
   const discountedPrice = hasDiscount ? calculateDiscountedPrice(price, discount) : price;
 
-  console.log('Price calculations:', { hasDiscount, originalPrice: price, discountedPrice }); // Debug log
 
   return (
     <div className="space-y-6">

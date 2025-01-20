@@ -1,16 +1,26 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Gift } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
+import { useNavigate } from 'react-router-dom';
 
 interface ConfirmationButtonProps {
   onConfirm: () => void;
   disabled: boolean;
+  packType?: string;
+  selectedItemsCount?: number;
 }
 
-const ConfirmationButton = ({ onConfirm, disabled }: ConfirmationButtonProps) => {
+const ConfirmationButton = ({ 
+  onConfirm, 
+  disabled, 
+  packType = '', 
+  selectedItemsCount = 0 
+}: ConfirmationButtonProps) => {
   const [isHolding, setIsHolding] = useState(false);
   const [holdProgress, setHoldProgress] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   let holdTimer: NodeJS.Timeout;
 
@@ -32,15 +42,71 @@ const ConfirmationButton = ({ onConfirm, disabled }: ConfirmationButtonProps) =>
     }, 20);
   };
 
-  const handleConfirmation = () => {
+  const handleConfirmation = async () => {
     if (isLoading || disabled) return;
+    
+    // Check if it's Pack Premium and only 2 items are selected
+    if (packType === 'Pack Premium' && selectedItemsCount === 2) {
+      clearInterval(holdTimer);
+      setIsHolding(false);
+      setHoldProgress(0);
+      
+      toast({
+        title: "Pack incomplet",
+        description: (
+          <div className="space-y-2">
+            <p>Vous n'avez sélectionné que 2 articles.</p>
+            <p>Souhaitez-vous plutôt composer un Pack Duo ?</p>
+            <button
+              onClick={() => navigate('/gift-universe/packduo')}
+              className="mt-2 px-4 py-2 bg-[#700100] text-white rounded-md hover:bg-[#590000] transition-colors w-full"
+            >
+              Voir le Pack Duo
+            </button>
+          </div>
+        ),
+        duration: 5000,
+      });
+      return;
+    }
+
+    // Check if it's Pack Prestige and only 2 items are selected
+    if (packType === 'Pack Prestige' && selectedItemsCount === 2) {
+      clearInterval(holdTimer);
+      setIsHolding(false);
+      setHoldProgress(0);
+      
+      toast({
+        title: "Pack incomplet",
+        description: (
+          <div className="space-y-2">
+            <p>Vous n'avez sélectionné que 2 articles.</p>
+            <p>Souhaitez-vous plutôt composer un Pack Duo ?</p>
+            <button
+              onClick={() => navigate('/gift-universe/packduo')}
+              className="mt-2 px-4 py-2 bg-[#700100] text-white rounded-md hover:bg-[#590000] transition-colors w-full"
+            >
+              Voir le Pack Duo
+            </button>
+          </div>
+        ),
+        duration: 5000,
+      });
+      return;
+    }
+
     setIsLoading(true);
     
-    // Immediately show loading state and prevent further clicks
     try {
-      onConfirm();
+      await onConfirm();
     } catch (error) {
       console.error('Error during confirmation:', error);
+      toast({
+        title: "Erreur",
+        description: "Une erreur est survenue lors de la confirmation",
+        variant: "destructive",
+      });
+    } finally {
       setIsLoading(false);
     }
   };

@@ -1,6 +1,7 @@
 export type PackSpaceConfig = {
   [key: string]: {
     mainSpace?: string;
+    mainSpace2?: string;
     secondarySpace?: string;
     tertiarySpace?: string;
   };
@@ -10,7 +11,7 @@ export const packSpaceLabels: PackSpaceConfig = {
   'Pack Prestige': {
     mainSpace: 'CHEMISE',
     secondarySpace: 'ACCESSOIRE',
-    tertiarySpace: 'ACCESSOIRE'
+    tertiarySpace: 'ACCESSOIRE' ,
   },
   'Pack Premium': {
     mainSpace: 'CRAVATTE',
@@ -24,11 +25,11 @@ export const packSpaceLabels: PackSpaceConfig = {
   },
   'Pack Duo': {
     mainSpace: 'PORTEFEUILLE',
-    secondarySpace: 'CEINTURE'
+    mainSpace2: 'CEINTURE'
   },
   'Pack Mini Duo': {
     mainSpace: 'PORTE-CARTES',
-    secondarySpace: 'PORTE-CLÉS'
+    mainSpace2: 'PORTE-CLÉS'
   },
   'Pack Chemise': {
     mainSpace: 'CHEMISE'

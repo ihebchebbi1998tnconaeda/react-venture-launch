@@ -39,12 +39,9 @@ export const initKonnectPayment = async (
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error('Invalid email format.');
   if (!orderId) throw new Error('Order ID is required.');
 
-  // Convert amount to millimes (1 TND = 1000 millimes)
   const amountInMillimes = Math.round(amount * 1000);
 
   try {
-    console.log('Initiating Konnect payment with amount:', amount, 'TND (', amountInMillimes, 'millimes)');
-    
     const response = await fetchWithTimeout(`${KONNECT_API_URL}/payments/init-payment`, {
       method: 'POST',
       headers: {
@@ -70,15 +67,11 @@ export const initKonnectPayment = async (
 
     if (!response.ok) {
       const errorDetails = await response.json();
-      console.error('Konnect API error details:', errorDetails);
       throw new Error(`Payment initialization failed: ${errorDetails.message || 'Unknown error'}`);
     }
 
-    const data = await response.json();
-    console.log('Konnect API response:', data);
-    return data;
+    return await response.json();
   } catch (error) {
-    console.error('Error initializing Konnect payment:', error);
     throw error;
   }
 };

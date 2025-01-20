@@ -7,7 +7,6 @@ export const usePageTracking = () => {
 
   useEffect(() => {
     const currentPage = location.pathname === '/' ? 'Accueil' : location.pathname.slice(1);
-    console.log('Tracking page view:', currentPage);
     trackVisitor(currentPage).catch(error => {
       console.error('Failed to track page view:', error);
     });

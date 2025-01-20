@@ -55,7 +55,6 @@ interface OrderSubmission {
 }
 
 export const submitOrder = async (orderData: OrderSubmission): Promise<any> => {
-  console.log('Starting order submission process...');
 
   try {
     // Format data to match the expected API structure
@@ -103,9 +102,8 @@ export const submitOrder = async (orderData: OrderSubmission): Promise<any> => {
       }
     };
 
-    console.log('Submitting order with formatted data:', JSON.stringify(formattedOrderData, null, 2));
 
-    const orderResponse = await fetch('https://respizenmedical.com/fiori/submit_all_order.php', {
+    const orderResponse = await fetch('https://www.fioriforyou.com/backfiori/submit_all_order.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -116,7 +114,6 @@ export const submitOrder = async (orderData: OrderSubmission): Promise<any> => {
     });
 
     const orderResponseText = await orderResponse.text();
-    console.log('Raw order submission response:', orderResponseText);
 
     // Try to parse the response as JSON, but handle HTML error responses
     let orderResult;
@@ -135,11 +132,8 @@ export const submitOrder = async (orderData: OrderSubmission): Promise<any> => {
       throw new Error(`Invalid response format: ${orderResponseText}`);
     }
 
-    console.log('Order submission successful:', orderResult);
-
     try {
       await sendOrderConfirmationEmail(formattedOrderData);
-      console.log('Email confirmation sent successfully');
     } catch (emailError) {
       console.error('Email confirmation failed but order was submitted:', emailError);
     }
@@ -152,7 +146,6 @@ export const submitOrder = async (orderData: OrderSubmission): Promise<any> => {
 };
 
 const sendOrderConfirmationEmail = async (orderData: any): Promise<void> => {
-  console.log('Starting email confirmation process...');
   
   try {
     const emailPayload = {
@@ -189,7 +182,6 @@ const sendOrderConfirmationEmail = async (orderData: any): Promise<void> => {
       }
     };
 
-    console.log('Sending email with payload:', JSON.stringify(emailPayload, null, 2));
 
     const response = await fetch('https://www.fioriforyou.com/testsmtp.php', {
       method: 'POST',
@@ -205,7 +197,6 @@ const sendOrderConfirmationEmail = async (orderData: any): Promise<void> => {
     }
 
     const result = await response.text();
-    console.log('Email confirmation response:', result);
 
     try {
       const jsonResult = JSON.parse(result);
