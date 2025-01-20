@@ -11,13 +11,14 @@ import { UserDetails, getUserDetails } from '@/utils/userDetailsStorage';
 import BackButton from '@/components/cart/BackButton';
 import EmptyCartMessage from '@/components/cart/EmptyCartMessage';
 import WhatsAppPopup from '@/components/WhatsAppPopup';
+import { useTranslation } from 'react-i18next';
 
-// Lazy load components for better performance
 const UserDetailsForm = React.lazy(() => import('@/components/cart/UserDetailsForm'));
 const OrderSummary = React.lazy(() => import('@/components/cart/OrderSummary'));
 const CartItemCard = React.lazy(() => import('@/components/cart/CartItemCard'));
 
 const CartPage = () => {
+  const { t } = useTranslation();
   const { cartItems, removeFromCart, updateQuantity } = useCart();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -28,8 +29,8 @@ const CartPage = () => {
     if (newQuantity >= 1) {
       updateQuantity(id, newQuantity);
       toast({
-        title: "Panier mis à jour",
-        description: "La quantité a été mise à jour avec succès",
+        title: t('cart.notifications.quantityUpdated'),
+        description: t('cart.notifications.quantityUpdatedDesc'),
         style: {
           backgroundColor: '#700100',
           color: 'white',
@@ -42,8 +43,8 @@ const CartPage = () => {
   const handleRemoveItem = (id: number) => {
     removeFromCart(id);
     toast({
-      title: "Article supprimé",
-      description: "L'article a été retiré du panier",
+      title: t('cart.notifications.itemRemoved'),
+      description: t('cart.notifications.itemRemovedDesc'),
       style: {
         backgroundColor: '#700100',
         color: 'white',
@@ -57,8 +58,8 @@ const CartPage = () => {
     localStorage.removeItem('userDetails');
     setUserDetails(null);
     toast({
-      title: "Informations supprimées",
-      description: "Vos informations ont été supprimées avec succès",
+      title: t('cart.notifications.detailsDeleted'),
+      description: t('cart.notifications.detailsDeletedDesc'),
       style: {
         backgroundColor: '#700100',
         color: 'white',
@@ -75,13 +76,13 @@ const CartPage = () => {
   return (
     <div className="min-h-screen bg-[#F1F0FB]">
       <Helmet>
-        <title>Mon Panier | Fiori - Vêtements Personnalisés</title>
-        <meta name="description" content="Gérez votre panier d'achats Fiori. Découvrez notre collection de vêtements personnalisés et haut de gamme en Tunisie." />
+        <title>{t('cart.meta.title')} | Fiori - {t('cart.meta.subtitle')}</title>
+        <meta name="description" content={t('cart.meta.description')} />
         <meta name="robots" content="index, follow" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#700100" />
-        <meta property="og:title" content="Mon Panier | Fiori - Vêtements Personnalisés" />
-        <meta property="og:description" content="Gérez votre panier d'achats Fiori. Découvrez notre collection de vêtements personnalisés et haut de gamme en Tunisie." />
+        <meta property="og:title" content={`${t('cart.meta.title')} | Fiori - ${t('cart.meta.subtitle')}`} />
+        <meta property="og:description" content={t('cart.meta.description')} />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="https://www.fiori.com/cart" />
       </Helmet>
@@ -96,7 +97,7 @@ const CartPage = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-2xl md:text-3xl font-serif text-[#1A1F2C] mt-2"
           >
-            Mon Panier ({cartItems.length} articles)
+            {t('cart.title')} ({cartItems.length} {t('cart.items')})
           </motion.h1>
           
           {cartItems.length === 0 ? (
@@ -153,8 +154,8 @@ const CartPage = () => {
         </div>
       </div>
       <Suspense fallback={null}>
-                      <WhatsAppPopup />
-   </Suspense>
+        <WhatsAppPopup />
+      </Suspense>
       <Footer />
     </div>
   );

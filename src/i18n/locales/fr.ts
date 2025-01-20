@@ -139,88 +139,50 @@ export default {
       title: "Le Pack Porte-clé",
       description: "Le Pack Porte-clé offre une gamme raffinée d'accessoires pratiques et élégants. Ajoutez une gravure personnelle pour une présentation unique."
     },
-    form: {
-      personalInfo: {
-        title: "Informations Personnelles",
-        description: "Vos coordonnées de base",
-        firstName: "Prénom",
-        firstNamePlaceholder: "Entrez votre prénom",
-        lastName: "Nom",
-        lastNamePlaceholder: "Entrez votre nom"
-      },
-      contact: {
-        title: "Contact",
-        description: "Comment vous joindre",
-        phone: "Téléphone",
-        phonePlaceholder: "Entrez votre numéro de téléphone",
-        email: "Email",
-        emailPlaceholder: "Entrez votre email"
-      },
-      address: {
-        title: "Adresse",
-        description: "Où livrer votre commande",
-        street: "Adresse",
-        streetPlaceholder: "Entrez votre adresse",
-        country: "Pays",
-        countryPlaceholder: "Entrez votre pays",
-        zipCode: "Code Postal",
-        zipCodePlaceholder: "Entrez votre code postal",
-        orderNote: "Note pour votre commande (optionnel)",
-        orderNotePlaceholder: "Ajoutez une note spéciale pour votre commande"
-      },
-      buttons: {
-        next: "Suivant",
-        previous: "Précédent",
-        save: "Sauvegarder",
-        edit: "Modifier",
-        delete: "Supprimer"
-      },
-      validation: {
-        required: "Ce champ est obligatoire",
-        invalidEmail: "Veuillez entrer un email valide",
-        invalidPhone: "Veuillez entrer un numéro de téléphone valide"
-      }
-    }
   },
-  giftApp: {
-    packTypeHeader: {
-      selectItems: "Sélectionnez vos articles préférés et créez un pack cadeau unique qui fera plaisir à vos proches."
+  cart: {
+    meta: {
+      title: "Mon Panier",
+      subtitle: "Vêtements Personnalisés",
+      description: "Gérez votre panier d'achats Fiori. Découvrez notre collection de vêtements personnalisés et haut de gamme en Tunisie."
     },
-    productSelection: {
-      searchPlaceholder: "Rechercher des produits...",
-      noResults: "Aucun produit trouvé",
-      loading: "Chargement des produits...",
-      dragInstruction: "Faites glisser les articles pour les ajouter à votre pack",
-      step1: "Étape 1 : Choisissez un",
-      step2: "Étape 2 : Ajoutez un",
-      step3: "Étape 3 : Complétez avec",
-      packComplete: "Pack complet !",
-      itemsCount: "articles"
-    },
-    packSummary: {
-      title: "Résumé du Pack",
-      noteLabel: "Ajoutez une note à votre pack",
-      notePlaceholder: "Écrivez un message spécial...",
-      emptyPack: "Votre pack est vide",
-      addItems: "Ajoutez des articles à votre pack pour les voir ici"
-    },
-    confirmationButton: {
-      addToCart: "Ajouter au Panier",
-      incomplete: "Complétez votre pack",
-      processing: "Traitement en cours..."
-    },
+    title: "Mon Panier",
+    items: "articles",
     notifications: {
+      quantityUpdated: "Panier mis à jour",
+      quantityUpdatedDesc: "La quantité a été mise à jour avec succès",
+      itemRemoved: "Article supprimé",
+      itemRemovedDesc: "L'article a été retiré du panier",
+      detailsDeleted: "Informations supprimées",
+      detailsDeletedDesc: "Vos informations ont été supprimées avec succès",
       packAdded: "Pack Ajouté au Panier ! 🎉",
       packAndFees: "Pack et frais de packaging ({price} TND) ajoutés au panier",
       packOnly: "Pack ajouté au panier",
       error: "Erreur",
       errorMessage: "Une erreur est survenue lors de l'ajout au panier",
       packFull: "Pack complet",
-      packFullMessage: "Ce pack ne peut contenir que {count} articles",
-      itemAdded: "Article Ajouté ! 🎁",
-      itemAddedMessage: "N'oubliez pas que vous pouvez ajouter un message personnalisé à votre pack !",
-      itemRemoved: "Article Retiré",
-      itemRemovedMessage: "L'article a été retiré de votre pack"
+      packFullMessage: "Ce pack ne peut contenir que {count} articles"
+    },
+    summary: {
+      title: "Résumé de la commande",
+      subtotal: "Sous-total",
+      shipping: "Livraison",
+      total: "Total",
+      vatIncluded: "TVA incluse",
+      freeShipping: "Livraison gratuite à partir de 299 TND",
+      shippingCost: "{cost} TND",
+      free: "Gratuite"
+    },
+    promoCode: {
+      label: "Code promo",
+      placeholder: "Entrez votre code promo",
+      apply: "Appliquer",
+      invalid: "Code invalide",
+      success: "Code appliqué avec succès"
+    },
+    emptyCart: {
+      message: "Votre panier est vide",
+      continueShopping: "Continuer mes achats"
     }
   }
-};
+}

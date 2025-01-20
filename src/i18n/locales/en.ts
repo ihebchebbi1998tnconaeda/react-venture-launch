@@ -143,88 +143,48 @@ export default {
     },
   },
   cart: {
-    form: {
-      personalInfo: {
-        title: "Personal Information",
-        description: "Your basic details",
-        firstName: "First Name",
-        firstNamePlaceholder: "Enter your first name",
-        lastName: "Last Name",
-        lastNamePlaceholder: "Enter your last name"
-      },
-      contact: {
-        title: "Contact",
-        description: "How to reach you",
-        phone: "Phone",
-        phonePlaceholder: "Enter your phone number",
-        email: "Email",
-        emailPlaceholder: "Enter your email"
-      },
-      address: {
-        title: "Address",
-        description: "Where to deliver your order",
-        street: "Address",
-        streetPlaceholder: "Enter your address",
-        country: "Country",
-        countryPlaceholder: "Enter your country",
-        zipCode: "Zip Code",
-        zipCodePlaceholder: "Enter your zip code",
-        orderNote: "Order Note (optional)",
-        orderNotePlaceholder: "Add a special note for your order"
-      },
-      buttons: {
-        next: "Next",
-        previous: "Previous",
-        save: "Save",
-        edit: "Edit Details",
-        delete: "Delete Details"
-      },
-      validation: {
-        required: "This field is required",
-        invalidEmail: "Please enter a valid email",
-        invalidPhone: "Please enter a valid phone number"
-      }
-    }
-  },
-  giftApp: {
-    packTypeHeader: {
-      selectItems: "Select your favorite items and create a unique gift pack that will delight your loved ones."
+    meta: {
+      title: "My Cart",
+      subtitle: "Custom Clothing",
+      description: "Manage your Fiori shopping cart. Discover our collection of custom and high-end clothing in Tunisia."
     },
-    productSelection: {
-      searchPlaceholder: "Search products...",
-      noResults: "No products found",
-      loading: "Loading products...",
-      dragInstruction: "Drag items to add them to your pack",
-      step1: "Step 1: Choose a",
-      step2: "Step 2: Add a",
-      step3: "Step 3: Complete with",
-      packComplete: "Pack complete!",
-      itemsCount: "items"
-    },
-    packSummary: {
-      title: "Pack Summary",
-      noteLabel: "Add a note to your pack",
-      notePlaceholder: "Write a special message...",
-      emptyPack: "Your pack is empty",
-      addItems: "Add items to your pack to see them here"
-    },
-    confirmationButton: {
-      addToCart: "Add to Cart",
-      incomplete: "Complete your pack",
-      processing: "Processing..."
-    },
+    title: "My Cart",
+    items: "items",
     notifications: {
+      quantityUpdated: "Cart updated",
+      quantityUpdatedDesc: "The quantity has been successfully updated",
+      itemRemoved: "Item removed",
+      itemRemovedDesc: "The item has been removed from the cart",
+      detailsDeleted: "Information deleted",
+      detailsDeletedDesc: "Your information has been successfully deleted",
       packAdded: "Pack Added to Cart! 🎉",
       packAndFees: "Pack and packaging fees ({price} TND) added to cart",
       packOnly: "Pack added to cart",
       error: "Error",
       errorMessage: "An error occurred while adding to cart",
       packFull: "Pack complete",
-      packFullMessage: "This pack can only contain {count} items",
-      itemAdded: "Item Added! 🎁",
-      itemAddedMessage: "Don't forget that you can add a personalized message to your pack!",
-      itemRemoved: "Item Removed",
-      itemRemovedMessage: "The item has been removed from your pack"
+      packFullMessage: "This pack can only contain {count} items"
+    },
+    summary: {
+      title: "Order Summary",
+      subtotal: "Subtotal",
+      shipping: "Shipping",
+      total: "Total",
+      vatIncluded: "VAT included",
+      freeShipping: "Free shipping from 299 TND",
+      shippingCost: "{cost} TND",
+      free: "Free"
+    },
+    promoCode: {
+      label: "Promo code",
+      placeholder: "Enter your promo code",
+      apply: "Apply",
+      invalid: "Invalid code",
+      success: "Code applied successfully"
+    },
+    emptyCart: {
+      message: "Your cart is empty",
+      continueShopping: "Continue shopping"
     }
   }
 }
