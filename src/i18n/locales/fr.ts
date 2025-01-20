@@ -181,5 +181,46 @@ export default {
         invalidPhone: "Veuillez entrer un numéro de téléphone valide"
       }
     }
+  },
+  giftApp: {
+    packTypeHeader: {
+      selectItems: "Sélectionnez vos articles préférés et créez un pack cadeau unique qui fera plaisir à vos proches."
+    },
+    productSelection: {
+      searchPlaceholder: "Rechercher des produits...",
+      noResults: "Aucun produit trouvé",
+      loading: "Chargement des produits...",
+      dragInstruction: "Faites glisser les articles pour les ajouter à votre pack",
+      step1: "Étape 1 : Choisissez un",
+      step2: "Étape 2 : Ajoutez un",
+      step3: "Étape 3 : Complétez avec",
+      packComplete: "Pack complet !",
+      itemsCount: "articles"
+    },
+    packSummary: {
+      title: "Résumé du Pack",
+      noteLabel: "Ajoutez une note à votre pack",
+      notePlaceholder: "Écrivez un message spécial...",
+      emptyPack: "Votre pack est vide",
+      addItems: "Ajoutez des articles à votre pack pour les voir ici"
+    },
+    confirmationButton: {
+      addToCart: "Ajouter au Panier",
+      incomplete: "Complétez votre pack",
+      processing: "Traitement en cours..."
+    },
+    notifications: {
+      packAdded: "Pack Ajouté au Panier ! 🎉",
+      packAndFees: "Pack et frais de packaging ({price} TND) ajoutés au panier",
+      packOnly: "Pack ajouté au panier",
+      error: "Erreur",
+      errorMessage: "Une erreur est survenue lors de l'ajout au panier",
+      packFull: "Pack complet",
+      packFullMessage: "Ce pack ne peut contenir que {count} articles",
+      itemAdded: "Article Ajouté ! 🎁",
+      itemAddedMessage: "N'oubliez pas que vous pouvez ajouter un message personnalisé à votre pack !",
+      itemRemoved: "Article Retiré",
+      itemRemovedMessage: "L'article a été retiré de votre pack"
+    }
   }
 };

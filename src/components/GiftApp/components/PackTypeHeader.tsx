@@ -1,12 +1,15 @@
 import React from 'react';
 import { Package2, Gift } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 interface PackTypeHeaderProps {
   packType: string;
 }
 
 const PackTypeHeader = ({ packType }: PackTypeHeaderProps) => {
+  const { t } = useTranslation();
+
   return (
     <motion.div 
       initial={{ opacity: 0, y: -20 }}
@@ -21,7 +24,7 @@ const PackTypeHeader = ({ packType }: PackTypeHeaderProps) => {
         <Gift className="w-8 h-8 text-[#700100]" />
       </div>
       <p className="text-gray-600 max-w-2xl mx-auto">
-        Sélectionnez vos articles préférés et créez un pack cadeau unique qui fera plaisir à vos proches.
+        {t('giftApp.packTypeHeader.selectItems')}
       </p>
     </motion.div>
   );

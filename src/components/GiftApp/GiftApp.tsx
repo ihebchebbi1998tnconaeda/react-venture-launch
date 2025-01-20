@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useCart } from "../cart/CartProvider";
 import { toast } from "@/hooks/use-toast";
 import { playTickSound } from "@/utils/audio";
@@ -19,6 +20,7 @@ export interface GiftPack {
 }
 
 const GiftApp = () => {
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(true);
   const [selectedItems, setSelectedItems] = useState<Product[]>([]);
   const [packNote, setPackNote] = useState("");
@@ -58,7 +60,7 @@ const GiftApp = () => {
       if (packPrice > 0) {
         addToCart({
           id: Date.now(),
-          name: `${packType} - Frais de packaging`,
+          name: `${packType} - ${t('giftApp.notifications.packAndFees', { price: packPrice })}`,
           price: packPrice,
           quantity: 1,
           image: packImage,
@@ -71,7 +73,6 @@ const GiftApp = () => {
         });
       }
 
-      // Add all items synchronously to prevent race conditionsnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
       selectedItems.forEach(item => {
         const itemToAdd = {
           ...item,
@@ -86,10 +87,10 @@ const GiftApp = () => {
       });
 
       toast({
-        title: "Pack Ajouté au Panier! 🎉",
+        title: t('giftApp.notifications.packAdded'),
         description: packPrice > 0 
-          ? `Pack et frais de packaging (${packPrice} TND) ajoutés au panier`
-          : "Pack ajouté au panier",
+          ? t('giftApp.notifications.packAndFees', { price: packPrice })
+          : t('giftApp.notifications.packOnly'),
         style: {
           backgroundColor: '#700100',
           color: 'white',
@@ -97,27 +98,25 @@ const GiftApp = () => {
         },
       });
 
-      // Immediate navigation to cart
       navigate('/cart');
     } catch (error) {
       console.error('Error adding pack to cart:', error);
       toast({
-        title: "Erreur",
-        description: "Une erreur est survenue lors de l'ajout au panier",
+        title: t('giftApp.notifications.error'),
+        description: t('giftApp.notifications.errorMessage'),
         variant: "destructive",
       });
     } finally {
       setIsLoading(false);
       setIsSubmitting(false);
     }
-  }, [isSubmitting, selectedItems, containerCount, packType, addToCart, navigate]);
+  }, [isSubmitting, selectedItems, containerCount, packType, addToCart, navigate, t]);
 
   const handleItemDrop = (item: Product, size: string, personalization: string) => {
-    
     if (selectedItems.length >= containerCount) {
       toast({
-        title: "Pack complet",
-        description: `Ce pack ne peut contenir que ${containerCount} articles`,
+        title: t('giftApp.notifications.packFull'),
+        description: t('giftApp.notifications.packFullMessage', { count: containerCount }),
         variant: "destructive",
       });
       return;
@@ -135,8 +134,8 @@ const GiftApp = () => {
     playTickSound();
     
     toast({
-      title: "Article Ajouté! 🎁",
-      description: "N'oubliez pas que vous pouvez ajouter un message personnalisé à votre pack!",
+      title: t('giftApp.notifications.itemAdded'),
+      description: t('giftApp.notifications.itemAddedMessage'),
       style: {
         backgroundColor: '#700100',
         color: 'white',
@@ -153,8 +152,8 @@ const GiftApp = () => {
     });
     
     toast({
-      title: "Article Retiré",
-      description: "L'article a été retiré de votre pack",
+      title: t('giftApp.notifications.itemRemoved'),
+      description: t('giftApp.notifications.itemRemovedMessage'),
       style: {
         backgroundColor: '#700100',
         color: 'white',
@@ -200,6 +199,7 @@ const GiftApp = () => {
               disabled={selectedItems.length === 0 || isSubmitting}
               packType={packType}
               selectedItemsCount={selectedItems.length}
+              isSubmitting={isSubmitting}
             />
           </div>
         </div>

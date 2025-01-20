@@ -185,5 +185,46 @@ export default {
         invalidPhone: "Please enter a valid phone number"
       }
     }
+  },
+  giftApp: {
+    packTypeHeader: {
+      selectItems: "Select your favorite items and create a unique gift pack that will delight your loved ones."
+    },
+    productSelection: {
+      searchPlaceholder: "Search products...",
+      noResults: "No products found",
+      loading: "Loading products...",
+      dragInstruction: "Drag items to add them to your pack",
+      step1: "Step 1: Choose a",
+      step2: "Step 2: Add a",
+      step3: "Step 3: Complete with",
+      packComplete: "Pack complete!",
+      itemsCount: "items"
+    },
+    packSummary: {
+      title: "Pack Summary",
+      noteLabel: "Add a note to your pack",
+      notePlaceholder: "Write a special message...",
+      emptyPack: "Your pack is empty",
+      addItems: "Add items to your pack to see them here"
+    },
+    confirmationButton: {
+      addToCart: "Add to Cart",
+      incomplete: "Complete your pack",
+      processing: "Processing..."
+    },
+    notifications: {
+      packAdded: "Pack Added to Cart! 🎉",
+      packAndFees: "Pack and packaging fees ({price} TND) added to cart",
+      packOnly: "Pack added to cart",
+      error: "Error",
+      errorMessage: "An error occurred while adding to cart",
+      packFull: "Pack complete",
+      packFullMessage: "This pack can only contain {count} items",
+      itemAdded: "Item Added! 🎁",
+      itemAddedMessage: "Don't forget that you can add a personalized message to your pack!",
+      itemRemoved: "Item Removed",
+      itemRemovedMessage: "The item has been removed from your pack"
+    }
   }
-};
+}
