@@ -1,16 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useTranslation } from 'react-i18next';
 
 const GiftCollection = () => {
-  const { t } = useTranslation();
-  
   const items = [
-    { src: "GiftGuide.png", label: t('giftCollection.giftGuide'), href: "/univers-cadeaux" },
-    { src: "LuxurtGifts.png", label: t('giftCollection.luxuryGifts'), href: "/univers-cadeaux/packprestige" },
-    { src: "MustHaveGifts.png", label: t('giftCollection.mustHaveGifts'), href: "/category/accessoires" },
-    { src: "GiftCards.png", label: t('giftCollection.giftCards'), href: "/gift-cards" },
-    { src: "Services.png", label: t('giftCollection.services'), href: "/services" },
+    { src: "GiftGuide.png", label: "GIFT GUIDE", href: "/univers-cadeaux" },
+    { src: "LuxurtGifts.png", label: "LUXURY GIFTS", href: "/univers-cadeaux/packprestige" },
+    { src: "MustHaveGifts.png", label: "MUST HAVE GIFTS", href: "/category/accessoires" },
+    { src: "GiftCards.png", label: "GIFT CARDS", href: "/gift-cards" },
+    { src: "Services.png", label: "SERVICES", href: "/services" },
   ];
 
   return (
@@ -23,7 +20,7 @@ const GiftCollection = () => {
         }}
       >
         <div className="w-full text-center mb-5">
-          <h2 className="text-[#8A2B3B] text-4xl">{t('giftCollection.title')}</h2>
+          <h2 className="text-[#8A2B3B] text-4xl">Le monde fiori</h2>
         </div>
         <div className="w-full grid grid-cols-1 md:grid-cols-5 gap-4">
           {items.map((item, index) => (

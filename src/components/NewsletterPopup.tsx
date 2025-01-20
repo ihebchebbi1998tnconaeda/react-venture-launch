@@ -4,11 +4,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { useCart } from './cart/CartProvider';
-import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 
 const NewsletterPopup = () => {
-  const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -36,12 +34,13 @@ const NewsletterPopup = () => {
     setIsLoading(true);
 
     try {
+      // Check if email has already used discount
       const usedDiscountEmails = JSON.parse(localStorage.getItem('usedDiscountEmails') || '[]');
       if (usedDiscountEmails.includes(email)) {
         toast({
           variant: "destructive",
-          title: t('newsletter.alreadySubscribed'),
-          description: t('newsletter.alreadySubscribedMessage'),
+          title: "Désolé",
+          description: "Cette adresse email a déjà bénéficié de la réduction de 5%.",
           duration: 3000,
         });
         setIsLoading(false);
@@ -53,13 +52,19 @@ const NewsletterPopup = () => {
       });
 
       if (response.data.status === 'success') {
+        // Save subscription status and email
+        localStorage.setItem('newsletterSubscribed', 'true');
+        localStorage.setItem('subscribedEmail', email);
+        
+        // Apply discount if available
         applyNewsletterDiscount();
+        
         toast({
-          title: t('newsletter.success'),
-          description: t('newsletter.successMessage'),
+          title: "Inscription réussie !",
+          description: "Merci de vous être inscrit à notre newsletter. Votre réduction de 5% a été appliquée à votre panier.",
           duration: 3000,
         });
-        setEmail('');
+        
         handleClose();
       } else {
         throw new Error(response.data.message);
@@ -68,8 +73,8 @@ const NewsletterPopup = () => {
       console.error('Newsletter subscription error:', error);
       toast({
         variant: "destructive",
-        title: t('newsletter.error'),
-        description: t('newsletter.errorMessage'),
+        title: "Erreur",
+        description: "Une erreur s'est produite lors de l'inscription. Veuillez réessayer.",
         duration: 3000,
       });
     } finally {
@@ -105,11 +110,11 @@ const NewsletterPopup = () => {
             </button>
 
             <h2 className="text-xl sm:text-2xl font-bold mb-2">
-              {t('newsletter.title')}
+              Offres Exclusives & Nouveautés
             </h2>
             
             <p className="text-white/80 mb-4 sm:mb-6 text-sm sm:text-base">
-              {t('newsletter.description')}
+              Inscrivez-vous à notre newsletter et bénéficiez de -5% sur votre première commande !
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
@@ -117,7 +122,7 @@ const NewsletterPopup = () => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder={t('newsletter.placeholder')}
+                placeholder="Votre adresse email"
                 required
                 className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg bg-white/10 border border-white/20 
                           placeholder-white/60 text-white outline-none focus:border-white/40
@@ -129,11 +134,11 @@ const NewsletterPopup = () => {
                 disabled={isLoading}
                 className="w-full bg-white text-primary hover:bg-white/90 transition-colors"
               >
-                {isLoading ? t('newsletter.loading') : t('newsletter.signUp')}
+                {isLoading ? "Inscription..." : "S'inscrire"}
               </Button>
 
               <p className="text-[10px] sm:text-xs text-white/60 text-center">
-                {t('newsletter.terms')}
+                En vous inscrivant, vous acceptez de recevoir nos newsletters et nos offres commerciales.
               </p>
             </form>
           </motion.div>

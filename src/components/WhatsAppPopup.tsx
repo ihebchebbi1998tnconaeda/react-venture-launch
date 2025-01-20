@@ -3,13 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { FaWhatsapp } from "react-icons/fa";
 import { X } from "lucide-react";
-import { useTranslation } from 'react-i18next';
 import FloatingCartIcon from './FloatingCartIcon';
 
 const WhatsAppPopup = () => {
-  const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
-  const [isMinimized, setIsMinimized] = useState(true);
+  const [isMinimized, setIsMinimized] = useState(true); // Changed to start minimized
   
   useEffect(() => {
     const showPopup = () => {
@@ -65,10 +63,10 @@ const WhatsAppPopup = () => {
               </button>
               <div className="flex flex-col items-start gap-2">
                 <p className="text-white text-sm font-medium">
-                  {t('whatsapp.needHelp')}
+                  Besoin d'aide ?
                 </p>
                 <p className="text-white/60 text-xs">
-                  {t('whatsapp.contactUs')}
+                  Contactez-nous sur WhatsApp
                 </p>
                 <Button 
                   variant="default" 
@@ -77,7 +75,7 @@ const WhatsAppPopup = () => {
                   onClick={handleWhatsAppClick}
                 >
                   <FaWhatsapp className="w-4 h-4" />
-                  {t('whatsapp.chatNow')}
+                  Discuter maintenant
                 </Button>
               </div>
             </div>
