@@ -82,7 +82,6 @@ const App = () => (
             <TrackingWrapper>
               <AnimatePresence mode="wait">
                 <Routes>
-                  {/* Add /new route before the catch-all */}
                   <Route 
                     path="/new" 
                     element={

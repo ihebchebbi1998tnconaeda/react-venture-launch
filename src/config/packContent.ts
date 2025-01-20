@@ -1,54 +1,56 @@
 import { useTranslation } from 'react-i18next';
 
-interface PackContent {
-  title: string;
-  description: string;
-  images: string[];
-  videoUrl: string;
-}
-
-const getPackImages = (packType: string): string[] => {
-  switch (packType) {
-    case 'Pack Prestige':
-      return ["/Prestige/1.png", "/Prestige/2.jpg", "/Prestige/3.jpg"];
-    case 'Pack Premium':
-      return ["/Premium/1.png", "/Premium/2.png", "/Premium/3.png"];
-    case 'Pack Trio':
-      return ["/Trio/1.png", "/Trio/2.png", "/Trio/3.png"];
-    case 'Pack Duo':
-      return ["/packduo.png"];
-    case 'Pack Mini Duo':
-      return ["/Packduomini2.png"];
-    default:
-      return ["https://placehold.co/600x400/67000D/ffffff?text=Pack+Image"];
-  }
-};
-
-const getPackVideo = (packType: string): string => {
-  switch (packType) {
-    case 'Pack Prestige':
-      return "/Prestige/video.mp4";
-    case 'Pack Premium':
-      return "/Premium/video.mp4";
-    case 'Pack Trio':
-      return "/Trio/video.mp4";
-    default:
-      return "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4";
-  }
-};
-
-export const getPackContent = (packType: string): PackContent => {
+export const getPackContent = () => {
   const { t } = useTranslation();
   
-  const packKey = packType.toLowerCase()
-    .replace('pack ', '')
-    .replace(' ', '')
-    .replace('-', '');
-
   return {
-    title: t(`packs.${packKey}.title`),
-    description: t(`packs.${packKey}.description`),
-    images: getPackImages(packType),
-    videoUrl: getPackVideo(packType)
+    packDuo: {
+      title: t('packs.duo.title'),
+      description: t('packs.duo.description'),
+      price: 299,
+      maxItems: 2,
+      allowedTypes: ['chemises'],
+      image: '/Menu/Pack duo.png'
+    },
+    packTrio: {
+      title: t('packs.trio.title'),
+      description: t('packs.trio.description'),
+      price: 399,
+      maxItems: 3,
+      allowedTypes: ['chemises'],
+      image: '/Menu/Pack trio.png'
+    },
+    packQuatro: {
+      title: t('packs.quatro.title'),
+      description: t('packs.quatro.description'),
+      price: 499,
+      maxItems: 4,
+      allowedTypes: ['chemises'],
+      image: '/Menu/Pack quatro.png'
+    },
+    packCostume: {
+      title: t('packs.costume.title'),
+      description: t('packs.costume.description'),
+      price: 899,
+      maxItems: 2,
+      allowedTypes: ['costumes', 'chemises'],
+      requiredTypes: {
+        costumes: 1,
+        chemises: 1
+      },
+      image: '/Menu/Pack costume.png'
+    },
+    packMariage: {
+      title: t('packs.mariage.title'),
+      description: t('packs.mariage.description'),
+      price: 1299,
+      maxItems: 3,
+      allowedTypes: ['costumes', 'chemises'],
+      requiredTypes: {
+        costumes: 1,
+        chemises: 2
+      },
+      image: '/Menu/Pack mariage.png'
+    }
   };
 };

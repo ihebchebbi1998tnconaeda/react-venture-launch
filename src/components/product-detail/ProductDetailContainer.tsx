@@ -91,6 +91,7 @@ const ProductDetailContainer = ({ product, onProductAdded }: ProductDetailContai
       personalization: personalizationText,
       withBox: withBox,
       discount_product: product.discount_product,
+      itemgroup_product: product.itemgroup_product // Added this required field
     });
 
     onProductAdded?.(product.name);
