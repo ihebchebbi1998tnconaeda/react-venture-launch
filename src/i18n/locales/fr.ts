@@ -138,6 +138,48 @@ export default {
     porteCle: {
       title: "Le Pack Porte-clé",
       description: "Le Pack Porte-clé offre une gamme raffinée d'accessoires pratiques et élégants. Ajoutez une gravure personnelle pour une présentation unique."
+    },
+    form: {
+      personalInfo: {
+        title: "Informations Personnelles",
+        description: "Vos coordonnées de base",
+        firstName: "Prénom",
+        firstNamePlaceholder: "Entrez votre prénom",
+        lastName: "Nom",
+        lastNamePlaceholder: "Entrez votre nom"
+      },
+      contact: {
+        title: "Contact",
+        description: "Comment vous joindre",
+        phone: "Téléphone",
+        phonePlaceholder: "Entrez votre numéro de téléphone",
+        email: "Email",
+        emailPlaceholder: "Entrez votre email"
+      },
+      address: {
+        title: "Adresse",
+        description: "Où livrer votre commande",
+        street: "Adresse",
+        streetPlaceholder: "Entrez votre adresse",
+        country: "Pays",
+        countryPlaceholder: "Entrez votre pays",
+        zipCode: "Code Postal",
+        zipCodePlaceholder: "Entrez votre code postal",
+        orderNote: "Note pour votre commande (optionnel)",
+        orderNotePlaceholder: "Ajoutez une note spéciale pour votre commande"
+      },
+      buttons: {
+        next: "Suivant",
+        previous: "Précédent",
+        save: "Sauvegarder",
+        edit: "Modifier",
+        delete: "Supprimer"
+      },
+      validation: {
+        required: "Ce champ est obligatoire",
+        invalidEmail: "Veuillez entrer un email valide",
+        invalidPhone: "Veuillez entrer un numéro de téléphone valide"
+      }
     }
   }
 };

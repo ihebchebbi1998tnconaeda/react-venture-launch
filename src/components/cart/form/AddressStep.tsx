@@ -4,12 +4,15 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { UseFormReturn } from 'react-hook-form';
 import { UserFormData } from './types';
+import { useTranslation } from 'react-i18next';
 
 interface AddressStepProps {
   form: UseFormReturn<UserFormData>;
 }
 
 const AddressStep = ({ form }: AddressStepProps) => {
+  const { t } = useTranslation();
+
   return (
     <div className="space-y-4">
       <FormField
@@ -17,11 +20,13 @@ const AddressStep = ({ form }: AddressStepProps) => {
         name="address"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-gray-700 font-medium">Adresse</FormLabel>
+            <FormLabel className="text-gray-700 font-medium">
+              {t('cart.form.address.street')}
+            </FormLabel>
             <FormControl>
               <Input
                 {...field}
-                placeholder="Entrez votre adresse"
+                placeholder={t('cart.form.address.streetPlaceholder')}
                 className="bg-white border-gray-300 focus:border-[#700100] focus:ring-[#700100] text-gray-900"
               />
             </FormControl>
@@ -36,11 +41,13 @@ const AddressStep = ({ form }: AddressStepProps) => {
           name="country"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-gray-700 font-medium">Pays</FormLabel>
+              <FormLabel className="text-gray-700 font-medium">
+                {t('cart.form.address.country')}
+              </FormLabel>
               <FormControl>
                 <Input
                   {...field}
-                  placeholder="Entrez votre pays"
+                  placeholder={t('cart.form.address.countryPlaceholder')}
                   className="bg-white border-gray-300 focus:border-[#700100] focus:ring-[#700100] text-gray-900"
                 />
               </FormControl>
@@ -54,11 +61,13 @@ const AddressStep = ({ form }: AddressStepProps) => {
           name="zipCode"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-gray-700 font-medium">Code postal</FormLabel>
+              <FormLabel className="text-gray-700 font-medium">
+                {t('cart.form.address.zipCode')}
+              </FormLabel>
               <FormControl>
                 <Input
                   {...field}
-                  placeholder="Entrez votre code postal"
+                  placeholder={t('cart.form.address.zipCodePlaceholder')}
                   className="bg-white border-gray-300 focus:border-[#700100] focus:ring-[#700100] text-gray-900"
                 />
               </FormControl>
@@ -73,11 +82,13 @@ const AddressStep = ({ form }: AddressStepProps) => {
         name="orderNote"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-gray-700 font-medium">Note pour votre commande (optionnel)</FormLabel>
+            <FormLabel className="text-gray-700 font-medium">
+              {t('cart.form.address.orderNote')}
+            </FormLabel>
             <FormControl>
               <Textarea
                 {...field}
-                placeholder="Ajoutez une note spéciale pour votre commande"
+                placeholder={t('cart.form.address.orderNotePlaceholder')}
                 className="bg-white border-gray-300 focus:border-[#700100] focus:ring-[#700100] text-gray-900 min-h-[100px]"
               />
             </FormControl>

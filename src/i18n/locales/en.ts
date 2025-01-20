@@ -140,6 +140,50 @@ export default {
     porteCle: {
       title: "The Key Holder Pack",
       description: "The Key Holder Pack offers a refined range of practical and elegant accessories. Add a personal engraving for a unique presentation."
+    },
+  },
+  cart: {
+    form: {
+      personalInfo: {
+        title: "Personal Information",
+        description: "Your basic details",
+        firstName: "First Name",
+        firstNamePlaceholder: "Enter your first name",
+        lastName: "Last Name",
+        lastNamePlaceholder: "Enter your last name"
+      },
+      contact: {
+        title: "Contact",
+        description: "How to reach you",
+        phone: "Phone",
+        phonePlaceholder: "Enter your phone number",
+        email: "Email",
+        emailPlaceholder: "Enter your email"
+      },
+      address: {
+        title: "Address",
+        description: "Where to deliver your order",
+        street: "Address",
+        streetPlaceholder: "Enter your address",
+        country: "Country",
+        countryPlaceholder: "Enter your country",
+        zipCode: "Zip Code",
+        zipCodePlaceholder: "Enter your zip code",
+        orderNote: "Order Note (optional)",
+        orderNotePlaceholder: "Add a special note for your order"
+      },
+      buttons: {
+        next: "Next",
+        previous: "Previous",
+        save: "Save",
+        edit: "Edit Details",
+        delete: "Delete Details"
+      },
+      validation: {
+        required: "This field is required",
+        invalidEmail: "Please enter a valid email",
+        invalidPhone: "Please enter a valid phone number"
+      }
     }
   }
 };
