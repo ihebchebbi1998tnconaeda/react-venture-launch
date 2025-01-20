@@ -183,6 +183,39 @@ export default {
     emptyCart: {
       message: "Votre panier est vide",
       continueShopping: "Continuer mes achats"
+    },
+    itemCard: {
+      size: "Taille",
+      color: "Couleur",
+      personalization: "Personnalisation",
+      unitPrice: "Prix unitaire",
+      quantity: "Quantité",
+      total: "Total",
+      giftBox: "+ Box cadeau (30 TND)",
+      personalizationCost: "+ Personnalisation (30 TND)",
+      editPersonalization: "Modifier la personnalisation",
+      yourText: "Votre texte de personnalisation",
+      charactersLeft: "caractères restants",
+      maxCharsShirt: "Pour les chemises, la personnalisation est limitée à 4 caractères",
+      maxCharsOther: "Maximum 100 caractères",
+      cancel: "Annuler",
+      save: "Enregistrer",
+      delete: "Supprimer l'article",
+      decreaseQuantity: "Diminuer la quantité",
+      increaseQuantity: "Augmenter la quantité",
+      packType: "Type de pack"
+    },
+    personalization: {
+      error: "Erreur de personnalisation",
+      maxLengthShirt: "Pour les chemises, la personnalisation est limitée à 4 caractères maximum",
+      characterLimit: "Limite de caractères atteinte",
+      maxLengthOther: "La personnalisation est limitée à 100 caractères"
+    },
+    provider: {
+      packRemoved: "Pack supprimé",
+      packRemovedDesc: "Le pack et tous ses articles ont été supprimés du panier",
+      newsletterUsed: "Réduction newsletter déjà utilisée",
+      newsletterUsedDesc: "Cet email a déjà utilisé la réduction newsletter"
     }
   }
 }

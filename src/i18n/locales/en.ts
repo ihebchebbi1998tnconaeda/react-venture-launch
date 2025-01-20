@@ -185,6 +185,39 @@ export default {
     emptyCart: {
       message: "Your cart is empty",
       continueShopping: "Continue shopping"
+    },
+    itemCard: {
+      size: "Size",
+      color: "Color",
+      personalization: "Personalization",
+      unitPrice: "Unit price",
+      quantity: "Quantity",
+      total: "Total",
+      giftBox: "+ Gift Box (30 TND)",
+      personalizationCost: "+ Personalization (30 TND)",
+      editPersonalization: "Edit Personalization",
+      yourText: "Your personalization text",
+      charactersLeft: "characters remaining",
+      maxCharsShirt: "For shirts, personalization is limited to 4 characters",
+      maxCharsOther: "Maximum 100 characters",
+      cancel: "Cancel",
+      save: "Save",
+      delete: "Delete item",
+      decreaseQuantity: "Decrease quantity",
+      increaseQuantity: "Increase quantity",
+      packType: "Pack type"
+    },
+    personalization: {
+      error: "Personalization Error",
+      maxLengthShirt: "For shirts, personalization is limited to 4 characters maximum",
+      characterLimit: "Character limit reached",
+      maxLengthOther: "Personalization is limited to 100 characters"
+    },
+    provider: {
+      packRemoved: "Pack removed",
+      packRemovedDesc: "The pack and all its items have been removed from the cart",
+      newsletterUsed: "Newsletter discount already used",
+      newsletterUsedDesc: "This email has already used the newsletter discount"
     }
   }
 }

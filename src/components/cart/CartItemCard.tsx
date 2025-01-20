@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { savePersonalization } from '@/utils/personalizationStorage';
 import { toast } from "@/hooks/use-toast";
+import { useTranslation } from 'react-i18next';
 
 interface CartItemCardProps {
   item: CartItem;
@@ -15,6 +16,7 @@ interface CartItemCardProps {
 }
 
 const CartItemCard = ({ item, onUpdateQuantity, onRemove }: CartItemCardProps) => {
+  const { t } = useTranslation();
   const [isPersonalizationOpen, setIsPersonalizationOpen] = useState(false);
   const [personalizationText, setPersonalizationText] = useState(item.personalization || '');
   const packType = sessionStorage.getItem('selectedPackType') || 'aucun';
@@ -31,8 +33,8 @@ const CartItemCard = ({ item, onUpdateQuantity, onRemove }: CartItemCardProps) =
   const handleSavePersonalization = () => {
     if (isChemise && personalizationText.length > 4) {
       toast({
-        title: "Erreur de personnalisation",
-        description: "Pour les chemises, la personnalisation est limitée à 4 caractères maximum",
+        title: t('cart.personalization.error'),
+        description: t('cart.personalization.maxLengthShirt'),
         variant: "destructive",
       });
       return;
@@ -48,10 +50,10 @@ const CartItemCard = ({ item, onUpdateQuantity, onRemove }: CartItemCardProps) =
       setPersonalizationText(newText);
     } else {
       toast({
-        title: "Limite de caractères atteinte",
+        title: t('cart.personalization.characterLimit'),
         description: isChemise 
-          ? "La personnalisation est limitée à 4 caractères pour les chemises"
-          : "La personnalisation est limitée à 100 caractères",
+          ? t('cart.personalization.maxLengthShirt')
+          : t('cart.personalization.maxLengthOther'),
         variant: "destructive",
       });
     }
@@ -93,13 +95,13 @@ const CartItemCard = ({ item, onUpdateQuantity, onRemove }: CartItemCardProps) =
               {item.withBox && (
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-[#700100]/10 text-[#700100] whitespace-nowrap">
                   <Gift size={12} />
-                  + Box cadeau (30 TND)
+                  {t('cart.itemCard.giftBox')}
                 </span>
               )}
               {showPersonalizationCost && (
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-[#700100]/10 text-[#700100] whitespace-nowrap">
                   <PenLine size={12} />
-                  + Personnalisation (30 TND)
+                  {t('cart.itemCard.personalizationCost')}
                 </span>
               )}
             </div>
@@ -109,27 +111,22 @@ const CartItemCard = ({ item, onUpdateQuantity, onRemove }: CartItemCardProps) =
             <div className="flex flex-wrap gap-2 mb-2">
               {item.size !== '-' && (
                 <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 whitespace-nowrap">
-                  Taille: {item.size}
+                  {t('cart.itemCard.size')}: {item.size}
                 </span>
               )}
               {item.color !== '-' && (
                 <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 whitespace-nowrap">
-                  Couleur: {item.color}
+                  {t('cart.itemCard.color')}: {item.color}
                 </span>
               )}
             </div>
           )}
 
           {!isPackagingFee && item.personalization && item.personalization !== '-' && (
-           /*  onClick={() => setIsPersonalizationOpen(true)} */
-            <div className="mb-2 bg-gray-50 p-3 rounded-lg relative group cursor-pointer" >
+            <div className="mb-2 bg-gray-50 p-3 rounded-lg relative group cursor-pointer">
               <p className="text-sm text-gray-600 pr-8">
-                Personnalisation: {item.personalization}
+                {t('cart.itemCard.personalization')}: {item.personalization}
               </p>
-             {/*  <PenLine 
-                size={16} 
-                className="absolute right-2 top-2 text-[#700100] opacity-0 group-hover:opacity-100 transition-opacity"
-              /> */}
             </div>
           )}
 
@@ -138,7 +135,7 @@ const CartItemCard = ({ item, onUpdateQuantity, onRemove }: CartItemCardProps) =
               <button
                 onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}
                 className="text-[#8E9196] hover:text-[#700100] transition-colors p-1"
-                aria-label="Diminuer la quantité"
+                aria-label={t('cart.itemCard.decreaseQuantity')}
               >
                 <MinusCircle size={18} />
               </button>
@@ -146,7 +143,7 @@ const CartItemCard = ({ item, onUpdateQuantity, onRemove }: CartItemCardProps) =
               <button
                 onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
                 className="text-[#8E9196] hover:text-[#700100] transition-colors p-1"
-                aria-label="Augmenter la quantité"
+                aria-label={t('cart.itemCard.increaseQuantity')}
               >
                 <PlusCircle size={18} />
               </button>
@@ -169,7 +166,7 @@ const CartItemCard = ({ item, onUpdateQuantity, onRemove }: CartItemCardProps) =
               <button
                 onClick={() => onRemove(item.id)}
                 className="text-[#8E9196] hover:text-red-600 transition-colors group p-1"
-                aria-label="Supprimer l'article"
+                aria-label={t('cart.itemCard.delete')}
               >
                 <Trash2 size={18} className="group-hover:scale-110 transition-transform" />
               </button>
@@ -183,21 +180,21 @@ const CartItemCard = ({ item, onUpdateQuantity, onRemove }: CartItemCardProps) =
           <DialogContent className="sm:max-w-[500px] bg-white shadow-xl border border-gray-100">
             <DialogHeader>
               <DialogTitle className="text-xl font-serif text-[#700100] mb-4 text-center">
-                Modifier la personnalisation
+                {t('cart.itemCard.editPersonalization')}
               </DialogTitle>
             </DialogHeader>
             <div className="space-y-6 p-6 bg-white">
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
-                  <label className="text-sm font-medium text-gray-700">Votre texte de personnalisation</label>
+                  <label className="text-sm font-medium text-gray-700">{t('cart.itemCard.yourText')}</label>
                   <span className={`text-sm ${remainingChars === 0 ? 'text-red-500' : 'text-gray-500'}`}>
-                    {remainingChars} caractères restants
+                    {remainingChars} {t('cart.itemCard.charactersLeft')}
                   </span>
                 </div>
                 <Textarea
                   placeholder={isChemise 
                     ? "Maximum 4 caractères (ex: IHEB)"
-                    : "Ajoutez votre texte personnalisé ici..."}
+                    : t('cart.itemCard.maxCharsOther')}
                   value={personalizationText}
                   onChange={handlePersonalizationChange}
                   maxLength={maxLength}
@@ -205,8 +202,8 @@ const CartItemCard = ({ item, onUpdateQuantity, onRemove }: CartItemCardProps) =
                 />
                 <p className="text-sm text-gray-500 italic">
                   {isChemise 
-                    ? "Pour les chemises, la personnalisation est limitée à 4 caractères"
-                    : "Maximum 100 caractères"}
+                    ? t('cart.itemCard.maxCharsShirt')
+                    : t('cart.itemCard.maxCharsOther')}
                 </p>
               </div>
               
@@ -216,13 +213,13 @@ const CartItemCard = ({ item, onUpdateQuantity, onRemove }: CartItemCardProps) =
                   variant="outline"
                   className="flex-1 border-2 border-gray-300 bg-[#fff] hover:bg-[#590000] text-gray-700 transition-all duration-300"
                 >
-                  Annuler
+                  {t('cart.itemCard.cancel')}
                 </Button>
                 <Button
                   onClick={handleSavePersonalization}
                   className="flex-1 bg-[#700100] hover:bg-[#590000] text-white transition-all duration-300"
                 >
-                  Enregistrer
+                  {t('cart.itemCard.save')}
                 </Button>
               </div>
             </div>

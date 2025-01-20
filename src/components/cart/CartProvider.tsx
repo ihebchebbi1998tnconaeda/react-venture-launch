@@ -11,6 +11,7 @@ import {
   findExistingItem, 
   prepareItemForCart 
 } from '@/utils/cartItemManagement';
+import { useTranslation } from 'react-i18next';
 
 export interface CartItem {
   id: number;
@@ -33,6 +34,7 @@ export interface CartItem {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
+  const { t } = useTranslation();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [hasNewsletterDiscount, setHasNewsletterDiscount] = useState<boolean>(() => {
     return localStorage.getItem('newsletterSubscribed') === 'true';
@@ -99,8 +101,8 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
           });
           
           toast({
-            title: "Pack supprimé",
-            description: "Le pack et tous ses articles ont été supprimés du panier",
+            title: t('cart.provider.packRemoved'),
+            description: t('cart.provider.packRemovedDesc'),
             style: {
               backgroundColor: '#700100',
               color: 'white',
@@ -142,6 +144,15 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     if (usedDiscountEmails.includes(subscribedEmail)) {
       setHasNewsletterDiscount(false);
       localStorage.removeItem('newsletterSubscribed');
+      toast({
+        title: t('cart.provider.newsletterUsed'),
+        description: t('cart.provider.newsletterUsedDesc'),
+        style: {
+          backgroundColor: '#700100',
+          color: 'white',
+          border: '1px solid #590000',
+        },
+      });
       return;
     }
 
