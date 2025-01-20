@@ -91,5 +91,55 @@ export default {
       thankYou: "Thank you for your review!",
       feedback: "Your feedback is very important to us."
     }
+  },
+  packs: {
+    prestige: {
+      title: "The Prestige Pack",
+      description: "The Prestige Pack is more than just a gift: it's an experience of elegance and refinement. This pack includes a customizable shirt where you can add your name or a unique message, a wallet, and a leather belt."
+    },
+    premium: {
+      title: "The Premium Pack",
+      description: "The Premium Pack is an invitation to combine style and practicality. This pack contains an elegant tie, a quality leather wallet, and a matching belt. Add a personal touch with a name or message to make this gift unforgettable."
+    },
+    trio: {
+      title: "The Trio Pack",
+      description: "The Trio Pack is the ideal combination of elegance and functionality. This pack contains a premium leather wallet, a sophisticated belt, and a refined key holder. Personalize your items to make it an exceptional gift."
+    },
+    duo: {
+      title: "The Duo Pack",
+      description: "The Duo Pack is a perfect alliance of simplicity and elegance. This pack contains a premium leather wallet and an elegant belt. Offer a unique gift by personalizing it with a name or message."
+    },
+    miniDuo: {
+      title: "The Mini Duo Pack",
+      description: "Compact and elegant, the Mini Duo Pack is an ideal gift. It includes a refined leather wallet and a sophisticated belt. Add a personalized engraving for a unique touch."
+    },
+    chemise: {
+      title: "The Shirt Pack",
+      description: "The Shirt Pack offers an exclusive selection of exceptional quality shirts. Each shirt is chosen for its timeless style and finesse. Add your personal touch for a unique gift."
+    },
+    ceinture: {
+      title: "The Belt Pack",
+      description: "Explore our Belt Pack, a collection of elegant belts carefully crafted to combine style and durability. Personalize them with a unique engraving for a sophisticated presentation."
+    },
+    cravatte: {
+      title: "The Tie Pack",
+      description: "The Tie Pack presents an exquisite collection of timeless ties. Each piece is chosen for its exceptional quality and style. Personalize your choice for an unforgettable gift."
+    },
+    malette: {
+      title: "The Briefcase Pack",
+      description: "The Briefcase Pack offers a premium selection of briefcases with elegant and professional design. Perfect for combining style and practicality, each briefcase can be personalized for a memorable gift."
+    },
+    portefeuille: {
+      title: "The Wallet Pack",
+      description: "The Wallet Pack is a selection of items carefully crafted to meet all your expectations in terms of style and practicality. Personalize them for a distinctive gift."
+    },
+    porteCarte: {
+      title: "The Card Holder Pack",
+      description: "Discover the Card Holder Pack, an elegant and practical collection. Each card holder is carefully designed and can be personalized for a unique gift."
+    },
+    porteCle: {
+      title: "The Key Holder Pack",
+      description: "The Key Holder Pack offers a refined range of practical and elegant accessories. Add a personal engraving for a unique presentation."
+    }
   }
 };
