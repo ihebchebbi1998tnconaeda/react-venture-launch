@@ -28,8 +28,19 @@ const ImageUploader = ({ canvas, onImageUpload }: ImageUploaderProps) => {
       }).then((fabricImage) => {
         if (fabricImage) {
           fabricImage.scaleToWidth(150);
-          canvas.centerObject(fabricImage);
+          fabricImage.set({
+            left: canvas.width! / 2,
+            top: canvas.height! / 2,
+            originX: 'center',
+            originY: 'center',
+            cornerColor: 'rgba(102,153,255,0.5)',
+            cornerSize: 12,
+            transparentCorners: false,
+            hasControls: true,
+            hasBorders: true,
+          });
           canvas.add(fabricImage);
+          canvas.setActiveObject(fabricImage);
           canvas.renderAll();
           
           onImageUpload({
@@ -37,13 +48,17 @@ const ImageUploader = ({ canvas, onImageUpload }: ImageUploaderProps) => {
             url: e.target.result as string,
             name: file.name
           });
-          
-          toast.success("Image ajoutée au design !");
         }
-      }).catch(console.error);
+      }).catch(error => {
+        console.error('Error loading image:', error);
+        toast.error("Erreur lors du chargement de l'image");
+      });
     };
 
     reader.readAsDataURL(file);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   return (

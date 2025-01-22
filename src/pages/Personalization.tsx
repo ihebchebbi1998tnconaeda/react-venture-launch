@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import { Canvas, Text } from "fabric";
+import { Canvas, Text, Image as FabricImage } from "fabric";
 import { Card } from "@/components/ui/card";
 import { Image, Move, Palette } from "lucide-react";
 import DesignTools from "@/components/personalization/DesignTools";
 import ImageUploader from "@/components/personalization/ImageUploader";
 import UploadedImagesList from "@/components/personalization/UploadedImagesList";
 import ActionButtons from "@/components/personalization/ActionButtons";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { toast } from "sonner";
 
 interface UploadedImage {
   id: string;
@@ -32,14 +34,19 @@ const Personalization = () => {
   const [selectedFont, setSelectedFont] = useState("Montserrat");
   const [activeText, setActiveText] = useState<Text | null>(null);
   const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([]);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (!canvasRef.current) return;
 
+    const canvasWidth = isMobile ? window.innerWidth - 32 : 500;
+    const canvasHeight = isMobile ? window.innerHeight * 0.5 : 600;
+
     const fabricCanvas = new Canvas(canvasRef.current, {
-      width: 500,
-      height: 600,
+      width: canvasWidth,
+      height: canvasHeight,
       backgroundColor: "#f8f9fa",
+      preserveObjectStacking: true,
     });
 
     // Add placeholder text
@@ -58,13 +65,40 @@ const Personalization = () => {
     fabricCanvas.add(placeholderText);
     fabricCanvas.renderAll();
 
-    fabricCanvas.set('allowTouchScrolling', true);
+    fabricCanvas.on('object:modified', (e) => {
+      const obj = e.target;
+      if (obj instanceof Text) {
+        setActiveText(obj);
+      }
+    });
+
+    fabricCanvas.on('selection:created', (e) => {
+      const obj = e.selected?.[0];
+      if (obj instanceof Text) {
+        setActiveText(obj);
+      }
+    });
+
+    fabricCanvas.on('selection:cleared', () => {
+      setActiveText(null);
+    });
+
     setCanvas(fabricCanvas);
+
+    const handleResize = () => {
+      const newWidth = isMobile ? window.innerWidth - 32 : 500;
+      const newHeight = isMobile ? window.innerHeight * 0.5 : 600;
+      fabricCanvas.setDimensions({ width: newWidth, height: newHeight });
+      fabricCanvas.renderAll();
+    };
+
+    window.addEventListener('resize', handleResize);
 
     return () => {
       fabricCanvas.dispose();
+      window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
     if (!canvas) return;
@@ -114,26 +148,17 @@ const Personalization = () => {
     canvas.renderAll();
   }, [text, canvas]);
 
-  useEffect(() => {
-    fonts.forEach(font => {
-      const link = document.createElement('link');
-      link.href = `https://fonts.googleapis.com/css2?family=${font.value.replace(' ', '+')}:wght@400;700&display=swap`;
-      link.rel = 'stylesheet';
-      document.head.appendChild(link);
-    });
-  }, []);
-
   return (
-    <div className="container mx-auto py-12 px-4">
+    <div className="container mx-auto py-6 px-4 lg:py-12">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-primary mb-2">Personnalisation</h1>
+        <div className="mb-6 lg:mb-8">
+          <h1 className="text-3xl lg:text-4xl font-bold text-primary mb-2">Personnalisation</h1>
           <p className="text-gray-600">Créez votre design unique en quelques clics</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <div className="lg:col-span-3 space-y-6">
-            <Card className="p-6 space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-8">
+          <div className="lg:col-span-3 space-y-4 lg:space-y-6">
+            <Card className="p-4 lg:p-6 space-y-4 lg:space-y-6">
               <div>
                 <h2 className="text-xl font-semibold flex items-center gap-2 mb-4">
                   <Palette className="h-5 w-5" />
@@ -155,13 +180,16 @@ const Personalization = () => {
                 <div className="mt-6">
                   <ImageUploader
                     canvas={canvas}
-                    onImageUpload={(image) => setUploadedImages(prev => [...prev, image])}
+                    onImageUpload={(image) => {
+                      setUploadedImages(prev => [...prev, image]);
+                      toast.success("Image ajoutée avec succès !");
+                    }}
                   />
                 </div>
               </div>
             </Card>
 
-            <Card className="p-6 space-y-4">
+            <Card className="p-4 lg:p-6 space-y-4">
               <h2 className="text-xl font-semibold flex items-center gap-2">
                 <Move className="h-5 w-5" />
                 Actions
@@ -170,21 +198,62 @@ const Personalization = () => {
             </Card>
           </div>
 
-          <div className="lg:col-span-6">
-            <Card className="p-6">
-              <div className="aspect-[5/6] w-full flex items-center justify-center bg-gray-50 rounded-lg overflow-hidden">
-                <canvas ref={canvasRef} className="max-w-full shadow-lg touch-manipulation" />
+          <div className="lg:col-span-6 order-first lg:order-none">
+            <Card className="p-4 lg:p-6">
+              <div className="w-full flex items-center justify-center bg-gray-50 rounded-lg overflow-hidden">
+                <canvas 
+                  ref={canvasRef} 
+                  className="max-w-full touch-manipulation shadow-lg"
+                />
               </div>
             </Card>
           </div>
 
           <div className="lg:col-span-3">
-            <Card className="p-6">
+            <Card className="p-4 lg:p-6">
               <h2 className="text-xl font-semibold flex items-center gap-2 mb-4">
                 <Image className="h-5 w-5" />
                 Images Téléchargées
               </h2>
-              <UploadedImagesList images={uploadedImages} />
+              <UploadedImagesList 
+                images={uploadedImages} 
+                onImageClick={(image) => {
+                  if (!canvas) return;
+                  FabricImage.fromURL(image.url, {
+                    crossOrigin: 'anonymous',
+                  }).then((fabricImage) => {
+                    if (fabricImage) {
+                      fabricImage.scaleToWidth(150);
+                      fabricImage.set({
+                        left: canvas.width! / 2,
+                        top: canvas.height! / 2,
+                        originX: 'center',
+                        originY: 'center',
+                        cornerColor: 'rgba(102,153,255,0.5)',
+                        cornerSize: 12,
+                        transparentCorners: false,
+                        hasControls: true,
+                        hasBorders: true,
+                      });
+                      canvas.add(fabricImage);
+                      canvas.setActiveObject(fabricImage);
+                      canvas.renderAll();
+                    }
+                  });
+                }}
+                onOpacityChange={(image, opacity) => {
+                  if (!canvas) return;
+                  const obj = canvas.getObjects().find(
+                    (obj): obj is FabricImage => 
+                      obj instanceof FabricImage && 
+                      obj.getSrc() === image.url
+                  );
+                  if (obj) {
+                    obj.set('opacity', opacity);
+                    canvas.renderAll();
+                  }
+                }}
+              />
             </Card>
           </div>
         </div>
