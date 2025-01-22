@@ -13,7 +13,7 @@ export interface CartItem {
   withBox?: boolean;
   discount_product?: string;
   type_product?: string;
-  itemgroup_product: string;  // Made required
+  itemgroup_product: string;  // Required field
 }
 
 export interface CartContextType {

@@ -76,7 +76,8 @@ const ProductDetailModal = ({ isOpen, onClose, product }: ProductDetailModalProp
       size: selectedSize,
       color: product.color,
       personalization: personalization,
-      withBox: selectedBoxOption || false
+      withBox: selectedBoxOption || false,
+      itemgroup_product: product.itemgroup_product
     });
 
     playTickSound();

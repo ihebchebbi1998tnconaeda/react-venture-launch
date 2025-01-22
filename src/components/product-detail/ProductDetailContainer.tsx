@@ -15,7 +15,6 @@ import { canItemBePersonalized, getPersonalizationMessage } from '@/utils/person
 import { getPersonalizations } from '@/utils/personalizationStorage';
 import { calculateFinalPrice } from '@/utils/productStorage';
 import { needsSizeSelection, getDefaultSize } from '@/utils/sizeUtils';
-import { useInView } from 'react-intersection-observer';
 
 interface ProductDetailContainerProps {
   product: Product;
@@ -91,7 +90,7 @@ const ProductDetailContainer = ({ product, onProductAdded }: ProductDetailContai
       personalization: personalizationText,
       withBox: withBox,
       discount_product: product.discount_product,
-      itemgroup_product: product.itemgroup_product // Added this required field
+      itemgroup_product: product.itemgroup_product
     });
 
     onProductAdded?.(product.name);
