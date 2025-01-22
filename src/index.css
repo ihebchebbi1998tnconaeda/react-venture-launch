@@ -1,197 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: 'WomanFontRegular';
-  src: url('/public/Fonts/WomanFontRegular.otf') format('opentype');
-}
-
 @layer base {
   :root {
-    --background: 0 0% 11%;
-    --foreground: 0 0% 100%;
-    --card: 0 0% 11%;
-    --card-foreground: 0 0% 100%;
-    --popover: 0 0% 11%;
-    --popover-foreground: 0 0% 100%;
-    --primary: 0 100% 22%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 13%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 0 0% 13%;
-    --muted-foreground: 0 0% 64%;
-    --accent: 51 100% 50%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 100% 22%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 13%;
-    --input: 0 0% 13%;
-    --ring: 0 100% 22%;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 20%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 20%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 20%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 224 71.4% 4.1%;
     --radius: 0.5rem;
   }
 
-  html, body {
-    @apply overflow-x-hidden;
-    width: 100%;
-    position: relative;
-    -webkit-tap-highlight-color: transparent;
-  }
-}
-
-@layer base {
   * {
-    @apply border-border;
-    font-family: 'WomanFontRegular', sans-serif;
-    font-weight: 300;
-    -webkit-tap-highlight-color: transparent !important;
-    -webkit-touch-callout: none !important;
-    -webkit-user-select: none !important;
-    user-select: none !important;
+    border-color: hsl(var(--border));
   }
+
   body {
-    @apply bg-background text-foreground m-0 p-0;
+    @apply bg-background text-foreground font-body;
   }
+
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'WomanFontBold', serif;
-  }
-
-  /* Specific styles for navigation components */
-  nav, 
-  .mainNavbar, 
-  .navbarProducts,
-  [class*="NavigationMenu"],
-  [class*="NavigationMenuItem"],
-  [class*="NavigationMenuTrigger"],
-  [class*="NavigationMenuContent"] {
-    font-family: 'WomanFontRegular', sans-serif !important;
-  }
-
-  /* Remove all hover effects and highlights globally */
-  a,
-  button,
-  [role="button"],
-  [role="link"],
-  .nav-link,
-  .NavigationMenuTrigger,
-  .NavigationMenuItem,
-  .NavigationMenuContent,
-  .NavigationMenuLink,
-  input[type="button"],
-  input[type="submit"],
-  .clickable,
-  .interactive {
-    -webkit-tap-highlight-color: transparent !important;
-    -webkit-touch-callout: none !important;
-    outline: none !important;
-    user-select: none !important;
-  }
-
-  /* Remove focus outline */
-  *:focus {
-    outline: none !important;
-  }
-
-  /* Remove touch highlight color on mobile */
-  * {
-    -webkit-tap-highlight-color: transparent !important;
-  }
-
-  /* Prevent text selection */
-  .no-select {
-    -webkit-touch-callout: none !important;
-    -webkit-user-select: none !important;
-    user-select: none !important;
-  }
-
-  /* Override any default button styles */
-  button,
-  .button,
-  [role="button"] {
-    -webkit-tap-highlight-color: transparent !important;
-    -webkit-touch-callout: none !important;
-    -webkit-user-select: none !important;
-    user-select: none !important;
-    outline: none !important;
-    cursor: pointer;
-  }
-
-  /* Override hover states */
-  *:hover {
-    -webkit-tap-highlight-color: transparent !important;
+    @apply font-sans font-bold;
   }
 }
 
-.glass-effect {
-  @apply bg-gradient-to-b from-white/20 via-transparent to-white/20 backdrop-blur-md border-t border-b border-white/30 shadow-lg;
-}
-
-.glass-effect {
-  @apply bg-gradient-to-b from-white/15 via-transparent to-white/15 backdrop-blur-sm border-t border-b border-white/20 shadow-lg;
-}
-
-.glass-effectFeedback {
-  @apply bg-gradient-to-b from-white/5 via-transparent to-white/5 backdrop-blur-sm border-t border-b border-white/5 shadow-lg rounded-lg px-8 py-4;
-}
-
-.product-box {
-  @apply bg-secondary p-5 rounded-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-xl;
-}
-
-.nav-item:hover {
-  background-color: transparent;
-  color: black;
-}
-
-@media (max-width: 1024px) {
+@layer components {
   .nav-link {
-    @apply block w-full py-2 text-center;
+    @apply relative text-primary hover:text-primary/80 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full;
   }
-}
-
-.hide-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-@layer base {
-  /* Scrollbar Styles */
-  ::-webkit-scrollbar {
-    width: 12px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: #f1f1f1;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background-color: #700100;
-    border-radius: 10px;
-    border: 3px solid #f1f1f1;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background-color: #b40000;
-  }
-}
-
-/* Google Translate Styles */
-.goog-te-banner-frame {
-  display: none !important;
-}
-
-.goog-te-menu-value {
-  display: none !important;
-}
-
-body {
-  top: 0 !important;
-}
-
-.skiptranslate {
-  display: none !important;
 }
