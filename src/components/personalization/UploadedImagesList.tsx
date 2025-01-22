@@ -27,10 +27,10 @@ const UploadedImagesList = ({
   onDeleteImage,
   canvas 
 }: UploadedImagesListProps) => {
-  const handleDelete = (image: UploadedImage) => {
+  const handleDelete = (image: UploadedImage, e: React.MouseEvent) => {
+    e.stopPropagation();
     if (!canvas) return;
 
-    // Find and remove the image from canvas
     const fabricObject = canvas.getObjects().find(obj => {
       return obj.type === 'image' && (obj as any)._element?.src === image.url;
     });
@@ -46,7 +46,7 @@ const UploadedImagesList = ({
 
   return (
     <ScrollArea className="h-[300px] lg:h-[600px] pr-4">
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {images.map((img) => (
           <div 
             key={img.id}
@@ -65,15 +65,10 @@ const UploadedImagesList = ({
                 <Button 
                   size="icon" 
                   variant="destructive"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDelete(img);
-                  }}
+                  onClick={(e) => handleDelete(img, e)}
+                  className="h-8 w-8"
                 >
                   <X className="h-4 w-4" />
-                </Button>
-                <Button size="icon" variant="secondary">
-                  <RefreshCw className="h-4 w-4" />
                 </Button>
               </div>
             </div>

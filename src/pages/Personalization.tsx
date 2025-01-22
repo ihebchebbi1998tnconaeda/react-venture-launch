@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { Canvas, Text } from "fabric";
 import { Card } from "@/components/ui/card";
-import { Image, Move, Palette } from "lucide-react";
+import { Image, Move, Palette, Trash2 } from "lucide-react";
 import DesignTools from "@/components/personalization/DesignTools";
 import ImageUploader from "@/components/personalization/ImageUploader";
 import UploadedImagesList from "@/components/personalization/UploadedImagesList";
 import ActionButtons from "@/components/personalization/ActionButtons";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 interface UploadedImage {
   id: string;
@@ -35,6 +36,29 @@ const Personalization = () => {
   const [activeText, setActiveText] = useState<Text | null>(null);
   const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([]);
   const isMobile = useIsMobile();
+
+  const handleDeleteActiveObject = () => {
+    if (!canvas) return;
+    const activeObject = canvas.getActiveObject();
+    if (activeObject) {
+      canvas.remove(activeObject);
+      canvas.renderAll();
+      
+      // If it's an image, remove it from uploadedImages
+      if (activeObject.type === 'image') {
+        const imageUrl = (activeObject as any)._element?.src;
+        setUploadedImages(prev => prev.filter(img => img.url !== imageUrl));
+      }
+      
+      // If it's text, clear the text state
+      if (activeObject.type === 'text') {
+        setText('');
+        setActiveText(null);
+      }
+      
+      toast.success("Élément supprimé !");
+    }
+  };
 
   const handleDeleteImage = (imageToDelete: UploadedImage) => {
     setUploadedImages(prev => prev.filter(img => img.id !== imageToDelete.id));
@@ -153,7 +177,7 @@ const Personalization = () => {
   }, [text, canvas]);
 
   return (
-    <div className="container mx-auto py-6 px-4 lg:py-12">
+    <div className="container mx-auto py-6 px-4 lg:py-12 max-w-[100vw] overflow-x-hidden">
       <div className="max-w-7xl mx-auto">
         <div className="mb-6 lg:mb-8">
           <h1 className="text-3xl lg:text-4xl font-bold text-primary mb-2">Personnalisation</h1>
@@ -180,6 +204,17 @@ const Personalization = () => {
                   canvas={canvas}
                   fonts={fonts}
                 />
+
+                <div className="mt-4">
+                  <Button
+                    variant="destructive"
+                    onClick={handleDeleteActiveObject}
+                    className="w-full"
+                  >
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    Supprimer l'élément sélectionné
+                  </Button>
+                </div>
 
                 <div className="mt-6">
                   <ImageUploader
