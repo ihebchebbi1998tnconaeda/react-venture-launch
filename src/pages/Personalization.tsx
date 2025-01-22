@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Canvas, Text, Image as FabricImage } from "fabric";
+import { Canvas, Text } from "fabric";
 import { Card } from "@/components/ui/card";
 import { Image, Move, Palette } from "lucide-react";
 import DesignTools from "@/components/personalization/DesignTools";
@@ -35,6 +35,10 @@ const Personalization = () => {
   const [activeText, setActiveText] = useState<Text | null>(null);
   const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([]);
   const isMobile = useIsMobile();
+
+  const handleDeleteImage = (imageToDelete: UploadedImage) => {
+    setUploadedImages(prev => prev.filter(img => img.id !== imageToDelete.id));
+  };
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -216,43 +220,29 @@ const Personalization = () => {
                 Images Téléchargées
               </h2>
               <UploadedImagesList 
-                images={uploadedImages} 
+                images={uploadedImages}
+                canvas={canvas}
                 onImageClick={(image) => {
                   if (!canvas) return;
-                  FabricImage.fromURL(image.url, {
-                    crossOrigin: 'anonymous',
-                  }).then((fabricImage) => {
-                    if (fabricImage) {
-                      fabricImage.scaleToWidth(150);
-                      fabricImage.set({
-                        left: canvas.width! / 2,
-                        top: canvas.height! / 2,
-                        originX: 'center',
-                        originY: 'center',
-                        cornerColor: 'rgba(102,153,255,0.5)',
-                        cornerSize: 12,
-                        transparentCorners: false,
-                        hasControls: true,
-                        hasBorders: true,
-                      });
-                      canvas.add(fabricImage);
-                      canvas.setActiveObject(fabricImage);
-                      canvas.renderAll();
-                    }
-                  });
+                  const obj = canvas.getObjects().find(
+                    obj => obj.type === 'image' && (obj as any)._element?.src === image.url
+                  );
+                  if (obj) {
+                    canvas.setActiveObject(obj);
+                    canvas.renderAll();
+                  }
                 }}
                 onOpacityChange={(image, opacity) => {
                   if (!canvas) return;
                   const obj = canvas.getObjects().find(
-                    (obj): obj is FabricImage => 
-                      obj instanceof FabricImage && 
-                      obj.getSrc() === image.url
+                    obj => obj.type === 'image' && (obj as any)._element?.src === image.url
                   );
                   if (obj) {
                     obj.set('opacity', opacity);
                     canvas.renderAll();
                   }
                 }}
+                onDeleteImage={handleDeleteImage}
               />
             </Card>
           </div>
