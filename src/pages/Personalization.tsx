@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Canvas } from "fabric";
+import { Canvas, Text } from "fabric";
 import { Card } from "@/components/ui/card";
 import { Image, Move, Palette } from "lucide-react";
 import DesignTools from "@/components/personalization/DesignTools";
@@ -30,7 +30,7 @@ const Personalization = () => {
   const [fontSize, setFontSize] = useState([16]);
   const [textColor, setTextColor] = useState("#000000");
   const [selectedFont, setSelectedFont] = useState("Montserrat");
-  const [activeText, setActiveText] = useState<fabric.Text | null>(null);
+  const [activeText, setActiveText] = useState<Text | null>(null);
   const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([]);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const Personalization = () => {
     });
 
     // Add placeholder text
-    const placeholderText = new fabric.Text("Tapez votre texte ici...", {
+    const placeholderText = new Text("Tapez votre texte ici...", {
       left: fabricCanvas.width! / 2,
       top: fabricCanvas.height! / 2,
       fontSize: 20,
@@ -70,12 +70,12 @@ const Personalization = () => {
     if (!canvas) return;
 
     // Clear existing text objects
-    const existingTexts = canvas.getObjects().filter(obj => obj instanceof fabric.Text);
+    const existingTexts = canvas.getObjects().filter(obj => obj instanceof Text);
     existingTexts.forEach(textObj => canvas.remove(textObj));
 
     if (text) {
       // If there's user input, add the actual text
-      const fabricText = new fabric.Text(text, {
+      const fabricText = new Text(text, {
         left: canvas.width! / 2,
         top: canvas.height! / 2,
         fontSize: fontSize[0],
@@ -97,7 +97,7 @@ const Personalization = () => {
       setActiveText(fabricText);
     } else {
       // If no text, show placeholder
-      const placeholderText = new fabric.Text("Tapez votre texte ici...", {
+      const placeholderText = new Text("Tapez votre texte ici...", {
         left: canvas.width! / 2,
         top: canvas.height! / 2,
         fontSize: 20,
