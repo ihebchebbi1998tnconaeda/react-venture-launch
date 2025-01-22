@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { fabric } from "fabric";
+import { Canvas, Text } from "fabric";
 import { toast } from "sonner";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
@@ -14,8 +14,8 @@ interface DesignToolsProps {
   setSelectedFont: (font: string) => void;
   textColor: string;
   setTextColor: (color: string) => void;
-  activeText: fabric.Text | null;
-  canvas: fabric.Canvas | null;
+  activeText: Text | null;
+  canvas: Canvas | null;
   fonts: Array<{ name: string; value: string }>;
 }
 

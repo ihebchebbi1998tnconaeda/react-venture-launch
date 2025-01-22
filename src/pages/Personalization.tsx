@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { fabric } from "fabric";
+import { Canvas } from "fabric";
 import { Card } from "@/components/ui/card";
 import { Image, Move, Palette } from "lucide-react";
 import DesignTools from "@/components/personalization/DesignTools";
@@ -25,7 +25,7 @@ const fonts = [
 
 const Personalization = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
+  const [canvas, setCanvas] = useState<Canvas | null>(null);
   const [text, setText] = useState("");
   const [fontSize, setFontSize] = useState([16]);
   const [textColor, setTextColor] = useState("#000000");
@@ -36,7 +36,7 @@ const Personalization = () => {
   useEffect(() => {
     if (!canvasRef.current) return;
 
-    const fabricCanvas = new fabric.Canvas(canvasRef.current, {
+    const fabricCanvas = new Canvas(canvasRef.current, {
       width: 500,
       height: 600,
       backgroundColor: "#f8f9fa",
