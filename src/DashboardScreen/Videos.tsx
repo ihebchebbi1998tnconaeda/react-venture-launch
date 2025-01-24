@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -6,9 +6,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { Progress } from '@/components/ui/progress';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
-import { Upload, FileVideo, Image as ImageIcon, X } from 'lucide-react';
+import { Upload, FileVideo, Image as ImageIcon, X, AlertTriangle } from 'lucide-react';
 import { ChapterSelect } from '@/components/video-upload/ChapterSelect';
 import { compressVideo, compressImage, formatFileSize } from '@/utils/compression';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 interface VideosProps {
   user: {
@@ -21,6 +22,8 @@ interface VideosProps {
 interface FileWithPreview extends File {
   preview?: string;
 }
+
+const MAX_TOTAL_SIZE = 400 * 1024 * 1024; // 400MB in bytes
 
 const Videos: React.FC<VideosProps> = ({ user }) => {
   const [title, setTitle] = useState('');
@@ -35,7 +38,26 @@ const Videos: React.FC<VideosProps> = ({ user }) => {
   const [isCompressing, setIsCompressing] = useState(false);
   const [originalSize, setOriginalSize] = useState<number | null>(null);
   const [compressedSize, setCompressedSize] = useState<number | null>(null);
+  const [totalFileSize, setTotalFileSize] = useState(0);
   const { toast } = useToast();
+
+  useEffect(() => {
+    // Calculate total size whenever files change
+    const videoSize = videoFile?.size || 0;
+    const thumbnailSize = thumbnailFile?.size || 0;
+    const newTotalSize = videoSize + thumbnailSize;
+    setTotalFileSize(newTotalSize);
+
+    // Auto-enable compression if total size exceeds 400MB
+    if (newTotalSize > MAX_TOTAL_SIZE && !enableCompression) {
+      setEnableCompression(true);
+      toast({
+        title: "Compression automatique activée",
+        description: `La taille totale des fichiers (${formatFileSize(newTotalSize)}) dépasse 400MB. La compression a été activée automatiquement.`,
+        duration: 5000,
+      });
+    }
+  }, [videoFile, thumbnailFile]);
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -62,7 +84,20 @@ const Videos: React.FC<VideosProps> = ({ user }) => {
       return;
     }
 
-    if (enableCompression) {
+    // Calculate new total size
+    const otherFileSize = type === 'video' ? (thumbnailFile?.size || 0) : (videoFile?.size || 0);
+    const newTotalSize = file.size + otherFileSize;
+
+    if (newTotalSize > MAX_TOTAL_SIZE && !enableCompression) {
+      setEnableCompression(true);
+      toast({
+        title: "Compression automatique activée",
+        description: `La taille totale des fichiers (${formatFileSize(newTotalSize)}) dépasse 400MB. La compression a été activée automatiquement.`,
+        duration: 5000,
+      });
+    }
+
+    if (enableCompression || newTotalSize > MAX_TOTAL_SIZE) {
       setIsCompressing(true);
       try {
         setOriginalSize(file.size);
@@ -188,9 +223,22 @@ const Videos: React.FC<VideosProps> = ({ user }) => {
               <Switch
                 checked={enableCompression}
                 onCheckedChange={setEnableCompression}
+                disabled={totalFileSize > MAX_TOTAL_SIZE}
               />
             </div>
           </div>
+          
+          {totalFileSize > 0 && (
+            <Alert variant={totalFileSize > MAX_TOTAL_SIZE ? "destructive" : "default"}>
+              <AlertTriangle className="h-4 w-4" />
+              <AlertTitle>Taille totale des fichiers</AlertTitle>
+              <AlertDescription>
+                {formatFileSize(totalFileSize)}
+                {totalFileSize > MAX_TOTAL_SIZE && " - Compression automatique activée"}
+              </AlertDescription>
+            </Alert>
+          )}
+
           <p className="text-sm text-muted-foreground">
             Partagez votre contenu avec votre audience. Téléchargez des vidéos et personnalisez leurs détails.
           </p>
