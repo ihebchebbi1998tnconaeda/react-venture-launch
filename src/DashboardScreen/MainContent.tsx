@@ -115,11 +115,11 @@ const MainContent: React.FC<MainContentProps> = ({ user }) => {
   };
 
   return (
-    <div className="p-6 mt-16">
+    <div className="p-6 mt-16" dir="rtl">
       {loading ? (
         <div className="flex flex-col items-center justify-center min-h-[60vh]">
           <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-          <p className="mt-4 text-muted-foreground">Chargement des vidéos...</p>
+          <p className="mt-4 text-muted-foreground">تحميل الفيديوهات...</p>
         </div>
       ) : error ? (
         <div className="text-red-500 text-center p-4">{error}</div>
@@ -128,10 +128,11 @@ const MainContent: React.FC<MainContentProps> = ({ user }) => {
           <div className="mb-6">
             <input
               type="text"
-              placeholder="Rechercher des vidéos..."
+              placeholder="البحث عن الفيديوهات..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full max-w-md px-4 py-2 rounded-lg bg-dashboard-card border border-border/40 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full max-w-md px-4 py-2 rounded-lg bg-dashboard-card border border-border/40 focus:outline-none focus:ring-2 focus:ring-primary text-black"
+              dir="rtl"
             />
           </div>
 
@@ -155,15 +156,15 @@ const MainContent: React.FC<MainContentProps> = ({ user }) => {
                         e.stopPropagation();
                         openDeleteModal(video.id);
                       }}
-                      title="Supprimer la vidéo"
+                      title="حذف الفيديو"
                     >
                       <XCircle className="w-5 h-5 text-white" />
                     </button>
                   )}
                 </div>
                 <div className="p-4">
-                  <h3 className="font-semibold mb-2">{video.title}</h3>
-                  <p className="text-sm text-muted-foreground">{video.description}</p>
+                  <h3 className="font-semibold mb-2 text-black">{video.title}</h3>
+                  <p className="text-sm text-black">{video.description}</p>
                 </div>
               </div>
             ))}

@@ -17,17 +17,17 @@ const Sidebar: React.FC<SidebarProps> = ({ user }) => {
   const location = useLocation();
 
   const menuItems = [
-    { path: '/app/', icon: LayoutDashboard, label: 'Dashboard' },
-    { path: '/app/settings', icon: Settings, label: 'Settings' },
-    { path: '/app/history', icon: History, label: 'History' },
+    { path: '/app/', icon: LayoutDashboard, label: 'Tableau de bord' },
+    { path: '/app/settings', icon: Settings, label: 'Paramètres' },
+    { path: '/app/history', icon: History, label: 'Historique' },
     { path: '/app/clients', icon: Users, label: 'Clients' },
-    { path: '/app/upload', icon: Upload, label: 'Videos' },
+    { path: '/app/upload', icon: Upload, label: 'Vidéos' },
   ];
 
   return (
     <div className="fixed left-0 top-0 h-full w-64 bg-dashboard-sidebar border-r border-border/40 text-gray-600 p-4">
       <div className="mb-8 flex items-center gap-2">
-        <h1 className="text-xl font-bold text-primary">Dashboard</h1>
+        <h1 className="text-xl font-bold text-primary">Tableau de bord</h1>
       </div>
       
       <nav className="space-y-1">
