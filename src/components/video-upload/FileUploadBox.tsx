@@ -2,9 +2,13 @@ import React from 'react';
 import { FileVideo, ImageIcon, X } from 'lucide-react';
 import { formatFileSize } from '@/utils/compression';
 
+interface FileWithPreview extends File {
+  preview?: string;
+}
+
 interface FileUploadBoxProps {
   type: 'video' | 'thumbnail';
-  file: File | null;
+  file: FileWithPreview | null;
   isCompressing: boolean;
   onFileSelect: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onFileRemove?: () => void;
