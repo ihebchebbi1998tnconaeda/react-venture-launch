@@ -10,6 +10,7 @@ import { Upload, FileVideo, Image as ImageIcon, X, AlertTriangle } from 'lucide-
 import { ChapterSelect } from '@/components/video-upload/ChapterSelect';
 import { compressVideo, compressImage, formatFileSize } from '@/utils/compression';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { ChapterManager } from '@/components/video-upload/ChapterManager';
 
 interface VideosProps {
   user: {
@@ -210,7 +211,9 @@ const Videos: React.FC<VideosProps> = ({ user }) => {
   };
 
   return (
-    <div className="p-6 mt-16 max-w-5xl mx-auto">
+    <div className="p-6 mt-16 max-w-5xl mx-auto space-y-6">
+      <ChapterManager />
+      
       <Card className="bg-dashboard-card border-border/40">
         <CardHeader className="space-y-1">
           <div className="flex items-center justify-between">
