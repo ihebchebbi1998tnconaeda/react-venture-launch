@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Progress } from '@/components/ui/progress';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
-import { Upload, FileVideo, Image as ImageIcon, X, AlertTriangle } from 'lucide-react';
-import { ChapterSelect } from '@/components/video-upload/ChapterSelect';
-import { compressVideo, compressImage, formatFileSize } from '@/utils/compression';
+import { Upload, AlertTriangle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { ChapterManager } from '@/components/video-upload/ChapterManager';
+import { VideoUploadForm } from '@/components/video-upload/VideoUploadForm';
+import { compressVideo, compressImage, formatFileSize } from '@/utils/compression';
 
 interface VideosProps {
   user: {
@@ -234,29 +230,6 @@ const Videos: React.FC<VideosProps> = ({ user }) => {
             </div>
           </div>
 
-          {isCompressing && (
-            <div className="mt-4 space-y-2">
-              <div className="flex justify-between text-sm text-muted-foreground">
-                <span>Compression en cours...</span>
-                <span>{compressionProgress.toFixed(0)}%</span>
-              </div>
-              <Progress value={compressionProgress} className="h-2" />
-              {originalSize && (
-                <p className="text-sm text-muted-foreground">
-                  Taille originale: {formatFileSize(originalSize)}
-                  {compressedSize && (
-                    <>
-                      <br />
-                      Taille actuelle: {formatFileSize(compressedSize)}
-                      <br />
-                      Réduction: {((originalSize - compressedSize) / originalSize * 100).toFixed(1)}%
-                    </>
-                  )}
-                </p>
-              )}
-            </div>
-          )}
-
           {totalFileSize > 0 && (
             <Alert variant={totalFileSize > MAX_TOTAL_SIZE ? "destructive" : "default"}>
               <AlertTriangle className="h-4 w-4" />
@@ -271,165 +244,30 @@ const Videos: React.FC<VideosProps> = ({ user }) => {
           <p className="text-sm text-muted-foreground">
             Partagez votre contenu avec votre audience. Téléchargez des vidéos et personnalisez leurs détails.
           </p>
-          {originalSize && (
-            <div className="text-sm text-muted-foreground">
-              <p>Taille originale: {formatFileSize(originalSize)}</p>
-              {compressedSize && (
-                <>
-                  <p>Taille compressée: {formatFileSize(compressedSize)}</p>
-                  <p>Réduction: {((originalSize - compressedSize) / originalSize * 100).toFixed(1)}%</p>
-                </>
-              )}
-            </div>
-          )}
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <ChapterSelect
-              selectedChapter={selectedChapter}
-              selectedSubchapter={selectedSubchapter}
-              onChapterChange={setSelectedChapter}
-              onSubchapterChange={setSelectedSubchapter}
-            />
-
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Titre</label>
-                <Input
-                  type="text"
-                  placeholder="Entrez le titre de la vidéo"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  required
-                  className="bg-dashboard-background border-border/40"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Description</label>
-                <Textarea
-                  placeholder="Entrez la description de la vidéo"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  required
-                  className="bg-dashboard-background border-border/40 min-h-[80px]"
-                />
-              </div>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">
-                  Fichier vidéo
-                  {videoFile && (
-                    <span className="ml-2 text-muted-foreground">
-                      ({formatFileSize(videoFile.size)})
-                    </span>
-                  )}
-                </label>
-                <div 
-                  className={`
-                    border-2 border-dashed border-border/40 rounded-lg p-6 text-center 
-                    cursor-pointer hover:bg-dashboard-background/50 transition-colors
-                    ${videoFile ? 'bg-primary/5 border-primary/40' : ''}
-                    ${isCompressing ? 'opacity-50 cursor-not-allowed' : ''}
-                  `}
-                  onClick={() => !isCompressing && document.getElementById('videoInput')?.click()}
-                >
-                  <FileVideo className="w-8 h-8 mx-auto mb-4 text-muted-foreground" />
-                  <input
-                    type="file"
-                    id="videoInput"
-                    onChange={(e) => handleFileChange(e, 'video')}
-                    accept="video/*"
-                    className="hidden"
-                    disabled={isCompressing}
-                  />
-                  <p className="text-sm text-muted-foreground mb-2">
-                    {isCompressing ? 'Compression en cours...' : 'Déposez la vidéo ici ou cliquez pour parcourir'}
-                  </p>
-                  {videoFile && (
-                    <p className="text-sm text-primary font-medium truncate max-w-[200px] mx-auto">
-                      {videoFile.name}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium">
-                  Image miniature
-                  {thumbnailFile && (
-                    <span className="ml-2 text-muted-foreground">
-                      ({formatFileSize(thumbnailFile.size)})
-                    </span>
-                  )}
-                </label>
-                <div 
-                  className={`
-                    border-2 border-dashed border-border/40 rounded-lg p-6 text-center 
-                    cursor-pointer hover:bg-dashboard-background/50 transition-colors relative
-                    ${thumbnailFile ? 'bg-primary/5 border-primary/40' : ''}
-                    ${isCompressing ? 'opacity-50 cursor-not-allowed' : ''}
-                  `}
-                  onClick={() => !isCompressing && document.getElementById('thumbnailInput')?.click()}
-                >
-                  {thumbnailFile?.preview ? (
-                    <>
-                      <img 
-                        src={thumbnailFile.preview} 
-                        alt="Aperçu de la miniature" 
-                        className="w-32 h-32 object-cover mx-auto rounded-lg"
-                      />
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setThumbnailFile(null);
-                        }}
-                        className="absolute top-2 right-2 p-1 bg-black/50 rounded-full hover:bg-black/70 transition-colors"
-                        disabled={isCompressing}
-                      >
-                        <X className="w-4 h-4 text-white" />
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <ImageIcon className="w-8 h-8 mx-auto mb-4 text-muted-foreground" />
-                      <p className="text-sm text-muted-foreground">
-                        {isCompressing ? 'Compression en cours...' : 'Déposez la miniature ici ou cliquez pour parcourir'}
-                      </p>
-                    </>
-                  )}
-                  <input
-                    type="file"
-                    id="thumbnailInput"
-                    onChange={(e) => handleFileChange(e, 'thumbnail')}
-                    accept="image/*"
-                    className="hidden"
-                    disabled={isCompressing}
-                  />
-                </div>
-              </div>
-            </div>
-
-            {(isUploading || isCompressing) && (
-              <div className="space-y-2">
-                <Progress value={uploadProgress} className="h-2" />
-                <p className="text-sm text-muted-foreground text-center">
-                  {isCompressing ? 'Compression en cours...' : `Téléchargement en cours... ${uploadProgress}%`}
-                </p>
-              </div>
-            )}
-
-            <Button
-              type="submit"
-              disabled={isUploading || isCompressing}
-              className="w-full"
-            >
-              <Upload className="mr-2 h-4 w-4" />
-              {isUploading ? 'Téléchargement...' : 'Télécharger la vidéo'}
-            </Button>
-          </form>
+          <VideoUploadForm
+            title={title}
+            description={description}
+            videoFile={videoFile}
+            thumbnailFile={thumbnailFile}
+            selectedChapter={selectedChapter}
+            selectedSubchapter={selectedSubchapter}
+            isUploading={isUploading}
+            isCompressing={isCompressing}
+            uploadProgress={uploadProgress}
+            compressionProgress={compressionProgress}
+            originalSize={originalSize}
+            compressedSize={compressedSize}
+            onTitleChange={setTitle}
+            onDescriptionChange={setDescription}
+            onVideoSelect={(e) => handleFileChange(e, 'video')}
+            onThumbnailSelect={(e) => handleFileChange(e, 'thumbnail')}
+            onChapterChange={setSelectedChapter}
+            onSubchapterChange={setSelectedSubchapter}
+            onSubmit={handleSubmit}
+            onThumbnailRemove={() => setThumbnailFile(null)}
+          />
         </CardContent>
       </Card>
     </div>
