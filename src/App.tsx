@@ -1,27 +1,41 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import PageWrapper from './components/PageWrapper';
-import Index from './pages/Index';
-import Cart from './pages/Cart';
-import Devis from './pages/Devis';
-import Metiers from './pages/Metiers';
-import Marques from './pages/Marques';
-import Personalization from './pages/Personalization';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import Sidebar from './DashboardScreen/Sidebar';
+import MainContent from './DashboardScreen/MainContent';
+import TopBar from './DashboardScreen/TopBar';
+import UserSettings from './DashboardScreen/UserSettings';
+import History from './DashboardScreen/History';
+import Clients from './DashboardScreen/Clients';
+import Videos from './DashboardScreen/Videos';
 
-function App() {
+const App = () => {
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+  const ProtectedRoute = ({ element }: { element: React.ReactNode }) => {
+    return user ? element : <Navigate to="https://platform.draminesaid.com/" replace />;
+  };
+
   return (
     <Router>
-      <PageWrapper>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/devis" element={<Devis />} />
-          <Route path="/metiers" element={<Metiers />} />
-          <Route path="/marques" element={<Marques />} />
-          <Route path="/personalization" element={<Personalization />} />
-        </Routes>
-      </PageWrapper>
+      <div className="flex min-h-screen bg-dashboard-background text-white">
+        <Sidebar user={user} />
+        <div className="flex-1 ml-64">
+          <TopBar />
+          <Routes>
+            <Route path="/" element={<MainContent user={user} />} />
+            <Route path="/app/settings" element={<ProtectedRoute element={<UserSettings user={user} />} />} />
+            <Route path="/app/history" element={<ProtectedRoute element={<History user={user} />} />} />
+            <Route path="/app/clients" element={<ProtectedRoute element={<Clients user={user} />} />} />
+            <Route path="/app/upload" element={<ProtectedRoute element={<Videos user={user} />} />} />
+            <Route path="/app" element={<MainContent user={user} />} />
+          </Routes>
+          <footer className="p-6 text-center text-sm text-muted-foreground">
+            &copy; {new Date().getFullYear()} <a href="http://draminesaid.com" className="hover:text-primary">draminesaid.com</a>
+          </footer>
+        </div>
+      </div>
     </Router>
   );
-}
+};
 
 export default App;

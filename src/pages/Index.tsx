@@ -1,34 +1,13 @@
-import { useState } from "react";
-import { HeroSection } from "../components/HeroSection";
-import ProductGrid from "../components/ProductGrid";
-import AboutSection from "../components/AboutSection";
-import FAQ from "../components/FAQ";
-import ReviewSection from "../components/ReviewSection";
+// Update this page (the content is just a fallback if you fail to update the page)
 
 const Index = () => {
-  const [cartCount, setCartCount] = useState(0);
-
   return (
-    <>
-      <HeroSection />
-
-      {/* Products Section */}
-      <section id="products" className="py-20">
-        <div className="container">
-          <h2 className="text-center font-sans text-3xl font-bold text-primary mb-8">Notre Collection</h2>
-          <ProductGrid onAddToCart={() => setCartCount(prev => prev + 1)} />
-        </div>
-      </section>
-
-      {/* About Section */}
-      <AboutSection />
-
-      {/* Reviews Section */}
-      <ReviewSection />
-
-      {/* FAQ Section */}
-      <FAQ />
-    </>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="text-center">
+        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
+        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
+      </div>
+    </div>
   );
 };
 
