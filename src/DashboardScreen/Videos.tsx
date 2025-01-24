@@ -39,17 +39,16 @@ const Videos: React.FC<VideosProps> = ({ user }) => {
   const [isCompressing, setIsCompressing] = useState(false);
   const [originalSize, setOriginalSize] = useState<number | null>(null);
   const [compressedSize, setCompressedSize] = useState<number | null>(null);
+  const [compressionProgress, setCompressionProgress] = useState(0);
   const [totalFileSize, setTotalFileSize] = useState(0);
   const { toast } = useToast();
 
   useEffect(() => {
-    // Calculate total size whenever files change
     const videoSize = videoFile?.size || 0;
     const thumbnailSize = thumbnailFile?.size || 0;
     const newTotalSize = videoSize + thumbnailSize;
     setTotalFileSize(newTotalSize);
 
-    // Auto-enable compression if total size exceeds 400MB
     if (newTotalSize > MAX_TOTAL_SIZE && !enableCompression) {
       setEnableCompression(true);
       toast({
@@ -85,7 +84,6 @@ const Videos: React.FC<VideosProps> = ({ user }) => {
       return;
     }
 
-    // Calculate new total size
     const otherFileSize = type === 'video' ? (thumbnailFile?.size || 0) : (videoFile?.size || 0);
     const newTotalSize = file.size + otherFileSize;
 
@@ -100,11 +98,15 @@ const Videos: React.FC<VideosProps> = ({ user }) => {
 
     if (enableCompression || newTotalSize > MAX_TOTAL_SIZE) {
       setIsCompressing(true);
+      setOriginalSize(file.size);
+      setCompressionProgress(0);
+      
       try {
-        setOriginalSize(file.size);
-        const compressedFile = type === 'video' 
-          ? await compressVideo(file)
-          : await compressImage(file);
+        const compressFile = type === 'video' ? compressVideo : compressImage;
+        const compressedFile = await compressFile(file, (progress) => {
+          setCompressionProgress(progress);
+          console.log('Compression progress:', progress);
+        });
         
         setCompressedSize(compressedFile.size);
         const fileWithPreview = Object.assign(compressedFile, {
@@ -120,7 +122,9 @@ const Videos: React.FC<VideosProps> = ({ user }) => {
         const compressionRatio = ((file.size - compressedFile.size) / file.size * 100).toFixed(1);
         toast({
           title: "Compression réussie",
-          description: `Taille originale: ${formatFileSize(file.size)}\nTaille compressée: ${formatFileSize(compressedFile.size)}\nRéduction: ${compressionRatio}%`
+          description: `Taille originale: ${formatFileSize(file.size)}
+                       Taille compressée: ${formatFileSize(compressedFile.size)}
+                       Réduction: ${compressionRatio}%`
         });
       } catch (error) {
         console.error('Error compressing file:', error);
@@ -129,11 +133,11 @@ const Videos: React.FC<VideosProps> = ({ user }) => {
           title: "Erreur de compression",
           description: "Une erreur est survenue lors de la compression"
         });
+      } finally {
+        setIsCompressing(false);
+        setCompressionProgress(0);
       }
-      setIsCompressing(false);
     } else {
-      setOriginalSize(file.size);
-      setCompressedSize(null);
       const fileWithPreview = Object.assign(file, {
         preview: type === 'thumbnail' ? URL.createObjectURL(file) : undefined
       });
@@ -188,7 +192,6 @@ const Videos: React.FC<VideosProps> = ({ user }) => {
           title: "Succès",
           description: "Vidéo téléchargée avec succès"
         });
-        // Reset form
         setTitle('');
         setDescription('');
         setVideoFile(null);
@@ -230,7 +233,30 @@ const Videos: React.FC<VideosProps> = ({ user }) => {
               />
             </div>
           </div>
-          
+
+          {isCompressing && (
+            <div className="mt-4 space-y-2">
+              <div className="flex justify-between text-sm text-muted-foreground">
+                <span>Compression en cours...</span>
+                <span>{compressionProgress.toFixed(0)}%</span>
+              </div>
+              <Progress value={compressionProgress} className="h-2" />
+              {originalSize && (
+                <p className="text-sm text-muted-foreground">
+                  Taille originale: {formatFileSize(originalSize)}
+                  {compressedSize && (
+                    <>
+                      <br />
+                      Taille actuelle: {formatFileSize(compressedSize)}
+                      <br />
+                      Réduction: {((originalSize - compressedSize) / originalSize * 100).toFixed(1)}%
+                    </>
+                  )}
+                </p>
+              )}
+            </div>
+          )}
+
           {totalFileSize > 0 && (
             <Alert variant={totalFileSize > MAX_TOTAL_SIZE ? "destructive" : "default"}>
               <AlertTriangle className="h-4 w-4" />

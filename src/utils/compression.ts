@@ -4,10 +4,20 @@ import imageCompression from 'browser-image-compression';
 
 const ffmpeg = new FFmpeg();
 
-export const compressVideo = async (file: File): Promise<File> => {
+export const compressVideo = async (
+  file: File,
+  onProgress?: (progress: number) => void
+): Promise<File> => {
   if (!ffmpeg.loaded) {
     await ffmpeg.load();
   }
+
+  ffmpeg.on('progress', ({ progress, time }) => {
+    if (onProgress) {
+      onProgress(progress * 100);
+    }
+    console.log('Compression progress:', progress * 100);
+  });
 
   await ffmpeg.writeFile('input.mp4', await fetchFile(file));
   await ffmpeg.exec([
@@ -23,11 +33,15 @@ export const compressVideo = async (file: File): Promise<File> => {
   return compressedFile;
 };
 
-export const compressImage = async (file: File): Promise<File> => {
+export const compressImage = async (
+  file: File,
+  onProgress?: (progress: number) => void
+): Promise<File> => {
   const options = {
     maxSizeMB: 1,
     maxWidthOrHeight: 1920,
     useWebWorker: true,
+    onProgress: onProgress ? (progress: number) => onProgress(progress * 100) : undefined,
   };
   
   try {
