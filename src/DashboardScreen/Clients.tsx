@@ -3,8 +3,15 @@ import axios from 'axios';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { UserPlus, Check, Pause, Box, Trash2, Loader2, Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { UserPlus, Check, Pause, Box, Trash2, Loader2, Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Pagination,
   PaginationContent,
@@ -16,21 +23,48 @@ import {
 import Modal from './Modal';
 import AllowerModal from './AllowerModal';
 
+interface User {
+  id_client: string;
+  nom_client: string;
+  prenom_client: string;
+  email_client: string;
+  telephone_client: string;
+  createdat_client: string;
+  status_client: string;
+}
+
+interface SaisonPermission {
+  id_client: number;
+  id_saison: number;
+}
+
+interface Saison {
+  id_saison: number;
+  nom_saison: string;
+}
+
+interface UserData {
+  user: User;
+  user_saison_permissions: SaisonPermission[];
+  saison_objects: Saison[];
+}
+
 interface ClientsProps {
   user: any;
 }
 
 const Clients: React.FC<ClientsProps> = ({ user }) => {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<UserData[]>([]);
   const [loading, setLoading] = useState(true);
   const [alertMessage, setAlertMessage] = useState('');
   const [showAlert, setShowAlert] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAllowerModalOpen, setIsAllowerModalOpen] = useState(false);
   const [actionType, setActionType] = useState('');
-  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [selectedUserEmail, setSelectedUserEmail] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [filterStatus, setFilterStatus] = useState<string>('all');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -53,7 +87,7 @@ const Clients: React.FC<ClientsProps> = ({ user }) => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch('https://plateform.draminesaid.com/app/get_users.php');
+        const response = await fetch('https://plateform.draminesaid.com/app/get_usersnew.php');
         const data = await response.json();
         if (data.success) {
           setUsers(data.users);
@@ -69,7 +103,19 @@ const Clients: React.FC<ClientsProps> = ({ user }) => {
     fetchUsers();
   }, []);
 
-  const handleDelete = async (id_client) => {
+  const filteredUsers = users.filter((userData: UserData) => {
+    const matchesSearch = Object.values(userData.user).some(value =>
+      String(value).toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    
+    const matchesStatus = filterStatus === 'all' 
+      ? true 
+      : userData.user.status_client === (filterStatus === 'active' ? '1' : '0');
+
+    return matchesSearch && matchesStatus;
+  });
+
+  const handleDelete = async (id_client: string) => {
     setIsModalOpen(false);
     try {
       const response = await fetch('https://plateform.draminesaid.com/app/delete_user.php', {
@@ -79,7 +125,7 @@ const Clients: React.FC<ClientsProps> = ({ user }) => {
       });
       const data = await response.json();
       if (data.success) {
-        setUsers(users.filter(user => user.id_client !== id_client));
+        setUsers(users.filter(userData => userData.user.id_client !== id_client));
         setAlertMessage('Utilisateur a été supprimé avec succès!');
         logUploadEvent('Utilisateur a été supprimé avec succès');
         setShowAlert(true);
@@ -95,7 +141,7 @@ const Clients: React.FC<ClientsProps> = ({ user }) => {
     }
   };
 
-  const handleActivate = async (id_client, email_client) => {
+  const handleActivate = async (id_client: string, email_client: string) => {
     setIsModalOpen(false);
     try {
       const response = await fetch('https://plateform.draminesaid.com/app/useractivation.php', {
@@ -105,7 +151,11 @@ const Clients: React.FC<ClientsProps> = ({ user }) => {
       });
       const data = await response.json();
       if (data.success) {
-        setUsers(users.map(user => user.id_client === id_client ? { ...user, status_client: '1' } : user));
+        setUsers(users.map(userData => 
+          userData.user.id_client === id_client 
+            ? { ...userData, user: { ...userData.user, status_client: '1' } }
+            : userData
+        ));
         setAlertMessage('Utilisateur a été activé avec succès!');
         logUploadEvent('Utilisateur a été activé avec succès');
         setShowAlert(true);
@@ -121,7 +171,7 @@ const Clients: React.FC<ClientsProps> = ({ user }) => {
     }
   };
 
-  const handleDeActivate = async (id_client) => {
+  const handleDeActivate = async (id_client: string) => {
     setIsModalOpen(false);
     try {
       const response = await fetch('https://plateform.draminesaid.com/app/deuseractivation.php', {
@@ -131,7 +181,11 @@ const Clients: React.FC<ClientsProps> = ({ user }) => {
       });
       const data = await response.json();
       if (data.success) {
-        setUsers(users.map(user => user.id_client === id_client ? { ...user, status_client: '0' } : user));
+        setUsers(users.map(userData => 
+          userData.user.id_client === id_client 
+            ? { ...userData, user: { ...userData.user, status_client: '0' } }
+            : userData
+        ));
         setAlertMessage('Utilisateur a été désactivé avec succès!');
         logUploadEvent('Utilisateur a été désactivé avec succès');
         setShowAlert(true);
@@ -147,26 +201,18 @@ const Clients: React.FC<ClientsProps> = ({ user }) => {
     }
   };
 
-  const confirmAction = (id_client, email_client, action) => {
+  const confirmAction = (id_client: string, email_client: string, action: string) => {
     setSelectedUserId(id_client);
     setSelectedUserEmail(email_client); 
     setActionType(action);
     setIsModalOpen(true);
   };
   
-  const openAllowerModal = (id_client) => {
+  const openAllowerModal = (id_client: string) => {
     setSelectedUserId(id_client);
     setIsAllowerModalOpen(true);
   };
 
-  // Filter users based on search term
-  const filteredUsers = users.filter((user: any) =>
-    Object.values(user).some(value =>
-      String(value).toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
-
-  // Calculate pagination
   const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedUsers = filteredUsers.slice(startIndex, startIndex + itemsPerPage);
@@ -186,15 +232,30 @@ const Clients: React.FC<ClientsProps> = ({ user }) => {
           <h2 className="text-2xl font-bold text-gray-900">Informations Utilisateurs</h2>
           <p className="text-gray-500">Liste des utilisateurs enregistrés</p>
         </div>
-        <div className="w-72">
-          <div className="relative">
-            <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
-            <Input
-              placeholder="Rechercher..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-8"
-            />
+        <div className="flex gap-4 items-center">
+          <Select
+            value={filterStatus}
+            onValueChange={setFilterStatus}
+          >
+            <SelectTrigger className="w-[180px] text-black">
+              <SelectValue placeholder="Filtrer par statut" className="text-black" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all" className="text-black">Tous les statuts</SelectItem>
+              <SelectItem value="active" className="text-black">Actif</SelectItem>
+              <SelectItem value="inactive" className="text-black">Inactif</SelectItem>
+            </SelectContent>
+          </Select>
+          <div className="w-72">
+            <div className="relative">
+              <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
+              <Input
+                placeholder="Rechercher..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-8"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -221,48 +282,48 @@ const Clients: React.FC<ClientsProps> = ({ user }) => {
               </tr>
             </thead>
             <tbody>
-              {paginatedUsers.map((user: any) => (
-                <tr key={user.id_client} className="border-b hover:bg-gray-50">
-                  <td className="px-6 py-4">{user.id_client}</td>
-                  <td className="px-6 py-4">{user.nom_client}</td>
-                  <td className="px-6 py-4">{user.prenom_client}</td>
-                  <td className="px-6 py-4">{user.email_client}</td>
-                  <td className="px-6 py-4">{user.telephone_client}</td>
-                  <td className="px-6 py-4">{new Date(user.createdat_client).toLocaleDateString()}</td>
+              {paginatedUsers.map((userData: UserData) => (
+                <tr key={userData.user.id_client} className="border-b hover:bg-gray-50">
+                  <td className="px-6 py-4">{userData.user.id_client}</td>
+                  <td className="px-6 py-4">{userData.user.nom_client}</td>
+                  <td className="px-6 py-4">{userData.user.prenom_client}</td>
+                  <td className="px-6 py-4">{userData.user.email_client}</td>
+                  <td className="px-6 py-4">{userData.user.telephone_client}</td>
+                  <td className="px-6 py-4">{new Date(userData.user.createdat_client).toLocaleDateString()}</td>
                   <td className="px-6 py-4">
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      user.status_client === '1' 
+                      userData.user.status_client === '1' 
                         ? 'bg-green-100 text-green-800'
                         : 'bg-red-100 text-red-800'
                     }`}>
-                      {user.status_client === '1' ? "Actif" : "Inactif"}
+                      {userData.user.status_client === '1' ? "Actif" : "Inactif"}
                     </span>
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex gap-2">
-                      {user.status_client === '0' && (
+                      {userData.user.status_client === '0' && (
                         <Button
                           size="sm"
-                          onClick={() => confirmAction(user.id_client, user.email_client, 'activate')}
+                          onClick={() => confirmAction(userData.user.id_client, userData.user.email_client, 'activate')}
                           className="bg-green-500 hover:bg-green-600"
                         >
                           <Check className="h-4 w-4 mr-1" />
                           Activer
                         </Button>
                       )}
-                      {user.status_client === '1' && (
+                      {userData.user.status_client === '1' && (
                         <>
                           <Button
                             size="sm"
                             variant="destructive"
-                            onClick={() => confirmAction(user.id_client, user.email_client, 'deactivate')}
+                            onClick={() => confirmAction(userData.user.id_client, userData.user.email_client, 'deactivate')}
                           >
                             <Pause className="h-4 w-4 mr-1" />
                             Désactiver
                           </Button>
                           <Button
                             size="sm"
-                            onClick={() => openAllowerModal(user.id_client)}
+                            onClick={() => openAllowerModal(userData.user.id_client)}
                           >
                             <Box className="h-4 w-4 mr-1" />
                             Allouer
@@ -272,7 +333,7 @@ const Clients: React.FC<ClientsProps> = ({ user }) => {
                       <Button
                         size="sm"
                         variant="destructive"
-                        onClick={() => confirmAction(user.id_client, user.email_client, 'delete')}
+                        onClick={() => confirmAction(userData.user.id_client, userData.user.email_client, 'delete')}
                       >
                         <Trash2 className="h-4 w-4 mr-1" />
                         Supprimer

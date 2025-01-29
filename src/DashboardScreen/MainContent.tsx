@@ -3,6 +3,9 @@ import ReactPlayer from 'react-player';
 import axios from 'axios';
 import { XCircle } from 'lucide-react';
 import Modal from './Modal';
+import { EditVideoModal } from '@/components/video/EditVideoModal';
+import VideoCard from '@/components/video/VideoCard';
+import VideoFilter from '@/components/video/VideoFilter';
 
 interface Video {
   id: string;
@@ -10,6 +13,8 @@ interface Video {
   description: string;
   videoUrl: string;
   thumbnail: string;
+  seasonId?: string;
+  chapterId?: string;
 }
 
 interface MainContentProps {
@@ -21,6 +26,8 @@ interface MainContentProps {
 
 const MainContent: React.FC<MainContentProps> = ({ user }) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedSeason, setSelectedSeason] = useState('all');
+  const [selectedChapter, setSelectedChapter] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
   const [videos, setVideos] = useState<Video[]>([]);
@@ -28,8 +35,8 @@ const MainContent: React.FC<MainContentProps> = ({ user }) => {
   const [error, setError] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [videoToDelete, setVideoToDelete] = useState<string | null>(null);
+  const [videoToEdit, setVideoToEdit] = useState<Video | null>(null);
   const videosPerPage = 6;
-  const connectedUserId = user?.id;
 
   useEffect(() => {
     if (!user) {
@@ -47,7 +54,9 @@ const MainContent: React.FC<MainContentProps> = ({ user }) => {
           title: video.name_video,
           description: video.descri_video,
           videoUrl: `https://plateform.draminesaid.com/app/${video.url_video}`,
-          thumbnail: `https://plateform.draminesaid.com/app/${video.url_thumbnail}`
+          thumbnail: `https://plateform.draminesaid.com/app/${video.url_thumbnail}`,
+          seasonId: video.id_saison,
+          chapterId: video.id_chapter
         }));
         setVideos(formattedVideos);
       } else {
@@ -64,24 +73,6 @@ const MainContent: React.FC<MainContentProps> = ({ user }) => {
   useEffect(() => {
     fetchVideos();
   }, []);
-
-  const filteredVideos = videos.filter(video =>
-    video.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const indexOfLastVideo = currentPage * videosPerPage;
-  const indexOfFirstVideo = indexOfLastVideo - videosPerPage;
-  const currentVideos = filteredVideos.slice(indexOfFirstVideo, indexOfLastVideo);
-  const totalPages = Math.ceil(filteredVideos.length / videosPerPage);
-
-  const handlePageChange = (pageNumber: number) => setCurrentPage(pageNumber);
-  const handleVideoClick = (video: Video) => setSelectedVideo(video);
-  const handleCloseVideo = (e: React.MouseEvent) => {
-    // Only close if clicking the backdrop, not the video player
-    if (e.target === e.currentTarget) {
-      setSelectedVideo(null);
-    }
-  };
 
   const handleDeleteVideo = async () => {
     if (!videoToDelete) return;
@@ -104,15 +95,17 @@ const MainContent: React.FC<MainContentProps> = ({ user }) => {
     }
   };
 
-  const openDeleteModal = (id: string) => {
-    setVideoToDelete(id);
-    setShowModal(true);
-  };
+  const filteredVideos = videos.filter(video => {
+    const matchesSearch = video.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSeason = selectedSeason === 'all' || video.seasonId === selectedSeason;
+    const matchesChapter = selectedChapter === 'all' || video.chapterId === selectedChapter;
+    return matchesSearch && matchesSeason && matchesChapter;
+  });
 
-  const closeDeleteModal = () => {
-    setShowModal(false);
-    setVideoToDelete(null);
-  };
+  const indexOfLastVideo = currentPage * videosPerPage;
+  const indexOfFirstVideo = indexOfLastVideo - videosPerPage;
+  const currentVideos = filteredVideos.slice(indexOfFirstVideo, indexOfLastVideo);
+  const totalPages = Math.ceil(filteredVideos.length / videosPerPage);
 
   return (
     <div className="p-6 mt-16" dir="rtl">
@@ -125,48 +118,30 @@ const MainContent: React.FC<MainContentProps> = ({ user }) => {
         <div className="text-red-500 text-center p-4">{error}</div>
       ) : (
         <>
-          <div className="mb-6">
-            <input
-              type="text"
-              placeholder="البحث عن الفيديوهات..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full max-w-md px-4 py-2 rounded-lg bg-dashboard-card border border-border/40 focus:outline-none focus:ring-2 focus:ring-primary text-black"
-              dir="rtl"
-            />
-          </div>
+          <VideoFilter
+            searchTerm={searchTerm}
+            onSearchChange={setSearchTerm}
+            selectedSeason={selectedSeason}
+            onSeasonChange={setSelectedSeason}
+            selectedChapter={selectedChapter}
+            onChapterChange={setSelectedChapter}
+          />
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {currentVideos.map((video) => (
-              <div
+              <VideoCard
                 key={video.id}
-                className="bg-dashboard-card rounded-lg overflow-hidden cursor-pointer transform transition-transform hover:scale-[1.02]"
-                onClick={() => handleVideoClick(video)}
-              >
-                <div className="relative aspect-video">
-                  <img
-                    src={video.thumbnail}
-                    alt={video.title}
-                    className="w-full h-full object-cover"
-                  />
-                  {connectedUserId === 1 && (
-                    <button
-                      className="absolute top-2 right-2 p-2 bg-red-500/80 rounded-full hover:bg-red-600 transition-colors"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        openDeleteModal(video.id);
-                      }}
-                      title="حذف الفيديو"
-                    >
-                      <XCircle className="w-5 h-5 text-white" />
-                    </button>
-                  )}
-                </div>
-                <div className="p-4">
-                  <h3 className="font-semibold mb-2 text-black">{video.title}</h3>
-                  <p className="text-sm text-black">{video.description}</p>
-                </div>
-              </div>
+                video={video}
+                onVideoClick={setSelectedVideo}
+                onDeleteClick={(id) => {
+                  setVideoToDelete(id);
+                  setShowModal(true);
+                }}
+                onEditClick={(video, e) => {
+                  e.stopPropagation();
+                  setVideoToEdit(video);
+                }}
+              />
             ))}
           </div>
 
@@ -174,7 +149,7 @@ const MainContent: React.FC<MainContentProps> = ({ user }) => {
             {Array.from({ length: totalPages }, (_, index) => (
               <button
                 key={index + 1}
-                onClick={() => handlePageChange(index + 1)}
+                onClick={() => setCurrentPage(index + 1)}
                 className={`px-4 py-2 rounded ${
                   currentPage === index + 1
                     ? 'bg-primary text-primary-foreground'
@@ -189,7 +164,7 @@ const MainContent: React.FC<MainContentProps> = ({ user }) => {
           {selectedVideo && (
             <div
               className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
-              onClick={handleCloseVideo}
+              onClick={() => setSelectedVideo(null)}
             >
               <div 
                 className="relative w-full max-w-4xl aspect-video bg-dashboard-card rounded-lg overflow-hidden"
@@ -218,7 +193,19 @@ const MainContent: React.FC<MainContentProps> = ({ user }) => {
               action="supprimer"
               message="Cette vidéo sera supprimée définitivement. Voulez-vous continuer ?"
               onConfirm={handleDeleteVideo}
-              onCancel={closeDeleteModal}
+              onCancel={() => {
+                setShowModal(false);
+                setVideoToDelete(null);
+              }}
+            />
+          )}
+
+          {videoToEdit && (
+            <EditVideoModal
+              video={videoToEdit}
+              isOpen={true}
+              onClose={() => setVideoToEdit(null)}
+              onSuccess={fetchVideos}
             />
           )}
         </>

@@ -4,9 +4,9 @@ import Sidebar from './DashboardScreen/Sidebar';
 import MainContent from './DashboardScreen/MainContent';
 import TopBar from './DashboardScreen/TopBar';
 import UserSettings from './DashboardScreen/UserSettings';
-import History from './DashboardScreen/History';
 import Clients from './DashboardScreen/Clients';
 import Videos from './DashboardScreen/Videos';
+import Seasons from './DashboardScreen/Seasons';
 
 const App = () => {
   const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -19,14 +19,14 @@ const App = () => {
     <Router>
       <div className="flex min-h-screen bg-dashboard-background text-white">
         <Sidebar user={user} />
-        <div className="flex-1 ml-64">
+        <div className="flex-1 ml-72">
           <TopBar />
           <Routes>
             <Route path="/" element={<MainContent user={user} />} />
             <Route path="/app/settings" element={<ProtectedRoute element={<UserSettings user={user} />} />} />
-            <Route path="/app/history" element={<ProtectedRoute element={<History user={user} />} />} />
             <Route path="/app/clients" element={<ProtectedRoute element={<Clients user={user} />} />} />
             <Route path="/app/upload" element={<ProtectedRoute element={<Videos user={user} />} />} />
+            <Route path="/app/seasons" element={<ProtectedRoute element={<Seasons />} />} />
             <Route path="/app" element={<MainContent user={user} />} />
           </Routes>
           <footer className="p-6 text-center text-sm text-muted-foreground">

@@ -53,4 +53,11 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Ensure all select components have black text */
+  .select-trigger,
+  .select-content,
+  .select-item {
+    @apply text-black;
+  }
 }

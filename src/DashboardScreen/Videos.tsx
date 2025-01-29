@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
 import { Upload, AlertTriangle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { ChapterManager } from '@/components/video-upload/ChapterManager';
 import { VideoUploadForm } from '@/components/video-upload/VideoUploadForm';
-import { compressVideo, compressImage, formatFileSize } from '@/utils/compression';
+import { formatFileSize } from '@/utils/compression';
+import { useVideoCompression } from '@/hooks/useVideoCompression';
+import { useVideoUploadForm } from '@/hooks/useVideoUploadForm';
+import { Progress } from '@/components/ui/progress';
 
 interface VideosProps {
   user: {
@@ -16,28 +18,43 @@ interface VideosProps {
   };
 }
 
-interface FileWithPreview extends File {
-  preview?: string;
-}
-
-const MAX_TOTAL_SIZE = 400 * 1024 * 1024; // 400MB in bytes
+const MAX_TOTAL_SIZE = 450 * 1024 * 1024; // 450MB in bytes
+const SIZE_THRESHOLD = 400 * 1024 * 1024; // 400MB threshold
 
 const Videos: React.FC<VideosProps> = ({ user }) => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [videoFile, setVideoFile] = useState<FileWithPreview | null>(null);
-  const [thumbnailFile, setThumbnailFile] = useState<FileWithPreview | null>(null);
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [isUploading, setIsUploading] = useState(false);
-  const [selectedChapter, setSelectedChapter] = useState('');
-  const [selectedSubchapter, setSelectedSubchapter] = useState('');
-  const [enableCompression, setEnableCompression] = useState(true);
-  const [isCompressing, setIsCompressing] = useState(false);
-  const [originalSize, setOriginalSize] = useState<number | null>(null);
-  const [compressedSize, setCompressedSize] = useState<number | null>(null);
-  const [compressionProgress, setCompressionProgress] = useState(0);
-  const [totalFileSize, setTotalFileSize] = useState(0);
+  const [enableCompression, setEnableCompression] = React.useState(true);
+  const [totalFileSize, setTotalFileSize] = React.useState(0);
   const { toast } = useToast();
+
+  const {
+    isCompressing,
+    originalSize,
+    compressedSize,
+    compressionProgress,
+    loadingMessage,
+    timeLeft,
+    speed,
+    handleFileCompression,
+    cancelCompression
+  } = useVideoCompression();
+
+  const {
+    title,
+    setTitle,
+    description,
+    setDescription,
+    videoFile,
+    setVideoFile,
+    thumbnailFile,
+    setThumbnailFile,
+    uploadProgress,
+    isUploading,
+    selectedChapter,
+    setSelectedChapter,
+    selectedSubchapter,
+    setSelectedSubchapter,
+    handleSubmit
+  } = useVideoUploadForm();
 
   useEffect(() => {
     const videoSize = videoFile?.size || 0;
@@ -45,11 +62,11 @@ const Videos: React.FC<VideosProps> = ({ user }) => {
     const newTotalSize = videoSize + thumbnailSize;
     setTotalFileSize(newTotalSize);
 
-    if (newTotalSize > MAX_TOTAL_SIZE && !enableCompression) {
+    if (newTotalSize > SIZE_THRESHOLD) {
       setEnableCompression(true);
       toast({
         title: "Compression automatique activée",
-        description: `La taille totale des fichiers (${formatFileSize(newTotalSize)}) dépasse 400MB. La compression a été activée automatiquement.`,
+        description: `La taille totale des fichiers (${formatFileSize(newTotalSize)}) dépasse 500MB. La compression sera appliquée automatiquement pour atteindre une taille maximale de 450MB.`,
         duration: 5000,
       });
     }
@@ -83,136 +100,40 @@ const Videos: React.FC<VideosProps> = ({ user }) => {
     const otherFileSize = type === 'video' ? (thumbnailFile?.size || 0) : (videoFile?.size || 0);
     const newTotalSize = file.size + otherFileSize;
 
-    if (newTotalSize > MAX_TOTAL_SIZE && !enableCompression) {
-      setEnableCompression(true);
-      toast({
-        title: "Compression automatique activée",
-        description: `La taille totale des fichiers (${formatFileSize(newTotalSize)}) dépasse 400MB. La compression a été activée automatiquement.`,
-        duration: 5000,
-      });
-    }
-
-    if (enableCompression || newTotalSize > MAX_TOTAL_SIZE) {
-      setIsCompressing(true);
-      setOriginalSize(file.size);
-      setCompressionProgress(0);
-      
-      try {
-        const compressFile = type === 'video' ? compressVideo : compressImage;
-        const compressedFile = await compressFile(file, (progress) => {
-          setCompressionProgress(progress);
-          console.log('Compression progress:', progress);
-        });
-        
-        setCompressedSize(compressedFile.size);
-        const fileWithPreview = Object.assign(compressedFile, {
-          preview: type === 'thumbnail' ? URL.createObjectURL(compressedFile) : undefined
-        });
-
+    try {
+      if (type === 'video' && enableCompression && file.size > SIZE_THRESHOLD) {
+        console.log('Starting video compression...');
+        const compressedFile = await handleFileCompression(file);
+        if (compressedFile) {
+          console.log('Video compression complete');
+          setVideoFile(compressedFile);
+          toast({
+            title: "Compression réussie",
+            description: `Taille originale: ${formatFileSize(file.size)}\nTaille compressée: ${formatFileSize(compressedFile.size)}`,
+          });
+        }
+      } else {
         if (type === 'video') {
-          setVideoFile(fileWithPreview);
+          setVideoFile(file);
         } else {
+          const fileWithPreview = Object.assign(file, {
+            preview: URL.createObjectURL(file)
+          });
           setThumbnailFile(fileWithPreview);
         }
-
-        const compressionRatio = ((file.size - compressedFile.size) / file.size * 100).toFixed(1);
-        toast({
-          title: "Compression réussie",
-          description: `Taille originale: ${formatFileSize(file.size)}
-                       Taille compressée: ${formatFileSize(compressedFile.size)}
-                       Réduction: ${compressionRatio}%`
-        });
-      } catch (error) {
-        console.error('Error compressing file:', error);
-        toast({
-          variant: "destructive",
-          title: "Erreur de compression",
-          description: "Une erreur est survenue lors de la compression"
-        });
-      } finally {
-        setIsCompressing(false);
-        setCompressionProgress(0);
       }
-    } else {
-      const fileWithPreview = Object.assign(file, {
-        preview: type === 'thumbnail' ? URL.createObjectURL(file) : undefined
-      });
-
-      if (type === 'video') {
-        setVideoFile(fileWithPreview);
-      } else {
-        setThumbnailFile(fileWithPreview);
-      }
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!videoFile || !thumbnailFile) {
+    } catch (error) {
+      console.error('Error handling file:', error);
       toast({
         variant: "destructive",
-        title: "Fichiers manquants",
-        description: "Veuillez sélectionner une vidéo et une miniature"
+        title: "Erreur",
+        description: "Une erreur est survenue lors du traitement du fichier"
       });
-      return;
-    }
-
-    if (!selectedChapter || !selectedSubchapter) {
-      toast({
-        variant: "destructive",
-        title: "Sélection incomplète",
-        description: "Veuillez sélectionner un chapitre et un sous-chapitre"
-      });
-      return;
-    }
-
-    setIsUploading(true);
-    const formData = new FormData();
-    formData.append('video', videoFile);
-    formData.append('thumbnail', thumbnailFile);
-    formData.append('title', title);
-    formData.append('description', description);
-    formData.append('chapter', selectedChapter);
-    formData.append('subchapter', selectedSubchapter);
-
-    try {
-      const response = await fetch('https://plateform.draminesaid.com/app/upload.php', {
-        method: 'POST',
-        body: formData,
-      });
-
-      const data = await response.json();
-      
-      if (data.success) {
-        toast({
-          title: "Succès",
-          description: "Vidéo téléchargée avec succès"
-        });
-        setTitle('');
-        setDescription('');
-        setVideoFile(null);
-        setThumbnailFile(null);
-        setUploadProgress(0);
-        setSelectedChapter('');
-        setSelectedSubchapter('');
-      } else {
-        throw new Error(data.message || 'Échec du téléchargement');
-      }
-    } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Échec du téléchargement",
-        description: error.message
-      });
-    } finally {
-      setIsUploading(false);
     }
   };
 
   return (
     <div className="p-6 mt-16 max-w-5xl mx-auto space-y-6">
-      <ChapterManager />
-      
       <Card className="bg-dashboard-card border-border/40">
         <CardHeader className="space-y-1">
           <div className="flex items-center justify-between">
@@ -221,28 +142,28 @@ const Videos: React.FC<VideosProps> = ({ user }) => {
               <CardTitle className="text-xl font-semibold">Télécharger une nouvelle vidéo</CardTitle>
             </div>
             <div className="flex items-center space-x-2">
-              <span className="text-sm text-muted-foreground">Compression</span>
+              <span className="text-sm text-muted-foreground">Compression automatique</span>
               <Switch
                 checked={enableCompression}
                 onCheckedChange={setEnableCompression}
-                disabled={totalFileSize > MAX_TOTAL_SIZE}
+                disabled={totalFileSize > SIZE_THRESHOLD}
               />
             </div>
           </div>
 
           {totalFileSize > 0 && (
-            <Alert variant={totalFileSize > MAX_TOTAL_SIZE ? "destructive" : "default"}>
+            <Alert variant={totalFileSize > SIZE_THRESHOLD ? "destructive" : "default"}>
               <AlertTriangle className="h-4 w-4" />
               <AlertTitle>Taille totale des fichiers</AlertTitle>
               <AlertDescription>
                 {formatFileSize(totalFileSize)}
-                {totalFileSize > MAX_TOTAL_SIZE && " - Compression automatique activée"}
+                {totalFileSize > SIZE_THRESHOLD && " - Compression automatique activée"}
               </AlertDescription>
             </Alert>
           )}
 
           <p className="text-sm text-muted-foreground">
-            Partagez votre contenu avec votre audience. Téléchargez des vidéos et personnalisez leurs détails.
+            Partagez votre contenu avec votre audience. Les fichiers de plus de 500MB seront automatiquement compressés pour optimiser le stockage.
           </p>
         </CardHeader>
         <CardContent>
@@ -259,6 +180,8 @@ const Videos: React.FC<VideosProps> = ({ user }) => {
             compressionProgress={compressionProgress}
             originalSize={originalSize}
             compressedSize={compressedSize}
+            timeLeft={timeLeft}
+            speed={speed}
             onTitleChange={setTitle}
             onDescriptionChange={setDescription}
             onVideoSelect={(e) => handleFileChange(e, 'video')}
@@ -267,6 +190,7 @@ const Videos: React.FC<VideosProps> = ({ user }) => {
             onSubchapterChange={setSelectedSubchapter}
             onSubmit={handleSubmit}
             onThumbnailRemove={() => setThumbnailFile(null)}
+            onCancelCompression={cancelCompression}
           />
         </CardContent>
       </Card>

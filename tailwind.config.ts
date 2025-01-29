@@ -31,7 +31,7 @@ export default {
         },
         dashboard: {
           background: "#ffffff",
-          sidebar: "#f8f9fa",
+          sidebar: "#D3E4FD", // Updated sidebar background to light blue
           topbar: "#ffffff",
           card: "#ffffff",
         },

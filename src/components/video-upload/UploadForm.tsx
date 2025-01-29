@@ -9,7 +9,7 @@ import { UploadProgress } from './UploadProgress';
 import { uploadVideo } from './uploadUtils';
 
 interface UploadFormProps {
-  userEmail: string;
+  userEmail?: string;
 }
 
 export const UploadForm: React.FC<UploadFormProps> = ({ userEmail }) => {
@@ -41,7 +41,6 @@ export const UploadForm: React.FC<UploadFormProps> = ({ userEmail }) => {
         thumbnailFile,
         title,
         description,
-        userEmail,
         onProgress: (progress, uploaded, total) => {
           setUploadProgress(progress);
           setUploadedMB(uploaded);
@@ -66,7 +65,8 @@ export const UploadForm: React.FC<UploadFormProps> = ({ userEmail }) => {
       toast({
         variant: "destructive",
         title: "Upload Failed",
-        description});
+        description: err instanceof Error ? err.message : 'An error occurred during upload'
+      });
     } finally {
       setIsUploading(false);
     }
