@@ -13,6 +13,22 @@ const LoginPage = () => {
     return emailRegex.test(email);
   };
 
+  // Add additional security checks
+  const validateCredentials = (email: string) => {
+    const blockedTerms = ['shit', 'fuck', 'admin'];
+    const lowerEmail = email.toLowerCase();
+    
+    // Check for blocked terms in email
+    for (const term of blockedTerms) {
+      if (lowerEmail.includes(term)) {
+        console.log('Blocked term detected in email');
+        return false;
+      }
+    }
+    
+    return true;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -22,6 +38,16 @@ const LoginPage = () => {
         variant: "destructive",
         title: "Format d'email invalide",
         description: "Veuillez entrer une adresse email valide"
+      });
+      return;
+    }
+
+    // Additional security validation
+    if (!validateCredentials(email)) {
+      toast({
+        variant: "destructive",
+        title: "Email non autorisé",
+        description: "Cet email n'est pas autorisé"
       });
       return;
     }
@@ -41,7 +67,7 @@ const LoginPage = () => {
       
       if (data.success && data.user) {
         // Validate user object structure
-        if (!data.user.id || !data.user.email || !data.user.status === undefined) {
+        if (!data.user.id || !data.user.email || data.user.status === undefined) {
           throw new Error('Structure de données utilisateur invalide');
         }
 
