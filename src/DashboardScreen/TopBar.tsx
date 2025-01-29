@@ -1,10 +1,13 @@
 import React from 'react';
 import { User } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useIsMobile } from '../hooks/use-mobile';
 
 const TopBar = () => {
+  const isMobile = useIsMobile();
+
   return (
-    <div className="fixed top-0 right-0 left-72 h-16 bg-dashboard-topbar border-b border-border/40 flex items-center justify-between px-6 z-10">
+    <div className={`fixed top-0 ${isMobile ? 'left-0 right-0' : 'right-0 left-72'} h-16 bg-dashboard-topbar border-b border-border/40 flex items-center justify-between px-6 z-10 transition-all duration-300`}>
       <div className="flex items-center">
         <img 
           src="/lovable-uploads/822785e2-1af0-42b6-b6a6-adde97b0442b.png" 
@@ -18,7 +21,7 @@ const TopBar = () => {
           className="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 rounded-full transition-colors duration-200"
         >
           <User className="h-5 w-5 text-gray-500" />
-          <span className="text-sm font-medium text-gray-600">Profile</span>
+          <span className="text-sm font-medium text-gray-600 hidden sm:inline">Profile</span>
         </Link>
       </div>
     </div>

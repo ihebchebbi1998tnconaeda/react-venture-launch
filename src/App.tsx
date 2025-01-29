@@ -9,9 +9,11 @@ import Videos from './DashboardScreen/Videos';
 import Seasons from './DashboardScreen/Seasons';
 import LoginPage from './pages/LoginPage';
 import NotActivePage from './pages/NotActivePage';
+import { useIsMobile } from './hooks/use-mobile';
 
 const App = () => {
   const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const isMobile = useIsMobile();
 
   const ProtectedRoute = ({ element }: { element: React.ReactNode }) => {
     return user?.id ? element : <Navigate to="/" replace />;
@@ -21,7 +23,7 @@ const App = () => {
     return (
       <div className="flex min-h-screen bg-dashboard-background text-white">
         <Sidebar user={user} />
-        <div className="flex-1 ml-72">
+        <div className={`flex-1 ${isMobile ? 'ml-0' : 'ml-72'} transition-all duration-300`}>
           <TopBar />
           {children}
           <footer className="p-6 text-center text-sm text-muted-foreground">
