@@ -25,13 +25,19 @@ const Sidebar: React.FC<SidebarProps> = ({ user }) => {
   ];
 
   return (
-    <div className="fixed left-0 top-0 h-full w-72 bg-dashboard-sidebar text-gray-600 overflow-hidden">
-      {/* Background overlay with gradient */}
+    <div 
+      className="fixed left-0 top-0 h-full w-72 bg-dashboard-sidebar text-gray-600 overflow-hidden"
+      data-color="purple"
+    >
+      {/* Background overlay with gradient and image */}
       <div 
-        className="absolute inset-0 opacity-5 bg-cover bg-center z-0" 
+        className="absolute inset-0 bg-gradient-to-b from-[#9b87f5]/30 to-[#7E69AB]/30 z-0"
         style={{ 
           backgroundImage: 'url(/lovable-uploads/822785e2-1af0-42b6-b6a6-adde97b0442b.png)',
-          backgroundBlendMode: 'overlay'
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundBlendMode: 'overlay',
+          opacity: 0.1
         }} 
       />
       
