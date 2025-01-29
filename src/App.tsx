@@ -7,33 +7,97 @@ import UserSettings from './DashboardScreen/UserSettings';
 import Clients from './DashboardScreen/Clients';
 import Videos from './DashboardScreen/Videos';
 import Seasons from './DashboardScreen/Seasons';
+import LoginPage from './pages/LoginPage';
+import NotActivePage from './pages/NotActivePage';
 
 const App = () => {
   const user = JSON.parse(localStorage.getItem('user') || '{}');
 
   const ProtectedRoute = ({ element }: { element: React.ReactNode }) => {
-    return user ? element : <Navigate to="https://platform.draminesaid.com/" replace />;
+    return user?.id ? element : <Navigate to="/" replace />;
   };
 
-  return (
-    <Router>
+  const AuthLayout = ({ children }: { children: React.ReactNode }) => {
+    return (
       <div className="flex min-h-screen bg-dashboard-background text-white">
         <Sidebar user={user} />
         <div className="flex-1 ml-72">
           <TopBar />
-          <Routes>
-            <Route path="/" element={<MainContent user={user} />} />
-            <Route path="/app/settings" element={<ProtectedRoute element={<UserSettings user={user} />} />} />
-            <Route path="/app/clients" element={<ProtectedRoute element={<Clients user={user} />} />} />
-            <Route path="/app/upload" element={<ProtectedRoute element={<Videos user={user} />} />} />
-            <Route path="/app/seasons" element={<ProtectedRoute element={<Seasons />} />} />
-            <Route path="/app" element={<MainContent user={user} />} />
-          </Routes>
+          {children}
           <footer className="p-6 text-center text-sm text-muted-foreground">
             &copy; {new Date().getFullYear()} <a href="http://draminesaid.com" className="hover:text-primary">draminesaid.com</a>
           </footer>
         </div>
       </div>
+    );
+  };
+
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={user?.id ? <Navigate to="/app" replace /> : <LoginPage />} />
+        <Route path="/not-active" element={<NotActivePage />} />
+        <Route
+          path="/app"
+          element={
+            <ProtectedRoute
+              element={
+                <AuthLayout>
+                  <MainContent user={user} />
+                </AuthLayout>
+              }
+            />
+          }
+        />
+        <Route
+          path="/app/settings"
+          element={
+            <ProtectedRoute
+              element={
+                <AuthLayout>
+                  <UserSettings user={user} />
+                </AuthLayout>
+              }
+            />
+          }
+        />
+        <Route
+          path="/app/clients"
+          element={
+            <ProtectedRoute
+              element={
+                <AuthLayout>
+                  <Clients user={user} />
+                </AuthLayout>
+              }
+            />
+          }
+        />
+        <Route
+          path="/app/upload"
+          element={
+            <ProtectedRoute
+              element={
+                <AuthLayout>
+                  <Videos user={user} />
+                </AuthLayout>
+              }
+            />
+          }
+        />
+        <Route
+          path="/app/seasons"
+          element={
+            <ProtectedRoute
+              element={
+                <AuthLayout>
+                  <Seasons />
+                </AuthLayout>
+              }
+            />
+          }
+        />
+      </Routes>
     </Router>
   );
 };
