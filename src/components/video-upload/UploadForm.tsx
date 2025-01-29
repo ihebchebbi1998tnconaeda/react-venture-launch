@@ -123,8 +123,10 @@ export const UploadForm: React.FC<UploadFormProps> = ({ userEmail }) => {
       {isUploading && (
         <UploadProgress
           progress={uploadProgress}
-          uploadedMB={uploadedMB}
-          totalMB={totalMB}
+          uploadedSize={uploadedMB}
+          totalSize={totalMB}
+          timeLeft="Calcul..."
+          speed="0 MB/s"
         />
       )}
 

@@ -38,7 +38,7 @@ export const UploadProgress: React.FC<UploadProgressProps> = ({
         </div>
         <div className="space-y-1">
           <p className="font-medium text-muted-foreground">Vitesse:</p>
-          <p className="text-foreground">{speed}/s</p>
+          <p className="text-foreground">{speed}</p>
         </div>
         <div className="space-y-1">
           <p className="font-medium text-muted-foreground">Taille:</p>

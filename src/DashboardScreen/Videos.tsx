@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
@@ -22,8 +22,8 @@ const MAX_TOTAL_SIZE = 450 * 1024 * 1024; // 450MB in bytes
 const SIZE_THRESHOLD = 400 * 1024 * 1024; // 400MB threshold
 
 const Videos: React.FC<VideosProps> = ({ user }) => {
-  const [enableCompression, setEnableCompression] = React.useState(true);
-  const [totalFileSize, setTotalFileSize] = React.useState(0);
+  const [enableCompression, setEnableCompression] = useState(true);
+  const [totalFileSize, setTotalFileSize] = useState(0);
   const { toast } = useToast();
 
   const {
@@ -55,6 +55,12 @@ const Videos: React.FC<VideosProps> = ({ user }) => {
     setSelectedSubchapter,
     handleSubmit
   } = useVideoUploadForm();
+
+  // Add new state variables for upload progress tracking
+  const [uploadedSize, setUploadedSize] = useState(0);
+  const [totalSize, setTotalSize] = useState(0);
+  const [uploadTimeLeft, setUploadTimeLeft] = useState('Calcul...');
+  const [uploadSpeed, setUploadSpeed] = useState('0 MB/s');
 
   useEffect(() => {
     const videoSize = videoFile?.size || 0;
@@ -182,6 +188,10 @@ const Videos: React.FC<VideosProps> = ({ user }) => {
             compressedSize={compressedSize}
             timeLeft={timeLeft}
             speed={speed}
+            uploadedSize={uploadedSize}
+            totalSize={totalSize}
+            uploadTimeLeft={uploadTimeLeft}
+            uploadSpeed={uploadSpeed}
             onTitleChange={setTitle}
             onDescriptionChange={setDescription}
             onVideoSelect={(e) => handleFileChange(e, 'video')}
