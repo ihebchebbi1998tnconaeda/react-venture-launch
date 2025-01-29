@@ -8,9 +8,24 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Validate email format
+    if (!validateEmail(email)) {
+      toast({
+        variant: "destructive",
+        title: "Format d'email invalide",
+        description: "Veuillez entrer une adresse email valide"
+      });
+      return;
+    }
+
     try {
       const response = await fetch('https://plateform.draminesaid.com/app/authentificate.php', {
         method: 'POST',
@@ -18,16 +33,32 @@ const LoginPage = () => {
         body: JSON.stringify({ email, password }),
       });
 
+      if (!response.ok) {
+        throw new Error('Erreur réseau');
+      }
+
       const data = await response.json();
       
-      if (data.success) {
+      if (data.success && data.user) {
+        // Validate user object structure
+        if (!data.user.id || !data.user.email || !data.user.status === undefined) {
+          throw new Error('Structure de données utilisateur invalide');
+        }
+
         if (data.user.status === 0) {
           navigate('/not-active');
         } else {
           if (email === 'admin@draminesaid.com') {
             window.location.href = 'https://plateform.draminesaid.com';
           } else {
-            localStorage.setItem('user', JSON.stringify(data.user));
+            // Store only necessary user data
+            const safeUserData = {
+              id: data.user.id,
+              email: data.user.email,
+              status: data.user.status,
+              role: data.user.role || 'user'
+            };
+            localStorage.setItem('user', JSON.stringify(safeUserData));
             navigate('/app');
           }
         }
@@ -38,7 +69,7 @@ const LoginPage = () => {
           toast({
             variant: "destructive",
             title: "Erreur",
-            description: data.message,
+            description: data.message || "Identifiants invalides",
           });
         }
       }
