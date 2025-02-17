@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Card } from '@/components/ui/card';
@@ -432,7 +433,7 @@ const Clients: React.FC<ClientsProps> = ({ user }) => {
 
   const formatCreatedAt = (timestamp: string) => {
     if (timestamp === "2147483647") {
-      return "À l'instant";
+      return "2147483647";
     }
 
     const date = new Date(parseInt(timestamp) * 1000);
