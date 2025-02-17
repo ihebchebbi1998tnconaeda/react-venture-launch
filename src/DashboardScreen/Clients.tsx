@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Card } from '@/components/ui/card';
@@ -85,6 +84,7 @@ interface APIUserSeasonsResponse {
 const fetchRegistrationRequests = async () => {
   try {
     const response = await axios.get('https://plateform.draminesaid.com/app/request_users.php');
+    console.log('Registration requests response:', response.data);
     return Array.isArray(response.data) ? response.data : [];
   } catch (error) {
     console.error('Error fetching registration requests:', error);
@@ -432,18 +432,8 @@ const Clients: React.FC<ClientsProps> = ({ user }) => {
   const paginatedUsers = filteredUsers.slice(startIndex, startIndex + itemsPerPage);
 
   const formatCreatedAt = (timestamp: string) => {
-    if (timestamp === "2147483647") {
-      return "2147483647";
-    }
-
-    const date = new Date(parseInt(timestamp) * 1000);
-    return date.toLocaleDateString('fr-FR', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+    console.log('Formatting timestamp:', timestamp);
+    return timestamp;
   };
 
   if (loading) {
