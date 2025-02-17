@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -84,6 +84,7 @@ interface APIUserSeasonsResponse {
 const fetchRegistrationRequests = async () => {
   try {
     const response = await axios.get('https://plateform.draminesaid.com/app/request_users.php');
+    // Ensure we always return an array
     return Array.isArray(response.data) ? response.data : [];
   } catch (error) {
     console.error('Error fetching registration requests:', error);
@@ -109,7 +110,7 @@ const Clients: React.FC<ClientsProps> = ({ user }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [allSeasons, setAllSeasons] = useState<APISeasonResponse['saisons']>([]);
   const [userSeasons, setUserSeasons] = useState<APIUserSeasonsResponse['seasons']>([]);
-  const [showRegistrationRequests, setShowRegistrationRequests] = useState(true);
+  const [showRegistrationRequests, setShowRegistrationRequests] = useState(true); // Changed to true by default
   const [registrationRequests, setRegistrationRequests] = useState<RegistrationRequest[]>([]);
   const [loadingRequests, setLoadingRequests] = useState(false);
   const [key, setKey] = useState("38457");
@@ -117,43 +118,65 @@ const Clients: React.FC<ClientsProps> = ({ user }) => {
   const [currentRequestPage, setCurrentRequestPage] = useState(1);
   const requestsPerPage = 15;
 
-  const fetchSeasons = useCallback(async () => {
+  useEffect(() => {
+    Promise.all([
+      fetchUsers(),
+      fetchSeasons(),
+      fetchUserSeasons(),
+    ]).catch(error => {
+      console.error("Error fetching initial data:", error);
+      setLoading(false);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (showRegistrationRequests) {
+      fetchRegistrationRequestsData();
+    }
+  }, [showRegistrationRequests]);
+
+  const fetchSeasons = async () => {
     try {
-      const response = await axios.get<APISeasonResponse>('https://plateform.draminesaid.com/app/get_saisons.php', {
-        headers: {
-          'Cache-Control': 'max-age=3600'
-        }
-      });
+      const response = await axios.get<APISeasonResponse>('https://plateform.draminesaid.com/app/get_saisons.php');
       if (response.data.success) {
         setAllSeasons(response.data.saisons);
       }
     } catch (error) {
       console.error("Error fetching seasons:", error);
     }
-  }, []);
+  };
 
-  const fetchUserSeasons = useCallback(async () => {
+  const fetchUserSeasons = async () => {
     try {
-      const response = await axios.get<APIUserSeasonsResponse>('https://plateform.draminesaid.com/app/get_allusers_seasons.php', {
-        headers: {
-          'Cache-Control': 'max-age=3600'
-        }
-      });
+      const response = await axios.get<APIUserSeasonsResponse>('https://plateform.draminesaid.com/app/get_allusers_seasons.php');
       if (response.data.success) {
         setUserSeasons(response.data.seasons);
       }
     } catch (error) {
       console.error("Error fetching user seasons:", error);
     }
-  }, []);
+  };
 
-  const fetchUsers = useCallback(async () => {
+  const logUploadEvent = async (title: string) => {
+    try {
+      await axios.post('https://plateform.draminesaid.com/app/data_logs.php', {
+        id_log: 'uniqueLogId',
+        text_log: title,
+        date_log: new Date().toISOString(),
+        user_log: user.email,
+        type_log: 'compte',
+      });
+    } catch (err) {
+      console.error('Failed to log the event:', err);
+    }
+  };
+
+  const fetchUsers = async () => {
     try {
       const response = await axios.get('https://plateform.draminesaid.com/app/get_usersnew.php', {
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Cache-Control': 'max-age=300'
+          'Accept': 'application/json'
         }
       });
       
@@ -170,72 +193,24 @@ const Clients: React.FC<ClientsProps> = ({ user }) => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
-  useEffect(() => {
-    const loadInitialData = async () => {
-      setLoading(true);
-      await Promise.all([
-        fetchUsers(),
-        fetchSeasons(),
-        fetchUserSeasons(),
-      ]).catch(error => {
-        console.error("Error fetching initial data:", error);
-      }).finally(() => {
-        setLoading(false);
+  const fetchRegistrationRequestsData = async () => {
+    setLoadingRequests(true);
+    try {
+      const requests = await fetchRegistrationRequests();
+      setRegistrationRequests(requests);
+    } catch (error) {
+      console.error('Error fetching registration requests:', error);
+      toast({
+        title: "Erreur",
+        description: "Impossible de charger les demandes d'inscription",
+        variant: "destructive",
       });
-    };
-
-    loadInitialData();
-  }, [fetchUsers, fetchSeasons, fetchUserSeasons]);
-
-  const filteredUsers = useMemo(() => {
-    return users.filter((userData: UserData) => {
-      const matchesSearch = Object.values(userData.user).some(value =>
-        String(value).toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      
-      const matchesStatus = filterStatus === 'all' 
-        ? true 
-        : userData.user.status_client === (filterStatus === 'active' ? '1' : '0');
-
-      const userSeasonsList = getUserSeasons(userData.user.id_client);
-      
-      const matchesSeason = filterSeason === 'all'
-        ? true
-        : userSeasonsList.some(season => season.id_saison === filterSeason);
-
-      const matchesAllocation = filterAllocation === 'all'
-        ? true
-        : filterAllocation === 'with-seasons'
-        ? userSeasonsList.length > 0
-        : userSeasonsList.length === 0;
-
-      return matchesSearch && matchesStatus && matchesSeason && matchesAllocation;
-    });
-  }, [users, searchTerm, filterStatus, filterSeason, filterAllocation]);
-
-  const filteredRequests = useMemo(() => {
-    return registrationRequests.filter(request => {
-      const userData = users.find(u => u.user.id_client === request.id_user);
-      const season = allSeasons.find(s => s.id_saison.toString() === request.id_saison);
-      
-      const matchesSearch = 
-        userData?.user.nom_client?.toLowerCase().includes(searchRequestTerm.toLowerCase()) ||
-        userData?.user.prenom_client?.toLowerCase().includes(searchRequestTerm.toLowerCase()) ||
-        userData?.user.email_client?.toLowerCase().includes(searchRequestTerm.toLowerCase()) ||
-        season?.name_saison?.toLowerCase().includes(searchRequestTerm.toLowerCase());
-
-      const matchesSeason = filterSeason === 'all' || request.id_saison === filterSeason;
-
-      return matchesSearch && matchesSeason;
-    });
-  }, [registrationRequests, users, allSeasons, searchRequestTerm, filterSeason]);
-
-  const indexOfLastRequest = currentRequestPage * requestsPerPage;
-  const indexOfFirstRequest = indexOfLastRequest - requestsPerPage;
-  const currentRequests = filteredRequests.slice(indexOfFirstRequest, indexOfLastRequest);
-  const totalRequestPages = Math.ceil(filteredRequests.length / requestsPerPage);
+    } finally {
+      setLoadingRequests(false);
+    }
+  };
 
   const handleAcceptRequest = async (userId: string, saisonId: string, requestId: string) => {
     try {
@@ -309,6 +284,50 @@ const Clients: React.FC<ClientsProps> = ({ user }) => {
   const getUserSeasons = (userId: string) => {
     return userSeasons.filter(season => season.id_client === userId);
   };
+
+  const filteredUsers = users.filter((userData: UserData) => {
+    const matchesSearch = Object.values(userData.user).some(value =>
+      String(value).toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    
+    const matchesStatus = filterStatus === 'all' 
+      ? true 
+      : userData.user.status_client === (filterStatus === 'active' ? '1' : '0');
+
+    const userSeasonsList = getUserSeasons(userData.user.id_client);
+    
+    const matchesSeason = filterSeason === 'all'
+      ? true
+      : userSeasonsList.some(season => season.id_saison === filterSeason);
+
+    const matchesAllocation = filterAllocation === 'all'
+      ? true
+      : filterAllocation === 'with-seasons'
+      ? userSeasonsList.length > 0
+      : userSeasonsList.length === 0;
+
+    return matchesSearch && matchesStatus && matchesSeason && matchesAllocation;
+  });
+
+  const filteredRequests = registrationRequests.filter(request => {
+    const userData = users.find(u => u.user.id_client === request.id_user);
+    const season = allSeasons.find(s => s.id_saison.toString() === request.id_saison);
+    
+    const matchesSearch = 
+      userData?.user.nom_client?.toLowerCase().includes(searchRequestTerm.toLowerCase()) ||
+      userData?.user.prenom_client?.toLowerCase().includes(searchRequestTerm.toLowerCase()) ||
+      userData?.user.email_client?.toLowerCase().includes(searchRequestTerm.toLowerCase()) ||
+      season?.name_saison?.toLowerCase().includes(searchRequestTerm.toLowerCase());
+
+    const matchesSeason = filterSeason === 'all' || request.id_saison === filterSeason;
+
+    return matchesSearch && matchesSeason;
+  });
+
+  const indexOfLastRequest = currentRequestPage * requestsPerPage;
+  const indexOfFirstRequest = indexOfLastRequest - requestsPerPage;
+  const currentRequests = filteredRequests.slice(indexOfFirstRequest, indexOfLastRequest);
+  const totalRequestPages = Math.ceil(filteredRequests.length / requestsPerPage);
 
   const handleDelete = async (id_client: string) => {
     setIsModalOpen(false);
@@ -414,9 +433,8 @@ const Clients: React.FC<ClientsProps> = ({ user }) => {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh]">
-        <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-        <p className="text-muted-foreground">Chargement des données...</p>
+      <div className="flex items-center justify-center h-screen">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
