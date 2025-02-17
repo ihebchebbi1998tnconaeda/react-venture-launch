@@ -84,7 +84,6 @@ interface APIUserSeasonsResponse {
 const fetchRegistrationRequests = async () => {
   try {
     const response = await axios.get('https://plateform.draminesaid.com/app/request_users.php');
-    // Ensure we always return an array
     return Array.isArray(response.data) ? response.data : [];
   } catch (error) {
     console.error('Error fetching registration requests:', error);
@@ -110,7 +109,7 @@ const Clients: React.FC<ClientsProps> = ({ user }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [allSeasons, setAllSeasons] = useState<APISeasonResponse['saisons']>([]);
   const [userSeasons, setUserSeasons] = useState<APIUserSeasonsResponse['seasons']>([]);
-  const [showRegistrationRequests, setShowRegistrationRequests] = useState(true); // Changed to true by default
+  const [showRegistrationRequests, setShowRegistrationRequests] = useState(true);
   const [registrationRequests, setRegistrationRequests] = useState<RegistrationRequest[]>([]);
   const [loadingRequests, setLoadingRequests] = useState(false);
   const [key, setKey] = useState("38457");
@@ -431,6 +430,27 @@ const Clients: React.FC<ClientsProps> = ({ user }) => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedUsers = filteredUsers.slice(startIndex, startIndex + itemsPerPage);
 
+  const formatCreatedAt = (timestamp: string) => {
+    if (timestamp === "2147483647") {
+      return new Date().toLocaleDateString('fr-FR', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    const date = new Date(parseInt(timestamp) * 1000);
+    return date.toLocaleDateString('fr-FR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -529,14 +549,16 @@ const Clients: React.FC<ClientsProps> = ({ user }) => {
                                   {userData ? `${userData.user.prenom_client} ${userData.user.nom_client} (#${userData.user.id_client})` : 'Utilisateur inconnu'}
                                 </td>
                                 <td className="py-4 px-4">
-                                  {userData?.user.telephone_client || 'Email inconnu'}
+                                  {userData?.user.telephone_client || 'Téléphone inconnu'}
                                 </td>
                                 <td className="py-4 px-4">
                                   {userData?.user.email_client || 'Email inconnu'}
                                 </td>
-                                <td className="py-4 px-4">{season ? season.name_saison : 'Formation inconnue'}</td>
                                 <td className="py-4 px-4">
-                                  {new Date(parseInt(request.created_at) * 1000).toLocaleDateString()}
+                                  {season ? season.name_saison : 'Formation inconnue'}
+                                </td>
+                                <td className="py-4 px-4">
+                                  {formatCreatedAt(request.created_at)}
                                 </td>
                                 <td className="py-4 px-4">
                                   <div className="flex gap-2">
