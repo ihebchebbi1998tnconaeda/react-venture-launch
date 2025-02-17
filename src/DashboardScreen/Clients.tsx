@@ -432,13 +432,7 @@ const Clients: React.FC<ClientsProps> = ({ user }) => {
 
   const formatCreatedAt = (timestamp: string) => {
     if (timestamp === "2147483647") {
-      return new Date().toLocaleDateString('fr-FR', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      });
+      return "À l'instant";
     }
 
     const date = new Date(parseInt(timestamp) * 1000);
