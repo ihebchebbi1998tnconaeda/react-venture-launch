@@ -1,0 +1,26 @@
+﻿@inherits Crm.Library.Modularization.CrmViewUserControl
+@using Crm.Library.Globalization.Extensions
+
+<!-- ko if: $data.innerInstance instanceof database.CrmPerDiemGermany_PerDiemAllowanceEntry.CrmPerDiemGermany_PerDiemAllowanceEntry -->
+<!-- ko if: $data.PerDiemAllowanceKey -->
+<div>
+	@(Html.Localize("PerDiemAllowance") + ' ')<span data-bind="lookupValue: $data.PerDiemAllowanceKey, lookups: $root.lookups.perDiemAllowances"></span>
+</div>
+<!-- /ko -->
+<!-- ko if: $data.AllDay -->
+<small>
+	@(Html.Localize("AllDayAmount"))
+</small>
+<!-- /ko -->
+<!-- ko ifnot: $data.AllDay -->
+<small>
+	@(Html.Localize("PartialDayAmount"))
+</small>
+<!-- /ko -->
+<div data-bind="visible: $data.AdjustmentReferences().length > 0">
+	<div data-bind="foreach: AdjustmentReferences()">
+		<small class="text-muted" data-bind="text: ($data.AdjustmentValue() <0 ? '-' + Helper.String.getTranslatedString('Cut') : '-' + Helper.String.getTranslatedString('Append')) +' ' + window.Helper.Lookup.getLookupValue($root.lookups.adjustments, $data.PerDiemAllowanceAdjustmentKey()) "></small>
+		<br />
+	</div>
+</div>
+<!-- /ko -->

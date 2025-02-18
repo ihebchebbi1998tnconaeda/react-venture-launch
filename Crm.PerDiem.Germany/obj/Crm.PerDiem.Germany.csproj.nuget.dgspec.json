@@ -1,0 +1,622 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Source\\crm6\\src\\Crm.Web\\Plugins\\Crm.PerDiem.Germany\\Crm.PerDiem.Germany.csproj": {}
+  },
+  "projects": {
+    "C:\\Source\\crm6\\src\\Crm.Library\\Crm.Library.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Source\\crm6\\src\\Crm.Library\\Crm.Library.csproj",
+        "projectName": "Crm.Library",
+        "projectPath": "C:\\Source\\crm6\\src\\Crm.Library\\Crm.Library.csproj",
+        "packagesPath": "C:\\Users\\iheb.chebbi\\.nuget\\packages\\",
+        "outputPath": "C:\\Source\\crm6\\src\\Crm.Library\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\iheb.chebbi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.l-mobile.com/nuget": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[8.1.1, )"
+            },
+            "AutoMapper.Extensions.ExpressionMapping": {
+              "target": "Package",
+              "version": "[2.0.2, )"
+            },
+            "Autofac.Extras.Quartz": {
+              "target": "Package",
+              "version": "[4.0.0, )"
+            },
+            "Autofac.Multitenant": {
+              "target": "Package",
+              "version": "[4.2.0, )"
+            },
+            "Azure.Storage.Blobs": {
+              "target": "Package",
+              "version": "[12.17.0, )"
+            },
+            "CefToPdf": {
+              "target": "Package",
+              "version": "[1.7.0, )"
+            },
+            "Curiosity.Resources": {
+              "target": "Package",
+              "version": "[1.0.1, )"
+            },
+            "Ical.Net": {
+              "target": "Package",
+              "version": "[4.2.0, )"
+            },
+            "LINQKit": {
+              "target": "Package",
+              "version": "[1.1.24, )"
+            },
+            "LMobile.Gen3LicenseManagement": {
+              "target": "Package",
+              "version": "[3.28.3, )"
+            },
+            "LMobile.Gen3LicenseManagement.Standalone": {
+              "target": "Package",
+              "version": "[3.28.3, )"
+            },
+            "LMobile.Unicore.NHibernate": {
+              "target": "Package",
+              "version": "[2.1.2-beta.490, )"
+            },
+            "Microsoft.AspNetCore.Authentication.OpenIdConnect": {
+              "target": "Package",
+              "version": "[6.0.24, )"
+            },
+            "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "Microsoft.AspNetCore.OData": {
+              "target": "Package",
+              "version": "[8.0.4, )"
+            },
+            "Microsoft.AspNetCore.OData.NewtonsoftJson": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            },
+            "Microsoft.Extensions.Logging.Log4Net.AspNetCore": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "Microsoft.OData.Core": {
+              "target": "Package",
+              "version": "[7.9.4, )"
+            },
+            "Microsoft.Web.Xdt": {
+              "target": "Package",
+              "version": "[3.1.0, )"
+            },
+            "Microsoft.Windows.Compatibility": {
+              "target": "Package",
+              "version": "[6.0.9, )"
+            },
+            "MimeKit": {
+              "target": "Package",
+              "version": "[2.15.0, )"
+            },
+            "MiniProfiler.AspNetCore.Mvc": {
+              "target": "Package",
+              "version": "[4.2.22, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            },
+            "PDFsharpNetStandard2": {
+              "target": "Package",
+              "version": "[1.51.4845, )"
+            },
+            "PluralizeService.Core": {
+              "target": "Package",
+              "version": "[1.2.21070.12, )"
+            },
+            "Quartz": {
+              "target": "Package",
+              "version": "[3.3.2, )"
+            },
+            "Quartz.Jobs": {
+              "target": "Package",
+              "version": "[3.3.2, )"
+            },
+            "StackExchange.Redis": {
+              "target": "Package",
+              "version": "[2.2.4, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.2.3, )"
+            },
+            "System.Buffers": {
+              "target": "Package",
+              "version": "[4.5.1, )"
+            },
+            "System.ComponentModel.Annotations": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            },
+            "System.Configuration.ConfigurationManager": {
+              "target": "Package",
+              "version": "[6.0.2, )"
+            },
+            "System.Linq.Dynamic.Core": {
+              "target": "Package",
+              "version": "[1.6.0, )"
+            },
+            "System.Memory": {
+              "target": "Package",
+              "version": "[4.5.4, )"
+            },
+            "System.Runtime.CompilerServices.Unsafe": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "System.ServiceModel.Duplex": {
+              "target": "Package",
+              "version": "[4.9.0, )"
+            },
+            "System.ServiceModel.NetTcp": {
+              "target": "Package",
+              "version": "[4.9.0, )"
+            },
+            "System.Threading.Channels": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "System.Threading.Tasks.Extensions": {
+              "target": "Package",
+              "version": "[4.5.4, )"
+            },
+            "log4net": {
+              "target": "Package",
+              "version": "[2.0.13, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Source\\crm6\\src\\Crm.Web\\Plugins\\Crm.PerDiem.Germany\\Crm.PerDiem.Germany.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Source\\crm6\\src\\Crm.Web\\Plugins\\Crm.PerDiem.Germany\\Crm.PerDiem.Germany.csproj",
+        "projectName": "Crm.PerDiem.Germany",
+        "projectPath": "C:\\Source\\crm6\\src\\Crm.Web\\Plugins\\Crm.PerDiem.Germany\\Crm.PerDiem.Germany.csproj",
+        "packagesPath": "C:\\Users\\iheb.chebbi\\.nuget\\packages\\",
+        "outputPath": "C:\\Source\\crm6\\src\\Crm.Web\\Plugins\\Crm.PerDiem.Germany\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\iheb.chebbi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.l-mobile.com/nuget": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\Source\\crm6\\src\\Crm.Library\\Crm.Library.csproj": {
+                "projectPath": "C:\\Source\\crm6\\src\\Crm.Library\\Crm.Library.csproj"
+              },
+              "C:\\Source\\crm6\\src\\Crm.Web\\Plugins\\Crm.PerDiem\\Crm.PerDiem.csproj": {
+                "projectPath": "C:\\Source\\crm6\\src\\Crm.Web\\Plugins\\Crm.PerDiem\\Crm.PerDiem.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Source\\crm6\\src\\Crm.Web\\Plugins\\Crm.PerDiem\\Crm.PerDiem.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Source\\crm6\\src\\Crm.Web\\Plugins\\Crm.PerDiem\\Crm.PerDiem.csproj",
+        "projectName": "Crm.PerDiem",
+        "projectPath": "C:\\Source\\crm6\\src\\Crm.Web\\Plugins\\Crm.PerDiem\\Crm.PerDiem.csproj",
+        "packagesPath": "C:\\Users\\iheb.chebbi\\.nuget\\packages\\",
+        "outputPath": "C:\\Source\\crm6\\src\\Crm.Web\\Plugins\\Crm.PerDiem\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\iheb.chebbi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.l-mobile.com/nuget": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\Source\\crm6\\src\\Crm.Library\\Crm.Library.csproj": {
+                "projectPath": "C:\\Source\\crm6\\src\\Crm.Library\\Crm.Library.csproj"
+              },
+              "C:\\Source\\crm6\\src\\Crm.Web\\Plugins\\Crm\\Crm.csproj": {
+                "projectPath": "C:\\Source\\crm6\\src\\Crm.Web\\Plugins\\Crm\\Crm.csproj"
+              },
+              "C:\\Source\\crm6\\src\\Crm.Web\\Plugins\\Main\\Main.csproj": {
+                "projectPath": "C:\\Source\\crm6\\src\\Crm.Web\\Plugins\\Main\\Main.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Source\\crm6\\src\\Crm.Web\\Plugins\\Crm\\Crm.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Source\\crm6\\src\\Crm.Web\\Plugins\\Crm\\Crm.csproj",
+        "projectName": "Crm",
+        "projectPath": "C:\\Source\\crm6\\src\\Crm.Web\\Plugins\\Crm\\Crm.csproj",
+        "packagesPath": "C:\\Users\\iheb.chebbi\\.nuget\\packages\\",
+        "outputPath": "C:\\Source\\crm6\\src\\Crm.Web\\Plugins\\Crm\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\iheb.chebbi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.l-mobile.com/nuget": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\Source\\crm6\\src\\Crm.Library\\Crm.Library.csproj": {
+                "projectPath": "C:\\Source\\crm6\\src\\Crm.Library\\Crm.Library.csproj"
+              },
+              "C:\\Source\\crm6\\src\\Crm.Web\\Plugins\\Main\\Main.csproj": {
+                "projectPath": "C:\\Source\\crm6\\src\\Crm.Web\\Plugins\\Main\\Main.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Source\\crm6\\src\\Crm.Web\\Plugins\\Main\\Main.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Source\\crm6\\src\\Crm.Web\\Plugins\\Main\\Main.csproj",
+        "projectName": "Main",
+        "projectPath": "C:\\Source\\crm6\\src\\Crm.Web\\Plugins\\Main\\Main.csproj",
+        "packagesPath": "C:\\Users\\iheb.chebbi\\.nuget\\packages\\",
+        "outputPath": "C:\\Source\\crm6\\src\\Crm.Web\\Plugins\\Main\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\iheb.chebbi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.l-mobile.com/nuget": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\Source\\crm6\\src\\Crm.Library\\Crm.Library.csproj": {
+                "projectPath": "C:\\Source\\crm6\\src\\Crm.Library\\Crm.Library.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "CefToPdf": {
+              "target": "Package",
+              "version": "[1.7.0, )"
+            },
+            "DistributedLock.Redis": {
+              "target": "Package",
+              "version": "[1.0.1, )"
+            },
+            "DistributedLock.SqlServer": {
+              "target": "Package",
+              "version": "[1.0.1, )"
+            },
+            "Geocoding.Core": {
+              "target": "Package",
+              "version": "[4.0.1, )"
+            },
+            "Geocoding.Google": {
+              "target": "Package",
+              "version": "[4.0.1, )"
+            },
+            "Geocoding.MapQuest": {
+              "target": "Package",
+              "version": "[4.0.1, )"
+            },
+            "Geocoding.Microsoft": {
+              "target": "Package",
+              "version": "[4.0.1, )"
+            },
+            "Geocoding.Yahoo": {
+              "target": "Package",
+              "version": "[4.0.1, )"
+            },
+            "MailKit": {
+              "target": "Package",
+              "version": "[2.15.0, )"
+            },
+            "Microsoft.Extensions.Caching.Memory": {
+              "target": "Package",
+              "version": "[6.0.3, )"
+            },
+            "Microsoft.Extensions.Caching.StackExchangeRedis": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Microsoft.OpenApi.OData": {
+              "target": "Package",
+              "version": "[1.0.9, )"
+            },
+            "NHibernate": {
+              "target": "Package",
+              "version": "[5.2.5, )"
+            },
+            "NHibernate.Caches.StackExchangeRedis": {
+              "target": "Package",
+              "version": "[5.7.0, )"
+            },
+            "NHibernate.Caches.Util.JsonSerializer": {
+              "target": "Package",
+              "version": "[5.7.0, )"
+            },
+            "NHibernateProfiler": {
+              "target": "Package",
+              "version": "[6.0.6021, )"
+            },
+            "Novell.Directory.Ldap.NETStandard": {
+              "target": "Package",
+              "version": "[3.6.0, )"
+            },
+            "Quartz.Serialization.Json": {
+              "target": "Package",
+              "version": "[3.3.3, )"
+            },
+            "System.Diagnostics.DiagnosticSource": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "zxcvbn-core": {
+              "target": "Package",
+              "version": "[7.0.92, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

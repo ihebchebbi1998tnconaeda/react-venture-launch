@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+  <Import Project="../../Shared.props" />
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Crm.Library\Crm.Library.csproj" />
+    <ProjectReference Include="..\Crm.PerDiem\Crm.PerDiem.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Resources.de.resx" />
+    <Content Include="Resources\Resources.en.resx" />
+    <Content Include="Resources\Resources.es.resx" />
+    <Content Include="Resources\Resources.fr.resx" />
+    <Content Include="Resources\Resources.hu.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="Resources\Resources.de.resx" />
+    <EmbeddedResource Remove="Resources\Resources.en.resx" />
+    <EmbeddedResource Remove="Resources\Resources.es.resx" />
+    <EmbeddedResource Remove="Resources\Resources.fr.resx" />
+    <EmbeddedResource Remove="Resources\Resources.hu.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\GlobalAssemblyInfo.cs">
+      <Link>Properties\AssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="tsconfig.sonar.json" />
+  </ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+</Project>

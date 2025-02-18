@@ -1,0 +1,66 @@
+﻿@using Crm.Library.Globalization.Extensions
+@inherits Crm.Library.Modularization.CrmViewUserControl
+
+<div class="modal-header card-header ch-alt" data-bind="with: perDiemAllowanceEntry">
+	<button type="button" class="close" data-dismiss="modal" aria-label="@(Html.Localize("Close"))">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h4 class="modal-title" data-bind="visible: innerInstance.entityState === 20">@(Html.Localize("AddPerDiemAllowanceEntry"))</h4>
+	<h4 class="modal-title" data-bind="visible: innerInstance.entityState !== 20">@(Html.Localize("EditPerDiemAllowanceEntry"))</h4>
+</div>
+<div class="modal-body card-body card-padding">
+	<form role="form" action="#" data-bind="with: perDiemAllowanceEntry">
+		<!-- ko requiredPermission: { name: 'SeeAllUsersPerDiemReports', group: 'PerDiemReport' } -->
+		<form-element id="ResponsibleUser" params="value: ResponsibleUser, caption: 'ResponsibleUser', type: 'select2'">
+			<select class="form-control" data-bind="select2autocompleter: { data: value, autocompleteOptions: { orderBy: ['LastName'], table: 'Main_User', mapDisplayObject: Helper.User.mapForSelect2Display, customFilter: Helper.User.filterUserQuery, placeholder: placeholder } }" disabled>
+			</select>
+		</form-element>
+		<!-- /ko -->
+		<form-element params="value: Date, caption: 'Date', type: 'datePicker', datePickerOptions: { config: { minDate: $root.minDate(), maxDate: $root.maxDate() } }"></form-element>
+		<form-element params="value: AllDay, caption: 'AllDay', type: 'checkbox'"></form-element>
+		<form-element params="value: CostCenterKey, caption: 'CostCenter', type: 'select'" data-bind="visible: $root.lookups.costCenters.$array.length > 1">
+			<select name="CostCenterKey" class="form-control" data-bind="select2autocompleter: { data: value, autocompleteOptions: Helper.Lookup.getAutocompleteOptions('Main_CostCenter'), placeholder: placeholder}">
+			</select>
+		</form-element>
+		<!-- ko if: $root.perDiemAllowances().length > 0 -->
+		<form-element params="value: PerDiemAllowanceKey, caption: 'Region', type: 'select'">
+			<select name="PerDiemAllowanceKey" class="form-control" data-bind="select2autocompleter: {data: $root.perDiemAllowances, optionsText: 'Value', optionsValue: 'Key'}, value: value">
+			</select>
+		</form-element>
+		<!-- /ko -->
+
+		<div class="has-error" data-bind="visible: $root.perDiemAllowances().length === 0 && Date() !== null">
+			<small class="help-block">@(Html.Localize("NoPerDiemAllowanceForDate"))</small>
+		</div>
+		<span data-bind="visible: $root.perDiemAllowanceAdjustmentList().length > 0">@(Html.Localize("DeductionOrAppend"))</span>
+		<!-- ko foreach: $root.perDiemAllowanceAdjustmentList-->
+		<div class="form-group">
+			<div class="checkbox m-b-15">
+				<label>
+					<input type="checkbox" data-bind="checkedValue: $data, checked: $root.selectedAdjustments">
+					<i class="input-helper"></i>
+					<span data-bind="attr:{ name: $root.isDeduction($data) ? Helper.String.getTranslatedString('Cut')+' '+$data.Value() : Helper.String.getTranslatedString('Append')+' '+$data.Value() }, text: $root.isDeduction($data) ? Helper.String.getTranslatedString('Cut')+' '+$data.Value() : Helper.String.getTranslatedString('Append')+' '+$data.Value()"></span>
+				</label>
+			</div>
+		</div>
+		<!-- /ko -->
+		<div data-bind="visible: Amount() !== null, validationElement: Amount">
+			<hr />
+			<span data-bind="visible: AllDay">@(Html.Localize("AllDayAmount")): </span>
+			<span data-bind="visible: AllDay() === false">@(Html.Localize("PartialDayAmount")): </span>
+			<h3 class="text-center">
+				<span data-bind="lookupValue: CurrencyKey, lookups: $parent.lookups.currencies"></span>
+				<span data-bind="money: Amount"></span>
+			</h3>
+			<small class="help-block text-center has-error" data-bind="validationMessage: Amount"></small>
+		</div>
+	</form>
+</div>
+<div class="modal-footer card-header ch-alt p-15">
+	<button type="button" class="btn btn-lg btn-default f-13 waves-effect" data-bind="click: Helper.Database.clearTrackedEntities" data-dismiss="modal">
+		@(Html.Localize("Cancel"))
+	</button>
+	<button type="button" class="btn btn-lg btn-primary f-13 waves-effect" data-bind="click: save, disable: loading">
+		@(Html.Localize("Save"))
+	</button>
+</div>

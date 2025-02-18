@@ -1,0 +1,7 @@
+<!-- ko if: $data.innerInstance instanceof database.CrmPerDiemGermany_PerDiemAllowanceAdjustment.CrmPerDiemGermany_PerDiemAllowanceAdjustment -->
+<div>
+	<i class="zmdi zmdi-check-circle"></i>
+	<small class="f-500" data-bind="text: window.Helper.String.getTranslatedString('AdjustmentFromLabel') + ': '"></small>
+	<small data-bind="text: window.Helper.String.getTranslatedString('PerDiem' + Crm.PerDiem.Germany.Model.Enums.AdjustmentFrom.getEnumName($data.AdjustmentFrom()))"></small>
+</div>
+<!-- /ko -->

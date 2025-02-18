@@ -1,0 +1,29 @@
+﻿@inherits Crm.Library.Modularization.CrmViewUserControl
+@using Crm.Library.Globalization.Extensions
+
+<!-- ko if: $data.innerInstance instanceof database.CrmPerDiemGermany_PerDiemAllowanceEntry.CrmPerDiemGermany_PerDiemAllowanceEntry -->
+<td></td>
+<td>
+	@(Html.Localize("PerDiemAllowance"))
+	<div data-bind="visible: AllDay">@(Html.Localize("AllDayAmount"))</div>
+	<div data-bind="visible: AllDay() === false">@(Html.Localize("PartialDayAmount"))</div>
+	<div data-bind="lookupValue: PerDiemAllowanceKey, lookups: $root.lookups.perDiemAllowances"></div>
+	<div data-bind="visible: AdjustmentReferences().length > 0">
+		<div data-bind="foreach: AdjustmentReferences()">
+			<small data-bind="visible: $data.AdjustmentValue() <0">
+				- @(Html.Localize("Cut")) <span data-bind="text: window.Helper.Lookup.getLookupValue($root.lookups.adjustments, $data.PerDiemAllowanceAdjustmentKey())"></span>
+			</small>
+			<small data-bind="visible: $data.AdjustmentValue() >0">
+				- @(Html.Localize("Append")) <span data-bind="text: window.Helper.Lookup.getLookupValue($root.lookups.adjustments, $data.PerDiemAllowanceAdjustmentKey())"></span>
+			</small>
+			<br />
+		</div>
+	</div>
+</td>
+<td>
+</td>
+<td class="text-right"></td>
+<td class="text-right">
+	<span data-bind="money: Amount"></span>&nbsp;<span data-bind="lookupValue: CurrencyKey, lookups: $root.lookups.currencies"></span>
+</td>
+<!-- /ko -->

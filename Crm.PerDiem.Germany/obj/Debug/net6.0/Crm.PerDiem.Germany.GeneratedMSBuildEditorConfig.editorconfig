@@ -1,0 +1,56 @@
+is_global = true
+build_property.TargetFramework = net6.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = Crm.PerDiem.Germany
+build_property.RootNamespace = Crm.PerDiem.Germany
+build_property.ProjectDir = C:\Source\crm6\src\Crm.Web\Plugins\Crm.PerDiem.Germany\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 6.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Source\crm6\src\Crm.Web\Plugins\Crm.PerDiem.Germany
+build_property._RazorSourceGeneratorDebug = 
+build_property.EffectiveAnalysisLevelStyle = 6.0
+
+[C:/Source/crm6/src/Crm.Web/Plugins/Crm.PerDiem.Germany/Views/PerDiemAllowance/EditTemplate.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGVyRGllbUFsbG93YW5jZVxFZGl0VGVtcGxhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Source/crm6/src/Crm.Web/Plugins/Crm.PerDiem.Germany/Views/PerDiemAllowance/LookupPropertyDetailsPerDiemAllowanceAdjustment.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGVyRGllbUFsbG93YW5jZVxMb29rdXBQcm9wZXJ0eURldGFpbHNQZXJEaWVtQWxsb3dhbmNlQWRqdXN0bWVudC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Source/crm6/src/Crm.Web/Plugins/Crm.PerDiem.Germany/Views/PerDiemAllowance/LookupPropertyEditPerDiemAllowanceAdjustment.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGVyRGllbUFsbG93YW5jZVxMb29rdXBQcm9wZXJ0eUVkaXRQZXJEaWVtQWxsb3dhbmNlQWRqdXN0bWVudC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Source/crm6/src/Crm.Web/Plugins/Crm.PerDiem.Germany/Views/PerDiemAllowance/PerDiemReportOverviewEntry.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGVyRGllbUFsbG93YW5jZVxQZXJEaWVtUmVwb3J0T3ZlcnZpZXdFbnRyeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Source/crm6/src/Crm.Web/Plugins/Crm.PerDiem.Germany/Views/PerDiemAllowance/PrimaryActionAddPerDiemAllowanceEntry.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGVyRGllbUFsbG93YW5jZVxQcmltYXJ5QWN0aW9uQWRkUGVyRGllbUFsbG93YW5jZUVudHJ5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Source/crm6/src/Crm.Web/Plugins/Crm.PerDiem.Germany/Views/PerDiemAllowance/TemplateActionDelete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGVyRGllbUFsbG93YW5jZVxUZW1wbGF0ZUFjdGlvbkRlbGV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Source/crm6/src/Crm.Web/Plugins/Crm.PerDiem.Germany/Views/PerDiemAllowance/TemplateActionEdit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGVyRGllbUFsbG93YW5jZVxUZW1wbGF0ZUFjdGlvbkVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Source/crm6/src/Crm.Web/Plugins/Crm.PerDiem.Germany/Views/PerDiemAllowance/TemplateTableColumns.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGVyRGllbUFsbG93YW5jZVxUZW1wbGF0ZVRhYmxlQ29sdW1ucy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Source/crm6/src/Crm.Web/Plugins/Crm.PerDiem.Germany/Views/PerDiemAllowance/TimeEntryReportEntryDetails.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGVyRGllbUFsbG93YW5jZVxUaW1lRW50cnlSZXBvcnRFbnRyeURldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 

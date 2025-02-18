@@ -1,0 +1,5 @@
+<!-- ko if: $root.table === "CrmPerDiemGermany_PerDiemAllowanceAdjustment" -->
+<form-element params="value: AdjustmentFrom, caption: 'AdjustmentFrom', type: 'select2'">
+	<select class="form-control" data-bind="value: value, options: $root.getAdjustmentFromOptions(), optionsText: 'value', optionsValue: 'key'"></select>
+</form-element>
+<!-- /ko -->

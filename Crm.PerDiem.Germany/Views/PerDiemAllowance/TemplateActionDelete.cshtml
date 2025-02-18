@@ -1,0 +1,8 @@
+﻿@inherits Crm.Library.Modularization.CrmViewUserControl
+
+<!-- ko if: $data.innerInstance instanceof database.CrmPerDiemGermany_PerDiemAllowanceEntry.CrmPerDiemGermany_PerDiemAllowanceEntry -->
+<li data-bind="requiredPermission: { name: 'Delete', group: 'PerDiemAllowanceEntry' }, visible: $root.canAddPerDiemAllowanceEntry && !IsClosed()">
+	<a href="#" data-bind="translatedText: 'Delete', click: $root.deletePerDiemAllowanceEntry">
+	</a>
+</li>
+<!-- /ko -->

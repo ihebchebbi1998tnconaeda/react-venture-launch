@@ -1,0 +1,8 @@
+﻿@inherits Crm.Library.Modularization.CrmViewUserControl
+
+<!-- ko if: $data.innerInstance instanceof database.CrmPerDiemGermany_PerDiemAllowanceEntry.CrmPerDiemGermany_PerDiemAllowanceEntry -->
+<li data-bind="requiredPermission: { name: 'Edit', group: 'PerDiemAllowanceEntry' }, visible: $root.canAddPerDiemAllowanceEntry && !IsClosed()">
+	<a href="#" data-bind="attr: { 'data-route': 'Crm.PerDiem.Germany/PerDiemAllowance/EditTemplate/' + Id() }, translatedText: 'Edit'" data-toggle="modal" data-target="#modal">
+	</a>
+</li>
+<!-- /ko -->
